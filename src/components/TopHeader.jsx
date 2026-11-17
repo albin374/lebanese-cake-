@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { Phone, ChevronDown, Check } from 'lucide-react';
+import React from 'react';
+import { Phone } from 'lucide-react';
 
 export default function TopHeader({ currentLang, onLanguageChange }) {
-  const [langMenuOpen, setLangMenuOpen] = useState(false);
+  const isAr = currentLang === 'ar';
 
   return (
-    <div className="bg-[#F8F1E6] border-b border-[#F5EBDD] text-[#4A2116] h-[32px] sm:h-[34px] px-3 sm:px-8 lg:px-12 text-xs flex items-center transition-colors w-full overflow-hidden">
+    <div className="bg-[#F8F1E6] border-b border-[#F5EBDD] text-[#4A2116] h-[34px] px-3 sm:px-8 lg:px-12 text-xs flex items-center transition-colors w-full">
       <div className="max-w-7xl mx-auto w-full flex items-center justify-between min-w-0">
         
         {/* Contact Phone (Gold phone icon #C58A19, Text #4A2116) */}
@@ -20,56 +20,35 @@ export default function TopHeader({ currentLang, onLanguageChange }) {
           </a>
         </div>
 
-        {/* Language Selector (English | العربية ∨) */}
-        <div className="relative">
+        {/* Direct Language Switcher (English | العربية) */}
+        <div className="flex items-center gap-1.5 text-xs">
           <button
-            onClick={() => setLangMenuOpen(!langMenuOpen)}
-            className="flex items-center gap-1.5 text-xs font-medium text-[#4A2116] hover:text-[#C58A19] transition-colors focus:outline-none cursor-pointer py-1"
-            aria-expanded={langMenuOpen}
+            type="button"
+            onClick={() => onLanguageChange('en')}
+            className={`px-2 py-0.5 rounded transition-all cursor-pointer font-medium ${
+              currentLang === 'en'
+                ? 'font-bold text-[#C58A19] bg-[#FAF3E8] border border-[#E5C583]/60 shadow-2xs'
+                : 'text-[#7D5B50] hover:text-[#4A2116] hover:bg-[#F0E6D6]'
+            }`}
+            title="Switch to English"
           >
-            <span className={currentLang === 'en' ? 'font-semibold text-[#4A2116]' : 'text-[#7D5B50]'}>
-              English
-            </span>
-            <span className="text-[#C58A19]/50">|</span>
-            <span className={`font-arabic text-sm ${currentLang === 'ar' ? 'font-bold text-[#4A2116]' : 'text-[#7D5B50]'}`}>
-              العربية
-            </span>
-            <ChevronDown className="w-3.5 h-3.5 text-[#C58A19] transition-transform duration-200" />
+            English
           </button>
 
-          {/* Language Dropdown Menu */}
-          {langMenuOpen && (
-            <div 
-              className={`absolute mt-1 w-32 bg-white rounded-md shadow-md border border-[#F5EBDD] py-1 z-50 text-xs ${
-                currentLang === 'ar' ? 'left-0' : 'right-0'
-              }`}
-            >
-              <button
-                onClick={() => {
-                  onLanguageChange('en');
-                  setLangMenuOpen(false);
-                }}
-                className={`w-full text-left px-3 py-1.5 hover:bg-[#F8F1E6] flex items-center justify-between transition-colors ${
-                  currentLang === 'en' ? 'text-[#C58A19] font-semibold' : 'text-[#4A2116]'
-                }`}
-              >
-                <span>English</span>
-                {currentLang === 'en' && <Check className="w-3.5 h-3.5 text-[#C58A19]" />}
-              </button>
-              <button
-                onClick={() => {
-                  onLanguageChange('ar');
-                  setLangMenuOpen(false);
-                }}
-                className={`w-full text-left px-3 py-1.5 hover:bg-[#F8F1E6] flex items-center justify-between font-arabic transition-colors ${
-                  currentLang === 'ar' ? 'text-[#C58A19] font-bold' : 'text-[#4A2116]'
-                }`}
-              >
-                <span>العربية</span>
-                {currentLang === 'ar' && <Check className="w-3.5 h-3.5 text-[#C58A19]" />}
-              </button>
-            </div>
-          )}
+          <span className="text-[#C58A19]/50 select-none">|</span>
+
+          <button
+            type="button"
+            onClick={() => onLanguageChange('ar')}
+            className={`px-2.5 py-0.5 font-arabic text-[13px] rounded transition-all cursor-pointer ${
+              currentLang === 'ar'
+                ? 'font-bold text-[#C58A19] bg-[#FAF3E8] border border-[#E5C583]/60 shadow-2xs'
+                : 'text-[#7D5B50] hover:text-[#4A2116] hover:bg-[#F0E6D6]'
+            }`}
+            title="التحويل إلى اللغة العربية"
+          >
+            العربية
+          </button>
         </div>
 
       </div>
