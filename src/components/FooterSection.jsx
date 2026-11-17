@@ -30,12 +30,12 @@ export default function FooterSection({
   return (
     <footer 
       id="main-footer" 
-      className="bg-white text-[#4A2116] border-t border-[#F5EBDD] pt-12 sm:pt-14 lg:pt-16 pb-8 sm:pb-10 px-4 sm:px-8 lg:px-12 transition-colors relative"
+      className="bg-white text-[#4A2116] border-t border-[#F5EBDD] pt-12 sm:pt-14 lg:pt-16 pb-8 sm:pb-10 px-4 sm:px-8 lg:px-12 transition-colors relative w-full max-w-full overflow-hidden"
     >
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-7xl mx-auto w-full min-w-0">
         
         {/* 4 Columns Grid with Thin Gold Dividers */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-0">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-0 w-full">
           
           {/* Column 1: Logo, Location, Phone & Email (4 Columns on LG) */}
           <div className="lg:col-span-4 lg:pr-8 lg:rtl:pr-0 lg:rtl:pl-8 lg:border-r lg:rtl:border-r-0 lg:rtl:border-l border-[#E5C583]/60 flex flex-col justify-start">
@@ -214,10 +214,10 @@ export default function FooterSection({
         <div className="w-full h-[1px] bg-[#E5C583]/70 mt-8 sm:mt-10 mb-5 sm:mb-6" />
 
         {/* Bottom Bar: Social Icons | Payment Badges | Copyright & Developed by Mostech */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs sm:text-[13px]">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs sm:text-[13px] w-full min-w-0">
           
           {/* Left Group: Social Icons + Separator + Payment Badges */}
-          <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4">
+          <div className="flex flex-wrap items-center justify-center gap-2.5 sm:gap-4 max-w-full">
             
             {/* 4 Golden Social Media Buttons */}
             <div className="flex items-center gap-1.5">

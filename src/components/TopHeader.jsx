@@ -5,16 +5,16 @@ export default function TopHeader({ currentLang, onLanguageChange }) {
   const [langMenuOpen, setLangMenuOpen] = useState(false);
 
   return (
-    <div className="bg-[#F8F1E6] border-b border-[#F5EBDD] text-[#4A2116] h-[32px] sm:h-[34px] px-4 sm:px-8 lg:px-12 text-xs flex items-center transition-colors">
-      <div className="max-w-7xl mx-auto w-full flex items-center justify-between">
+    <div className="bg-[#F8F1E6] border-b border-[#F5EBDD] text-[#4A2116] h-[32px] sm:h-[34px] px-3 sm:px-8 lg:px-12 text-xs flex items-center transition-colors w-full overflow-hidden">
+      <div className="max-w-7xl mx-auto w-full flex items-center justify-between min-w-0">
         
         {/* Contact Phone (Gold phone icon #C58A19, Text #4A2116) */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
           <Phone className="w-3.5 h-3.5 text-[#C58A19] shrink-0" />
           <a 
             href="tel:+971506063631" 
             dir="ltr"
-            className="font-medium text-[#4A2116] hover:text-[#C58A19] transition-colors tracking-wide"
+            className="font-medium text-[#4A2116] hover:text-[#C58A19] transition-colors tracking-wide text-[11px] sm:text-xs truncate"
           >
             +971 506063631
           </a>

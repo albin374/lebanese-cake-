@@ -251,7 +251,7 @@ export default function CustomizePage({
   };
 
   return (
-    <div className="min-h-screen bg-[#FFFDF8] text-[#4A2116] py-6 sm:py-10 px-4 sm:px-6 lg:px-12 relative overflow-hidden transition-colors selection:bg-[#C58A19] selection:text-white">
+    <div className="min-h-screen bg-[#FFFDF8] text-[#4A2116] py-6 sm:py-10 px-3 sm:px-6 lg:px-12 relative overflow-hidden transition-colors selection:bg-[#C58A19] selection:text-white w-full max-w-full">
       
       {/* Decorative Golden Line Art Flourishes (Matching Reference Image) */}
       

@@ -56,10 +56,10 @@ export default function ReviewsSection({ currentLang = 'en' }) {
         <div className="absolute inset-0 bg-[#FDFBF7]/30 sm:bg-transparent pointer-events-none" />
       </div>
 
-      <div className="max-w-7xl mx-auto w-full relative z-10">
+      <div className="max-w-7xl mx-auto w-full relative z-10 min-w-0">
         
         {/* Section Header */}
-        <div className="flex flex-col items-center text-center mb-10 sm:mb-14">
+        <div className="flex flex-col items-center text-center mb-10 sm:mb-14 px-2">
           
           {/* Overline with Flanking Gold Lines */}
           <div className="flex items-center justify-center gap-3 sm:gap-4 mb-2.5 sm:mb-3">

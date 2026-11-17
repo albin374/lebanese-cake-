@@ -32,7 +32,7 @@ export default function BestsellersSection({
       id="bestsellers-section" 
       className="pt-6 sm:pt-10 pb-14 sm:pb-20 px-4 sm:px-8 lg:px-12 bg-[#FFF9F0] transition-colors relative"
     >
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-7xl mx-auto w-full min-w-0">
         
         {/* Header Block */}
         <div className="flex flex-col items-center text-center mb-10 sm:mb-14">

@@ -29,7 +29,7 @@ export default function MainHeader({
       <div className="max-w-7xl mx-auto w-full flex items-center justify-between gap-4 md:gap-8 py-2 md:py-0">
         
         {/* Left Section: Bakery Logo (Slightly increased size, preserved original aspect ratio) */}
-        <div className="flex items-center shrink-0">
+        <div className="flex items-center shrink min-w-0">
           <button 
             type="button" 
             onClick={onLogoClick} 
@@ -38,7 +38,7 @@ export default function MainHeader({
             <img 
               src="/Lebanese Dream Bakery Logo.png" 
               alt="Lebanese Dream Bakery LLC - مخبز الحلم اللبناني"
-              className="h-14 sm:h-16 md:h-18 lg:h-[80px] w-auto max-w-[260px] sm:max-w-[340px] md:max-w-[400px] lg:max-w-[440px] object-contain transition-transform duration-200 group-hover:scale-[1.01]"
+              className="h-10 sm:h-14 md:h-18 lg:h-[80px] w-auto max-w-[170px] sm:max-w-[240px] md:max-w-[340px] lg:max-w-[440px] object-contain transition-transform duration-200 group-hover:scale-[1.01]"
             />
           </button>
         </div>
@@ -114,13 +114,13 @@ export default function MainHeader({
           )}
         </div>
 
-        {/* Right Section: Header Actions (Help Center, Account, Bag with Improved Spacious Spacing) */}
-        <div className="flex items-center gap-7 sm:gap-9 lg:gap-11 shrink-0">
+        {/* Right Section: Header Actions (Help Center, Account, Bag with Responsive Spacing) */}
+        <div className="flex items-center gap-3 sm:gap-6 md:gap-8 lg:gap-11 shrink-0">
           
           {/* Mobile Search Icon Trigger */}
           <button 
             type="button"
-            className="md:hidden text-[#C58A19] hover:text-[#4A2116] p-1 cursor-pointer"
+            className="md:hidden text-[#C58A19] hover:text-[#4A2116] p-1.5 cursor-pointer"
             title="Search"
           >
             <Search className="w-5 h-5" />
@@ -134,7 +134,7 @@ export default function MainHeader({
             title={t.helpCenter}
           >
             <CircleHelp className="w-5 h-5 text-[#C58A19] group-hover:scale-105 transition-transform stroke-[1.8]" />
-            <span className="text-[11.5px] sm:text-xs font-poppins font-medium text-[#4A2116] group-hover:text-[#C58A19] transition-colors leading-none tracking-tight mt-1.5">
+            <span className="hidden sm:inline text-[11px] sm:text-xs font-poppins font-medium text-[#4A2116] group-hover:text-[#C58A19] transition-colors leading-none tracking-tight mt-1.5">
               {t.helpCenter}
             </span>
           </button>
@@ -147,7 +147,7 @@ export default function MainHeader({
             title={t.account}
           >
             <UserRound className="w-5 h-5 text-[#C58A19] group-hover:scale-105 transition-transform stroke-[1.8]" />
-            <span className="text-[11.5px] sm:text-xs font-poppins font-medium text-[#4A2116] group-hover:text-[#C58A19] transition-colors leading-none tracking-tight mt-1.5">
+            <span className="hidden sm:inline text-[11px] sm:text-xs font-poppins font-medium text-[#4A2116] group-hover:text-[#C58A19] transition-colors leading-none tracking-tight mt-1.5">
               {t.account}
             </span>
           </button>
@@ -167,7 +167,7 @@ export default function MainHeader({
                 </span>
               )}
             </div>
-            <span className="text-[11.5px] sm:text-xs font-poppins font-medium text-[#4A2116] group-hover:text-[#C58A19] transition-colors leading-none tracking-tight mt-1.5">
+            <span className="hidden sm:inline text-[11px] sm:text-xs font-poppins font-medium text-[#4A2116] group-hover:text-[#C58A19] transition-colors leading-none tracking-tight mt-1.5">
               {t.bag}
             </span>
           </button>

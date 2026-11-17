@@ -75,7 +75,7 @@ export default function App() {
   };
 
   return (
-    <div className={`min-h-screen bg-[#FFF9F0] text-[#4A2116] flex flex-col font-sans selection:bg-[#C58A19] selection:text-white ${isAr ? 'font-arabic' : 'font-poppins'}`}>
+    <div className={`min-h-screen bg-[#FFF9F0] text-[#4A2116] flex flex-col font-sans selection:bg-[#C58A19] selection:text-white w-full max-w-full overflow-x-hidden relative ${isAr ? 'font-arabic' : 'font-poppins'}`}>
       
       {/* Toast Notification */}
       {toastMessage && (

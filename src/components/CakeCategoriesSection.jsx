@@ -7,7 +7,7 @@ export default function CakeCategoriesSection({ currentLang = 'en', onSelectCate
 
   return (
     <section id="cake-categories-section" className="py-14 sm:py-20 px-4 sm:px-8 lg:px-12 bg-[#FFF9F0] border-t border-[#F5EBDD] transition-colors relative">
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-7xl mx-auto w-full min-w-0">
         
         {/* Section Header */}
         <div className="flex flex-col items-center text-center mb-10 sm:mb-14">

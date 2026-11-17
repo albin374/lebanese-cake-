@@ -31,8 +31,8 @@ export default function Navbar({ currentLang = 'en', onCustomizeClick, activeCat
   ];
 
   return (
-    <nav className="bg-[#FFFFFF] border-y border-[#F5EBDD] h-[52px] sm:h-[58px] px-4 sm:px-6 lg:px-8 xl:px-10 relative z-30 transition-colors">
-      <div className="max-w-7xl mx-auto h-full flex items-center justify-between">
+    <nav className="bg-[#FFFFFF] border-y border-[#F5EBDD] h-[50px] sm:h-[58px] px-3 sm:px-6 lg:px-8 xl:px-10 relative z-30 transition-colors w-full overflow-hidden">
+      <div className="max-w-7xl mx-auto h-full flex items-center justify-between min-w-0 w-full">
         
         {/* Mobile Hamburger Drawer Trigger */}
         <div className="lg:hidden flex items-center gap-2">
@@ -100,13 +100,13 @@ export default function Navbar({ currentLang = 'en', onCustomizeClick, activeCat
           })}
         </div>
 
-        {/* Customize Cake Button: Moved to the right with generous distinct separation from Cakes for Guys */}
+        {/* Customize Cake Button: Moved to the right with responsive spacing */}
         <button
           type="button"
           onClick={onCustomizeClick}
-          className="flex items-center gap-2 bg-[#C58A19] hover:bg-[#4A2116] text-white font-poppins font-semibold text-[14px] sm:text-[14.5px] px-5 sm:px-6 py-2.5 sm:py-3 rounded-[22px] shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer group shrink-0 ml-6 xl:ml-10 2xl:ml-12 rtl:ml-0 rtl:mr-6 rtl:xl:mr-10 rtl:2xl:mr-12"
+          className="flex items-center gap-1.5 sm:gap-2 bg-[#C58A19] hover:bg-[#4A2116] text-white font-poppins font-semibold text-xs sm:text-[14px] px-3 sm:px-5 py-2 sm:py-2.5 rounded-[22px] shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer group shrink-0 lg:ml-6 xl:ml-10 2xl:ml-12 lg:rtl:ml-0 lg:rtl:mr-6 lg:rtl:xl:mr-10 lg:rtl:2xl:mr-12"
         >
-          <Cake className="w-4 h-4 text-white group-hover:scale-110 transition-transform duration-200" />
+          <Cake className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white group-hover:scale-110 transition-transform duration-200" />
           <span className="leading-none whitespace-nowrap">{t.customizeCake}</span>
         </button>
 
