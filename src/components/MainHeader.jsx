@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, CircleHelp, UserRound, ShoppingBag, X } from 'lucide-react';
+import { Search, UserRound, Cake, X } from 'lucide-react';
 import { translations } from '../translations';
 
 export default function MainHeader({ 
@@ -114,8 +114,8 @@ export default function MainHeader({
           )}
         </div>
 
-        {/* Right Section: Header Actions (Help Center, Account, Bag with Responsive Spacing) */}
-        <div className="flex items-center gap-3 sm:gap-6 md:gap-8 lg:gap-11 shrink-0">
+        {/* Right Section: Header Actions (Account & Cake Bag) */}
+        <div className="flex items-center gap-4 sm:gap-7 md:gap-9 shrink-0">
           
           {/* Mobile Search Icon Trigger */}
           <button 
@@ -126,20 +126,7 @@ export default function MainHeader({
             <Search className="w-5 h-5" />
           </button>
 
-          {/* 1. Help Center */}
-          <button 
-            type="button"
-            onClick={onOpenHelp}
-            className="flex flex-col items-center group text-[#4A2116] hover:text-[#C58A19] transition-colors cursor-pointer"
-            title={t.helpCenter}
-          >
-            <CircleHelp className="w-5 h-5 text-[#C58A19] group-hover:scale-105 transition-transform stroke-[1.8]" />
-            <span className="hidden sm:inline text-[11px] sm:text-xs font-poppins font-medium text-[#4A2116] group-hover:text-[#C58A19] transition-colors leading-none tracking-tight mt-1.5">
-              {t.helpCenter}
-            </span>
-          </button>
-
-          {/* 2. Account */}
+          {/* 1. Account */}
           <button 
             type="button"
             onClick={onOpenAccount}
@@ -152,7 +139,7 @@ export default function MainHeader({
             </span>
           </button>
 
-          {/* 3. Bag */}
+          {/* 2. Bag (Cake Icon) */}
           <button 
             type="button"
             onClick={onOpenBag}
@@ -160,7 +147,7 @@ export default function MainHeader({
             title={t.bag}
           >
             <div className="relative">
-              <ShoppingBag className="w-5 h-5 text-[#C58A19] group-hover:scale-105 transition-transform stroke-[1.8]" />
+              <Cake className="w-5 h-5 text-[#C58A19] group-hover:scale-105 transition-transform stroke-[1.8]" />
               {cartCount > 0 && (
                 <span className="absolute -top-1.5 -right-2 rtl:-right-auto rtl:-left-2 bg-[#72251F] text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center shadow-sm">
                   {cartCount}

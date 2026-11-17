@@ -41,11 +41,11 @@ export default function FooterSection({
           <div className="lg:col-span-4 lg:pr-8 lg:rtl:pr-0 lg:rtl:pl-8 lg:border-r lg:rtl:border-r-0 lg:rtl:border-l border-[#E5C583]/60 flex flex-col justify-start">
             
             {/* Circular Heritage Logo Emblem */}
-            <div className="mb-4">
+            <div className="mb-3.5">
               <img 
                 src="/Lebanese Dream Bakery Logo2.png" 
                 alt="Lebanese Dream Bakery LLC" 
-                className="w-22 h-22 sm:w-24 sm:h-24 object-contain select-none"
+                className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 max-w-[75px] sm:max-w-[90px] object-contain select-none"
               />
             </div>
 
