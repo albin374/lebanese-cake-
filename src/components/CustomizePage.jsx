@@ -69,7 +69,7 @@ export default function CustomizePage({
       title: isAr ? 'كيك أعياد الميلاد' : 'Birthday Cake',
       image: '/customize/birthday.png',
       icon: (
-        <svg className="w-4 h-4 stroke-current" viewBox="0 0 24 24" fill="none" strokeWidth="1.8">
+        <svg className="w-5 h-5 stroke-current" viewBox="0 0 24 24" fill="none" strokeWidth="1.8">
           <path d="M20 21v-8a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8" />
           <path d="M4 16s2-1 4-1 4 1 4 1 2-1 4-1 4 1 4 1" />
           <path d="M2 21h20" />
@@ -87,7 +87,7 @@ export default function CustomizePage({
       title: isAr ? 'كيك الأعراس' : 'Wedding Cake',
       image: '/customize/Wedding Cake.png',
       icon: (
-        <svg className="w-4 h-4 stroke-current" viewBox="0 0 24 24" fill="none" strokeWidth="1.8">
+        <svg className="w-5 h-5 stroke-current" viewBox="0 0 24 24" fill="none" strokeWidth="1.8">
           <circle cx="9" cy="12" r="5" />
           <circle cx="15" cy="12" r="5" />
         </svg>
@@ -97,20 +97,20 @@ export default function CustomizePage({
       id: 'graduation',
       title: isAr ? 'كيك التخرج' : 'Graduation Cake',
       image: '/customize/graduation.png',
-      icon: <GraduationCap className="w-4 h-4" />
+      icon: <GraduationCap className="w-5 h-5" />
     },
     {
       id: 'superhero',
       title: isAr ? 'كيك الأبطال الخارقين' : 'Superhero Cake',
       image: '/customize/Superhero Cake.png',
-      icon: <Sparkles className="w-4 h-4" />
+      icon: <Sparkles className="w-5 h-5" />
     },
     {
       id: 'boys',
       title: isAr ? 'كيك للأولاد' : 'Boys Cake',
       image: '/customize/boys cake.png',
       icon: (
-        <svg className="w-4 h-4 stroke-current" viewBox="0 0 24 24" fill="none" strokeWidth="1.8">
+        <svg className="w-5 h-5 stroke-current" viewBox="0 0 24 24" fill="none" strokeWidth="1.8">
           <circle cx="12" cy="12" r="8" />
           <path d="M12 8v8" />
           <path d="M8 12h8" />
@@ -121,7 +121,7 @@ export default function CustomizePage({
       id: 'girls',
       title: isAr ? 'كيك للبنات' : 'Girls Cake',
       image: '/customize/girls cake.png',
-      icon: <Heart className="w-4 h-4" />
+      icon: <Heart className="w-5 h-5" />
     }
   ];
 
@@ -235,59 +235,6 @@ export default function CustomizePage({
 
   return (
     <div className="min-h-screen bg-[#FFFDF8] text-[#4A2116] py-6 sm:py-10 px-3 sm:px-6 lg:px-12 relative overflow-hidden transition-colors selection:bg-[#C58A19] selection:text-white w-full max-w-full">
-      
-      {/* Decorative Golden Line Art Flourishes (Matching Reference Image) */}
-      
-      {/* 1. Top-Left Golden Laurel Leaves */}
-      <div className="absolute top-2 left-2 rtl:left-auto rtl:right-2 w-28 sm:w-40 pointer-events-none opacity-80 select-none">
-        <svg viewBox="0 0 160 120" fill="none" className="w-full stroke-[#C58A19]" strokeWidth="1.5">
-          <path d="M10 20 C 30 15, 60 25, 90 50 C 110 68, 140 100, 150 115" strokeLinecap="round" />
-          {/* Leaves along vine */}
-          <path d="M25 18 C 30 5, 45 8, 40 22 C 35 25, 25 22, 25 18 Z" fill="#FFF9F0" />
-          <path d="M50 25 C 60 12, 75 16, 70 30 C 65 33, 52 30, 50 25 Z" fill="#FFF9F0" />
-          <path d="M75 42 C 85 28, 100 32, 95 46 C 90 50, 78 47, 75 42 Z" fill="#FFF9F0" />
-          <path d="M100 60 C 112 48, 126 54, 120 68 C 115 72, 102 68, 100 60 Z" fill="#FFF9F0" />
-          <path d="M125 82 C 138 72, 150 78, 145 92 C 140 96, 128 90, 125 82 Z" fill="#FFF9F0" />
-        </svg>
-      </div>
-
-      {/* 2. Top-Right Golden Elegant Curves */}
-      <div className="absolute top-0 right-0 rtl:right-auto rtl:left-0 w-32 sm:w-48 pointer-events-none opacity-60 select-none">
-        <svg viewBox="0 0 180 140" fill="none" className="w-full stroke-[#C58A19]" strokeWidth="1.6">
-          <path d="M180 0 C 120 10, 80 50, 50 110 C 35 140, 20 150, 0 160" strokeLinecap="round" />
-          <path d="M180 30 C 135 40, 105 75, 80 130" strokeLinecap="round" strokeDasharray="3 3" />
-        </svg>
-      </div>
-
-      {/* 3. Bottom-Left Golden Whisk & Rolling Pin */}
-      <div className="absolute bottom-2 left-3 rtl:left-auto rtl:right-3 w-28 sm:w-36 pointer-events-none opacity-75 select-none hidden sm:block">
-        <svg viewBox="0 0 140 100" fill="none" className="w-full stroke-[#C58A19]" strokeWidth="1.5">
-          {/* Whisk wires */}
-          <path d="M10 80 C 15 50, 45 40, 70 50 C 95 60, 105 85, 10 80 Z" />
-          <path d="M15 78 C 30 55, 60 50, 80 62" />
-          <path d="M22 75 C 40 60, 65 58, 85 70" />
-          {/* Whisk handle */}
-          <line x1="85" y1="62" x2="130" y2="40" strokeWidth="2.5" strokeLinecap="round" />
-        </svg>
-      </div>
-
-      {/* 4. Bottom-Right Golden Cupcake with Cherry */}
-      <div className="absolute bottom-2 right-3 rtl:right-auto rtl:left-3 w-24 sm:w-32 pointer-events-none opacity-75 select-none hidden sm:block">
-        <svg viewBox="0 0 100 100" fill="none" className="w-full stroke-[#C58A19]" strokeWidth="1.5">
-          <circle cx="50" cy="22" r="5" />
-          <path d="M50 17 C 55 10, 62 12, 65 14" strokeLinecap="round" />
-          <path d="M40 32 C 40 25, 60 25, 60 32" />
-          <path d="M32 40 C 30 32, 70 32, 68 40" />
-          <path d="M26 48 C 24 40, 76 40, 74 48" />
-          <path d="M28 49 L 34 76 L 66 76 L 72 49 Z" strokeLinejoin="round" />
-          <line x1="38" y1="50" x2="42" y2="76" strokeWidth="1.2" />
-          <line x1="46" y1="50" x2="48" y2="76" strokeWidth="1.2" />
-          <line x1="54" y1="50" x2="52" y2="76" strokeWidth="1.2" />
-          <line x1="62" y1="50" x2="58" y2="76" strokeWidth="1.2" />
-          <path d="M10 82 C 35 78, 65 88, 90 74" strokeWidth="1.6" strokeLinecap="round" />
-        </svg>
-      </div>
-
       <div className="max-w-6xl mx-auto relative z-10">
 
         {/* Back to Home Breadcrumb & Button */}
@@ -411,8 +358,8 @@ export default function CustomizePage({
               </div>
             </div>
 
-            {/* 6 Cake Cards Grid */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-6 gap-3.5 sm:gap-4.5 mb-8">
+            {/* 6 Cake Cards Grid: 3 in a row, enlarged size */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-7 md:gap-8 mb-10">
               {occasions.map((occ) => {
                 const isSelected = selectedOccasion === occ.id;
 
@@ -420,36 +367,34 @@ export default function CustomizePage({
                   <div
                     key={occ.id}
                     onClick={() => setSelectedOccasion(occ.id)}
-                    className={`bg-white rounded-2xl border transition-all duration-200 cursor-pointer p-3 sm:p-3.5 flex flex-col justify-between relative group hover:-translate-y-1 hover:shadow-lg ${
+                    className={`bg-white rounded-3xl border-2 transition-all duration-300 cursor-pointer p-5 sm:p-6 flex flex-col justify-between relative group hover:-translate-y-1.5 hover:shadow-xl ${
                       isSelected 
-                        ? 'border-2 border-[#C58A19] shadow-md ring-2 ring-[#C58A19]/20' 
-                        : 'border-[#F0E4D2] hover:border-[#C58A19]/70 shadow-xs'
+                        ? 'border-[#C58A19] shadow-lg ring-4 ring-[#C58A19]/15 bg-[#FFFDF9]' 
+                        : 'border-[#EEDECB] hover:border-[#C58A19]/70 shadow-sm'
                     }`}
                   >
                     {/* Checkmark Badge on Top Right when selected */}
                     {isSelected && (
-                      <div className="absolute top-2.5 right-2.5 rtl:right-auto rtl:left-2.5 w-6 h-6 rounded-full bg-[#C58A19] text-white flex items-center justify-center shadow-xs z-10 animate-scaleIn">
-                        <Check className="w-3.5 h-3.5 stroke-[2.5]" />
+                      <div className="absolute top-4 right-4 rtl:right-auto rtl:left-4 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#C58A19] text-white flex items-center justify-center shadow-md z-10 animate-scaleIn">
+                        <Check className="w-4 h-4 stroke-[2.5]" />
                       </div>
                     )}
 
-                    {/* Cake Image Box */}
-                    <div className="w-full aspect-[4/3] flex items-center justify-center overflow-hidden mb-2.5 pt-1">
+                    {/* Cake Image Box (Enlarged) */}
+                    <div className="w-full aspect-[4/3] sm:h-52 md:h-60 flex items-center justify-center overflow-hidden mb-4 p-3 bg-[#FAF7F2]/60 rounded-2xl group-hover:bg-[#FAF7F2] transition-colors">
                       <img 
                         src={encodeURI(occ.image)} 
                         alt={occ.title} 
-                        className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300 select-none" 
+                        className="w-full h-full object-contain drop-shadow-sm group-hover:scale-108 transition-transform duration-300 select-none" 
                       />
                     </div>
 
                     {/* Card Footer: Icon + Title */}
-                    <div className="flex items-center gap-2 pt-2 border-t border-[#F8F1E6]">
-                      <span className={`text-base shrink-0 ${isSelected ? 'text-[#C58A19]' : 'text-[#8C6D62]'}`}>
+                    <div className="flex items-center justify-center gap-2.5 pt-3.5 border-t border-[#F2E7D5]">
+                      <span className={`shrink-0 transition-colors ${isSelected ? 'text-[#C58A19]' : 'text-[#8C6D62] group-hover:text-[#C58A19]'}`}>
                         {occ.icon}
                       </span>
-                      <span className={`font-poppins text-xs sm:text-[13px] font-medium leading-tight truncate ${
-                        isSelected ? 'text-[#4A2116] font-semibold' : 'text-[#4A2116]'
-                      }`}>
+                      <span className="font-serif text-base sm:text-lg md:text-xl font-bold tracking-tight text-[#4A2116] text-center">
                         {occ.title}
                       </span>
                     </div>
