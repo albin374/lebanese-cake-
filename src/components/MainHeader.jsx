@@ -7,7 +7,8 @@ export default function MainHeader({
   cartCount = 2, 
   onOpenHelp, 
   onOpenAccount, 
-  onOpenBag 
+  onOpenBag,
+  onLogoClick
 }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchFocused, setSearchFocused] = useState(false);
@@ -29,13 +30,17 @@ export default function MainHeader({
         
         {/* Left Section: Bakery Logo (Slightly increased size, preserved original aspect ratio) */}
         <div className="flex items-center shrink-0">
-          <a href="#" className="flex items-center group focus:outline-none">
+          <button 
+            type="button" 
+            onClick={onLogoClick} 
+            className="flex items-center group focus:outline-none cursor-pointer text-left rtl:text-right"
+          >
             <img 
               src="/Lebanese Dream Bakery Logo.png" 
               alt="Lebanese Dream Bakery LLC - مخبز الحلم اللبناني"
               className="h-14 sm:h-16 md:h-18 lg:h-[80px] w-auto max-w-[260px] sm:max-w-[340px] md:max-w-[400px] lg:max-w-[440px] object-contain transition-transform duration-200 group-hover:scale-[1.01]"
             />
-          </a>
+          </button>
         </div>
 
         {/* Center Section: Taller Search Bar (Cream bg #FFFDF8, Thin gold border #E6C783, Rounded 10px, Antique gold button #C58A19) */}

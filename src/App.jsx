@@ -10,11 +10,15 @@ import ChefStorySection from './components/ChefStorySection';
 import ReviewsSection from './components/ReviewsSection';
 import FooterSection from './components/FooterSection';
 import CustomizeCakeModal from './components/CustomizeCakeModal';
+import CustomizePage from './components/CustomizePage';
 import { translations } from './translations';
 import { Phone, Mail, Clock, X, Check, ShoppingBag, UserRound } from 'lucide-react';
 
 export default function App() {
   const [currentLang, setCurrentLang] = useState('en');
+  const [currentPage, setCurrentPage] = useState(() => {
+    return typeof window !== 'undefined' && window.location.hash === '#customize' ? 'customize' : 'home';
+  });
   const [activeCategory, setActiveCategory] = useState('all-cakes');
   const [cartCount, setCartCount] = useState(2);
   const [isCustomizeOpen, setIsCustomizeOpen] = useState(false);
@@ -31,6 +35,32 @@ export default function App() {
     document.documentElement.dir = isAr ? 'rtl' : 'ltr';
     document.documentElement.lang = currentLang;
   }, [currentLang, isAr]);
+
+  // Synchronize URL hash with page state
+  useEffect(() => {
+    const handleHash = () => {
+      if (window.location.hash === '#customize') {
+        setCurrentPage('customize');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        setCurrentPage('home');
+      }
+    };
+    window.addEventListener('hashchange', handleHash);
+    return () => window.removeEventListener('hashchange', handleHash);
+  }, []);
+
+  const openCustomizePage = () => {
+    window.location.hash = '#customize';
+    setCurrentPage('customize');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const goToHome = () => {
+    window.location.hash = '';
+    setCurrentPage('home');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   const handleAddToCart = (item) => {
     setCartCount((prev) => prev + 1);
@@ -70,55 +100,72 @@ export default function App() {
         onOpenHelp={() => setIsHelpOpen(true)}
         onOpenAccount={() => setIsAccountOpen(true)}
         onOpenBag={() => setIsBagOpen(true)}
+        onLogoClick={goToHome}
       />
 
       {/* 3. Level 3: Category Navigation Bar (Height ~48-52px, #FFFFFF, border-y #F5EBDD, Poppins, 14-15px, Hover gold underline, Dropdowns, Customize Cake Button in #C58A19) */}
       <Navbar 
         currentLang={currentLang}
         activeCategory={activeCategory}
-        onSelectCategory={(id) => setActiveCategory(id)}
-        onCustomizeClick={() => setIsCustomizeOpen(true)}
+        onSelectCategory={(id) => {
+          if (currentPage !== 'home') goToHome();
+          setActiveCategory(id);
+        }}
+        onCustomizeClick={openCustomizePage}
       />
 
-      {/* 4. Level 4: Homepage Hero Section (Height 380-450px on desktop, original photography, slider transition) */}
-      <main className="w-full flex-1">
-        <BannerSection currentLang={currentLang} />
-        
-        {/* 5. Cake Categories Section (Matching style of reference image with empty image slots) */}
-        <CakeCategoriesSection 
-          currentLang={currentLang}
-          onSelectCategory={(id) => setActiveCategory(id)}
-          onCustomizeClick={() => setIsCustomizeOpen(true)}
-        />
+      {/* Page View: Either Dedicated Multi-Step Customize Page OR Homepage */}
+      {currentPage === 'customize' ? (
+        <main className="w-full flex-1">
+          <CustomizePage
+            currentLang={currentLang}
+            onBackToHome={goToHome}
+            onAddToCart={handleAddToCart}
+            onOpenHelp={() => setIsHelpOpen(true)}
+          />
+        </main>
+      ) : (
+        <main className="w-full flex-1">
+          {/* 4. Level 4: Homepage Hero Section (Height 380-450px on desktop, original photography, slider transition) */}
+          <BannerSection currentLang={currentLang} />
+          
+          {/* 5. Cake Categories Section (Matching style of reference image with empty image slots) */}
+          <CakeCategoriesSection 
+            currentLang={currentLang}
+            onSelectCategory={(id) => setActiveCategory(id)}
+            onCustomizeClick={openCustomizePage}
+          />
 
-        {/* 6. Bestsellers Section (Our Favorites - 4 Featured Showcase Cards) */}
-        <BestsellersSection
-          currentLang={currentLang}
-          onAddToCart={handleAddToCart}
-          onCustomizeClick={() => setIsCustomizeOpen(true)}
-        />
+          {/* 6. Bestsellers Section (Our Favorites - 4 Featured Showcase Cards) */}
+          <BestsellersSection
+            currentLang={currentLang}
+            onAddToCart={handleAddToCart}
+            onCustomizeClick={openCustomizePage}
+          />
 
-        {/* 7. Best Cakes in Dubai Section (Signature Dubai Showcase, Trust Pillars & Refrigerated Delivery) */}
-        <BestCakesInDubaiSection
-          currentLang={currentLang}
-          onAddToCart={handleAddToCart}
-          onCustomizeClick={() => setIsCustomizeOpen(true)}
-        />
+          {/* 7. Best Cakes in Dubai Section (Signature Dubai Showcase, Trust Pillars & Refrigerated Delivery) */}
+          <BestCakesInDubaiSection
+            currentLang={currentLang}
+            onAddToCart={handleAddToCart}
+            onCustomizeClick={openCustomizePage}
+          />
 
-        {/* 8. Chef Saad Heritage Story Section (Strawberry Cream Cake Close-Up Background) */}
-        <ChefStorySection currentLang={currentLang} />
+          {/* 8. Chef Saad Heritage Story Section (Strawberry Cream Cake Close-Up Background) */}
+          <ChefStorySection currentLang={currentLang} />
 
-        {/* 9. Client Stories & Reviews Section */}
-        <ReviewsSection currentLang={currentLang} />
-      </main>
+          {/* 9. Client Stories & Reviews Section */}
+          <ReviewsSection currentLang={currentLang} />
+        </main>
+      )}
 
       {/* 10. Luxury Bakery Footer Section */}
       <FooterSection 
         currentLang={currentLang} 
-        onCustomizeClick={() => setIsCustomizeOpen(true)}
+        onCustomizeClick={openCustomizePage}
         onOpenHelp={() => setIsHelpOpen(true)}
         onOpenAccount={() => setIsAccountOpen(true)}
         onSelectCategory={(id) => {
+          if (currentPage !== 'home') goToHome();
           setActiveCategory(id);
           const el = document.getElementById('cake-categories-section');
           if (el) {
