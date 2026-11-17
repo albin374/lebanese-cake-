@@ -118,6 +118,15 @@ export default function App() {
         onCustomizeClick={() => setIsCustomizeOpen(true)}
         onOpenHelp={() => setIsHelpOpen(true)}
         onOpenAccount={() => setIsAccountOpen(true)}
+        onSelectCategory={(id) => {
+          setActiveCategory(id);
+          const el = document.getElementById('cake-categories-section');
+          if (el) {
+            el.scrollIntoView({ behavior: 'smooth' });
+          } else {
+            window.scrollTo({ top: 400, behavior: 'smooth' });
+          }
+        }}
       />
 
       {/* Cake Customization Modal (Preserved existing builder functionality) */}

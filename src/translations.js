@@ -364,12 +364,15 @@ export const translations = {
     footerPhone: "+971 506063631",
     footerNavigationTitle: "Navigation",
     footerNavLinks: [
-      { text: "All Cakes", target: "banner" },
-      { text: "Cake Categories", target: "cake-categories-section" },
-      { text: "Bestsellers", target: "bestsellers-section" },
-      { text: "Best Cakes in Dubai", target: "best-cakes-in-dubai" },
-      { text: "Chef Story", target: "chef-story-section" },
-      { text: "Client Reviews", target: "reviews-section" }
+      { text: "All Cakes", id: "all-cakes" },
+      { text: "Wedding Cakes", id: "wedding-cakes" },
+      { text: "Corporate Cakes", id: "corporate-cakes" },
+      { text: "Cookies", id: "cookies" },
+      { text: "Cake Pops", id: "cake-pops" },
+      { text: "Cupcakes", id: "cupcakes" },
+      { text: "Cakes for Kids", id: "cakes-for-kids" },
+      { text: "Cakes for Ladies", id: "cakes-for-ladies" },
+      { text: "Cakes for Guys", id: "cakes-for-guys" }
     ],
     footerCustomizationTitle: "Customization Services",
     footerDesignYourCake: "Design your own cake",
@@ -749,12 +752,15 @@ export const translations = {
     footerPhone: "+971 506063631",
     footerNavigationTitle: "التنقل السريع",
     footerNavLinks: [
-      { text: "كل أنواع الكيك", target: "banner" },
-      { text: "أقسام وتشكيلات الكيك", target: "cake-categories-section" },
-      { text: "الكيك الأكثر مبيعاً", target: "bestsellers-section" },
-      { text: "أفضل كيك في دبي", target: "best-cakes-in-dubai" },
-      { text: "قصة الشيف والمخبز", target: "chef-story-section" },
-      { text: "آراء وتجارب العملاء", target: "reviews-section" }
+      { text: "كل أنواع الكيك", id: "all-cakes" },
+      { text: "كيك الأعراس", id: "wedding-cakes" },
+      { text: "كيك الشركات", id: "corporate-cakes" },
+      { text: "كوكيز", id: "cookies" },
+      { text: "كيك بوبس", id: "cake-pops" },
+      { text: "كب كيك", id: "cupcakes" },
+      { text: "كيك للأطفال", id: "cakes-for-kids" },
+      { text: "كيك للسيدات", id: "cakes-for-ladies" },
+      { text: "كيك للرجال", id: "cakes-for-guys" }
     ],
     footerCustomizationTitle: "خدمات التخصيص",
     footerDesignYourCake: "صمّم كيكتك الخاصة",
