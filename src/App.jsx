@@ -110,6 +110,10 @@ export default function App() {
         onSelectCategory={(id) => {
           if (currentPage !== 'home') goToHome();
           setActiveCategory(id);
+          const el = document.getElementById('cake-categories-section');
+          if (el) {
+            el.scrollIntoView({ behavior: 'smooth' });
+          }
         }}
         onCustomizeClick={openCustomizePage}
       />

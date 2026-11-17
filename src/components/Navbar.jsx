@@ -5,8 +5,16 @@ import { translations } from '../translations';
 export default function Navbar({ currentLang = 'en', onCustomizeClick, activeCategory, onSelectCategory }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState(null);
+  const [mobileExpanded, setMobileExpanded] = useState({});
   const t = translations[currentLang] || translations.en;
   const isAr = currentLang === 'ar';
+
+  const toggleMobileSubmenu = (id) => {
+    setMobileExpanded(prev => ({
+      ...prev,
+      [id]: !prev[id]
+    }));
+  };
 
   const navCategories = [
     { id: 'all-cakes', label: t.allCakes, hasDropdown: false },
@@ -31,7 +39,7 @@ export default function Navbar({ currentLang = 'en', onCustomizeClick, activeCat
   ];
 
   return (
-    <nav className="bg-[#FFFFFF] border-y border-[#F5EBDD] h-[50px] sm:h-[58px] px-3 sm:px-6 lg:px-8 xl:px-10 relative z-30 transition-colors w-full overflow-hidden">
+    <nav className="bg-[#FFFFFF] border-y border-[#F5EBDD] h-[50px] sm:h-[58px] px-3 sm:px-6 lg:px-8 xl:px-10 relative z-30 transition-colors w-full">
       <div className="max-w-7xl mx-auto h-full flex items-center justify-between min-w-0 w-full">
         
         {/* Mobile Hamburger Drawer Trigger */}
@@ -39,13 +47,13 @@ export default function Navbar({ currentLang = 'en', onCustomizeClick, activeCat
           <button
             type="button"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-1.5 text-[#4A2116] hover:text-[#C58A19] focus:outline-none cursor-pointer"
+            className="p-1.5 rounded-lg text-[#4A2116] hover:text-[#C58A19] hover:bg-[#F8F1E6] focus:outline-none transition-colors cursor-pointer"
             aria-label="Toggle Navigation Menu"
           >
-            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            {mobileMenuOpen ? <X className="w-5 h-5 text-[#C58A19]" /> : <Menu className="w-5 h-5" />}
           </button>
-          <span className="font-poppins font-medium text-sm text-[#4A2116]">
-            {isAr ? 'الأقسام' : 'Categories'}
+          <span className="font-poppins font-medium text-xs sm:text-sm text-[#4A2116]">
+            {isAr ? 'تصفح الأقسام' : 'Menu'}
           </span>
         </div>
 
@@ -112,39 +120,88 @@ export default function Navbar({ currentLang = 'en', onCustomizeClick, activeCat
 
       </div>
 
-      {/* Mobile Drawer Menu */}
+      {/* Mobile Drawer Menu & Overlay */}
       {mobileMenuOpen && (
-        <div className="lg:hidden absolute top-full left-0 right-0 bg-[#FFF9F0] border-b border-[#F5EBDD] px-6 py-6 shadow-xl z-50 animate-fadeIn">
-          <div className="space-y-2.5 mb-5">
-            {navCategories.map((item) => (
-              <div key={item.id} className="border-b border-[#F5EBDD]/60 py-2.5">
-                <button
-                  type="button"
-                  onClick={() => {
-                    if (onSelectCategory) onSelectCategory(item.id);
-                    setMobileMenuOpen(false);
-                  }}
-                  className="w-full text-left rtl:text-right flex items-center justify-between font-poppins text-base font-medium text-[#4A2116] hover:text-[#C58A19]"
-                >
-                  <span>{item.label}</span>
-                  {item.hasDropdown && <ChevronDown className="w-4 h-4 text-[#C58A19]" />}
-                </button>
-              </div>
-            ))}
-          </div>
+        <>
+          {/* Backdrop overlay */}
+          <div 
+            onClick={() => setMobileMenuOpen(false)}
+            className="lg:hidden fixed inset-0 top-[110px] sm:top-[125px] bg-black/40 backdrop-blur-xs z-40 transition-opacity"
+            aria-hidden="true"
+          />
 
-          <button
-            type="button"
-            onClick={() => {
-              setMobileMenuOpen(false);
-              onCustomizeClick();
-            }}
-            className="w-full flex items-center justify-center gap-2.5 bg-[#C58A19] hover:bg-[#4A2116] text-white font-poppins font-semibold text-base py-3.5 px-6 rounded-[22px] shadow transition-colors"
-          >
-            <Cake className="w-5 h-5 text-white" />
-            <span>{t.customizeCake}</span>
-          </button>
-        </div>
+          {/* Drawer Dropdown Content */}
+          <div className="lg:hidden absolute top-full left-0 right-0 bg-[#FFFDF8] border-b border-[#EADCC8] px-5 py-5 shadow-2xl z-50 animate-fadeIn max-h-[75vh] overflow-y-auto">
+            <div className="space-y-1 mb-5">
+              {navCategories.map((item) => {
+                const isActive = activeCategory === item.id;
+                const isExpanded = !!mobileExpanded[item.id];
+
+                return (
+                  <div key={item.id} className="border-b border-[#F2E7D5]/70 py-2">
+                    <div className="flex items-center justify-between">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (onSelectCategory) onSelectCategory(item.id);
+                          setMobileMenuOpen(false);
+                        }}
+                        className={`text-left rtl:text-right font-poppins text-[15px] font-medium py-1 transition-colors cursor-pointer flex-1 ${
+                          isActive ? 'text-[#C58A19] font-bold' : 'text-[#4A2116] hover:text-[#C58A19]'
+                        }`}
+                      >
+                        {item.label}
+                      </button>
+
+                      {item.hasDropdown && (
+                        <button
+                          type="button"
+                          onClick={() => toggleMobileSubmenu(item.id)}
+                          className="p-2 text-[#C58A19] hover:text-[#4A2116] cursor-pointer"
+                          aria-label={`Toggle ${item.label} subcategories`}
+                        >
+                          <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`} />
+                        </button>
+                      )}
+                    </div>
+
+                    {/* Subcategories for items with dropdown */}
+                    {item.hasDropdown && isExpanded && (
+                      <div className="mt-2 pl-4 rtl:pl-0 rtl:pr-4 space-y-1.5 py-1 border-l-2 rtl:border-l-0 rtl:border-r-2 border-[#C58A19]/30">
+                        {item.children.map((sub, idx) => (
+                          <button
+                            key={idx}
+                            type="button"
+                            onClick={() => {
+                              if (onSelectCategory) onSelectCategory(item.id);
+                              setMobileMenuOpen(false);
+                            }}
+                            className="block w-full text-left rtl:text-right py-1.5 text-xs text-[#7D5B50] hover:text-[#C58A19] font-medium cursor-pointer"
+                          >
+                            {sub}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Customize Cake Action Button */}
+            <button
+              type="button"
+              onClick={() => {
+                setMobileMenuOpen(false);
+                if (onCustomizeClick) onCustomizeClick();
+              }}
+              className="w-full flex items-center justify-center gap-2.5 bg-[#C58A19] hover:bg-[#4A2116] text-white font-poppins font-semibold text-sm sm:text-base py-3.5 px-6 rounded-full shadow-md transition-colors cursor-pointer"
+            >
+              <Cake className="w-5 h-5 text-white" />
+              <span>{t.customizeCake}</span>
+            </button>
+          </div>
+        </>
       )}
     </nav>
   );
