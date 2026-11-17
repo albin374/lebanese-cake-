@@ -52,13 +52,13 @@ export default function CustomizePage({
   const [messageStyle, setMessageStyle] = useState('piped-gold');
   const [specialInstructions, setSpecialInstructions] = useState('');
 
-  // 8 Steps Definition (Unified Shape & Layers, Dedicated Sponge, Dedicated Filling Step)
+  // 8 Steps Definition (1: Shape & Layers, 2: Size, 3: Sponge, 4: Filling, 5: Cake Type, 6: Toppings, 7: Message, 8: Review)
   const steps = [
-    { number: 1, id: 'cake-type', label: isAr ? 'نوع الكيك' : 'Cake Type' },
-    { number: 2, id: 'shape-layers', label: isAr ? 'الشكل والطبقات' : 'Shape and Layers' },
-    { number: 3, id: 'size', label: isAr ? 'الحجم' : 'Size' },
-    { number: 4, id: 'sponge', label: isAr ? 'الإسفنجة' : 'Choose Sponge' },
-    { number: 5, id: 'filling', label: isAr ? 'الحشوة' : 'Choose Filling' },
+    { number: 1, id: 'shape-layers', label: isAr ? 'الشكل والطبقات' : 'Shape and Layers' },
+    { number: 2, id: 'size', label: isAr ? 'الحجم' : 'Size' },
+    { number: 3, id: 'sponge', label: isAr ? 'الإسفنجة' : 'Choose Sponge' },
+    { number: 4, id: 'filling', label: isAr ? 'الحشوة' : 'Choose Filling' },
+    { number: 5, id: 'cake-type', label: isAr ? 'نوع الكيك' : 'Cake Type' },
     { number: 6, id: 'toppings', label: isAr ? 'التصميم' : 'Design and Toppings' },
     { number: 7, id: 'message', label: isAr ? 'الرسالة' : 'Message' },
     { number: 8, id: 'review', label: isAr ? 'المراجعة' : 'Review' },
@@ -444,10 +444,10 @@ export default function CustomizePage({
 
   // Next step label helper
   const getNextStepLabel = () => {
-    if (currentStep === 1) return isAr ? 'التالي: الشكل والطبقات' : 'Next: Shape and Layers';
-    if (currentStep === 2) return isAr ? 'التالي: اختر الحجم' : 'Next: Choose Size';
-    if (currentStep === 3) return isAr ? 'التالي: نكهة الإسفنجة' : 'Next: Choose Sponge';
-    if (currentStep === 4) return isAr ? 'التالي: حشوة الكيك' : 'Next: Choose Filling';
+    if (currentStep === 1) return isAr ? 'التالي: اختر الحجم' : 'Next: Choose Size';
+    if (currentStep === 2) return isAr ? 'التالي: نكهة الإسفنجة' : 'Next: Choose Sponge';
+    if (currentStep === 3) return isAr ? 'التالي: حشوة الكيك' : 'Next: Choose Filling';
+    if (currentStep === 4) return isAr ? 'التالي: نوع الكيك' : 'Next: Cake Type';
     if (currentStep === 5) return isAr ? 'التالي: التصميم والإضافات' : 'Next: Design and Toppings';
     if (currentStep === 6) return isAr ? 'التالي: كتابة الرسالة' : 'Next: Custom Message';
     if (currentStep === 7) return isAr ? 'التالي: مراجعة الطلب' : 'Next: Review Order';
@@ -592,74 +592,8 @@ export default function CustomizePage({
           </div>
         </div>
 
-        {/* STEP 1: Cake Type / Occasions (Identical to reference image) */}
+        {/* STEP 1: Shape and Layers (3 in a row with 9 3D Cake Shape Models) */}
         {currentStep === 1 && (
-          <div className="animate-fadeIn">
-            
-            {/* Section Heading with Left Gold Bar */}
-            <div className="flex items-start gap-3 mb-6 sm:mb-8">
-              <div className="w-1 sm:w-1.5 h-10 sm:h-12 bg-[#C58A19] rounded-full shrink-0 mt-0.5" />
-              <div>
-                <h2 className="font-serif text-xl sm:text-2xl md:text-[26px] font-bold text-[#4A2116]">
-                  {isAr ? 'ما هو نوع الكيك الذي ترغب به؟' : 'What type of cake do you want?'}
-                </h2>
-                <p className="font-poppins text-xs sm:text-sm text-[#8C6D62] mt-0.5">
-                  {isAr ? 'اختر مناسبة الكيك الخاصة بك.' : 'Choose the occasion for your cake.'}
-                </p>
-              </div>
-            </div>
-
-            {/* 6 Cake Cards Grid: 3 in a row, enlarged size */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-7 md:gap-8 mb-10">
-              {occasions.map((occ) => {
-                const isSelected = selectedOccasion === occ.id;
-
-                return (
-                  <div
-                    key={occ.id}
-                    onClick={() => setSelectedOccasion(occ.id)}
-                    className={`bg-white rounded-3xl border-2 transition-all duration-300 cursor-pointer p-5 sm:p-6 flex flex-col justify-between relative group hover:-translate-y-1.5 hover:shadow-xl ${
-                      isSelected 
-                        ? 'border-[#C58A19] shadow-lg ring-4 ring-[#C58A19]/15 bg-[#FFFDF9]' 
-                        : 'border-[#EEDECB] hover:border-[#C58A19]/70 shadow-sm'
-                    }`}
-                  >
-                    {/* Checkmark Badge on Top Right when selected */}
-                    {isSelected && (
-                      <div className="absolute top-4 right-4 rtl:right-auto rtl:left-4 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#C58A19] text-white flex items-center justify-center shadow-md z-10 animate-scaleIn">
-                        <Check className="w-4 h-4 stroke-[2.5]" />
-                      </div>
-                    )}
-
-                    {/* Cake Image Box (Enlarged) */}
-                    <div className="w-full aspect-[4/3] sm:h-52 md:h-60 flex items-center justify-center overflow-hidden mb-4 p-3 bg-[#FAF7F2]/60 rounded-2xl group-hover:bg-[#FAF7F2] transition-colors">
-                      <img 
-                        src={encodeURI(occ.image)} 
-                        alt={occ.title} 
-                        className="w-full h-full object-contain drop-shadow-sm group-hover:scale-108 transition-transform duration-300 select-none" 
-                      />
-                    </div>
-
-                    {/* Card Footer: Icon + Title */}
-                    <div className="flex items-center justify-center gap-2.5 pt-3.5 border-t border-[#F2E7D5]">
-                      <span className={`shrink-0 transition-colors ${isSelected ? 'text-[#C58A19]' : 'text-[#8C6D62] group-hover:text-[#C58A19]'}`}>
-                        {occ.icon}
-                      </span>
-                      <span className="font-serif text-base sm:text-lg md:text-xl font-bold tracking-tight text-[#4A2116] text-center">
-                        {occ.title}
-                      </span>
-                    </div>
-
-                  </div>
-                );
-              })}
-            </div>
-
-          </div>
-        )}
-
-        {/* STEP 2: Cake Shape & Layers (3 in a row with 9 3D Cake Shape Models) */}
-        {currentStep === 2 && (
           <div className="animate-fadeIn">
             {/* Section Heading with Left Gold Bar */}
             <div className="flex items-start gap-3 mb-6 sm:mb-8">
@@ -729,8 +663,8 @@ export default function CustomizePage({
           </div>
         )}
 
-        {/* STEP 3: Size & Guest Count (3 in a row matching Step 1, 2, and 4) */}
-        {currentStep === 3 && (
+        {/* STEP 2: Size and Guest Count (3 in a row matching other steps) */}
+        {currentStep === 2 && (
           <div className="animate-fadeIn">
             <div className="flex items-start gap-3 mb-6 sm:mb-8">
               <div className="w-1 sm:w-1.5 h-10 sm:h-12 bg-[#C58A19] rounded-full shrink-0 mt-0.5" />
@@ -816,8 +750,8 @@ export default function CustomizePage({
           </div>
         )}
 
-        {/* STEP 4: Choose Sponge (3 in a row with 9 Sponge Slice Cutout Models) */}
-        {currentStep === 4 && (
+        {/* STEP 3: Choose Sponge (3 in a row with 9 Sponge Slice Cutout Models) */}
+        {currentStep === 3 && (
           <div className="animate-fadeIn">
             {/* Section Heading with Left Gold Bar */}
             <div className="flex items-start gap-3 mb-6 sm:mb-8">
@@ -883,8 +817,8 @@ export default function CustomizePage({
         )}
 
         
-        {/* STEP 5: Choose Gourmet Filling (Pixel-perfect aligned cards matching reference) */}
-        {currentStep === 5 && (
+        {/* STEP 4: Choose Gourmet Filling (Pixel-perfect aligned cards) */}
+        {currentStep === 4 && (
           <div className="animate-fadeIn">
             {/* Section Heading with Left Gold Bar */}
             <div className="flex items-start gap-3 mb-6 sm:mb-8">
@@ -947,6 +881,72 @@ export default function CustomizePage({
                 );
               })}
             </div>
+          </div>
+        )}
+
+        {/* STEP 5: Cake Type / Occasions */}
+        {currentStep === 5 && (
+          <div className="animate-fadeIn">
+            
+            {/* Section Heading with Left Gold Bar */}
+            <div className="flex items-start gap-3 mb-6 sm:mb-8">
+              <div className="w-1 sm:w-1.5 h-10 sm:h-12 bg-[#C58A19] rounded-full shrink-0 mt-0.5" />
+              <div>
+                <h2 className="font-serif text-xl sm:text-2xl md:text-[26px] font-bold text-[#4A2116]">
+                  {isAr ? 'ما هو نوع الكيك الذي ترغب به؟' : 'What type of cake do you want?'}
+                </h2>
+                <p className="font-poppins text-xs sm:text-sm text-[#8C6D62] mt-0.5">
+                  {isAr ? 'اختر مناسبة الكيك الخاصة بك.' : 'Choose the occasion for your cake.'}
+                </p>
+              </div>
+            </div>
+
+            {/* 6 Cake Cards Grid: 3 in a row, enlarged size */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-7 md:gap-8 mb-10">
+              {occasions.map((occ) => {
+                const isSelected = selectedOccasion === occ.id;
+
+                return (
+                  <div
+                    key={occ.id}
+                    onClick={() => setSelectedOccasion(occ.id)}
+                    className={`bg-white rounded-3xl border-2 transition-all duration-300 cursor-pointer p-5 sm:p-6 flex flex-col justify-between relative group hover:-translate-y-1.5 hover:shadow-xl ${
+                      isSelected 
+                        ? 'border-[#C58A19] shadow-lg ring-4 ring-[#C58A19]/15 bg-[#FFFDF9]' 
+                        : 'border-[#EEDECB] hover:border-[#C58A19]/70 shadow-sm'
+                    }`}
+                  >
+                    {/* Checkmark Badge on Top Right when selected */}
+                    {isSelected && (
+                      <div className="absolute top-4 right-4 rtl:right-auto rtl:left-4 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#C58A19] text-white flex items-center justify-center shadow-md z-10 animate-scaleIn">
+                        <Check className="w-4 h-4 stroke-[2.5]" />
+                      </div>
+                    )}
+
+                    {/* Cake Image Box (Enlarged) */}
+                    <div className="w-full aspect-[4/3] sm:h-52 md:h-60 flex items-center justify-center overflow-hidden mb-4 p-3 bg-[#FAF7F2]/60 rounded-2xl group-hover:bg-[#FAF7F2] transition-colors">
+                      <img 
+                        src={encodeURI(occ.image)} 
+                        alt={occ.title} 
+                        className="w-full h-full object-contain drop-shadow-sm group-hover:scale-108 transition-transform duration-300 select-none" 
+                      />
+                    </div>
+
+                    {/* Card Footer: Icon + Title */}
+                    <div className="flex items-center justify-center gap-2.5 pt-3.5 border-t border-[#F2E7D5]">
+                      <span className={`shrink-0 transition-colors ${isSelected ? 'text-[#C58A19]' : 'text-[#8C6D62] group-hover:text-[#C58A19]'}`}>
+                        {occ.icon}
+                      </span>
+                      <span className="font-serif text-base sm:text-lg md:text-xl font-bold tracking-tight text-[#4A2116] text-center">
+                        {occ.title}
+                      </span>
+                    </div>
+
+                  </div>
+                );
+              })}
+            </div>
+
           </div>
         )}
 
@@ -1212,6 +1212,18 @@ export default function CustomizePage({
                     {fillingOptions.find(f => f.id === selectedFilling)?.image && (
                       <div className="w-14 h-14 rounded-xl bg-white border border-[#E5C583]/60 flex items-center justify-center shrink-0 p-1">
                         <img src={encodeURI(fillingOptions.find(f => f.id === selectedFilling)?.image)} alt="" className="w-full h-full object-contain select-none" />
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="sm:col-span-2 p-3.5 rounded-xl bg-[#FFFBF5] border border-[#F5EBDD] flex items-center justify-between">
+                    <div>
+                      <span className="text-[#8C6D62] block mb-1 font-medium">{isAr ? 'نوع الكيك والمناسبة' : 'Cake Type and Occasion'}</span>
+                      <span className="font-semibold text-[#4A2116] text-sm">{occasions.find(o => o.id === selectedOccasion)?.title}</span>
+                    </div>
+                    {occasions.find(o => o.id === selectedOccasion)?.image && (
+                      <div className="w-14 h-14 rounded-xl bg-white border border-[#E5C583]/60 flex items-center justify-center shrink-0 p-1">
+                        <img src={encodeURI(occasions.find(o => o.id === selectedOccasion)?.image || '/customize/birthday.png')} alt="" className="w-full h-full object-contain select-none" />
                       </div>
                     )}
                   </div>
