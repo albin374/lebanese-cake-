@@ -18,6 +18,7 @@ import {
   Layers,
   Shapes,
   Scale,
+  Users,
   UtensilsCrossed,
   Sparkle,
   Type,
@@ -210,13 +211,63 @@ export default function CustomizePage({
     }
   ];
 
-  // Size options
+  // 6 Size & Guest Count Options (3 in a row layout)
   const sizeOptions = [
-    { id: '1kg', title: isAr ? '1 كجم (6-8 حصص)' : '1 kg (6-8 servings)', basePrice: 180, desc: isAr ? 'قطر 16 سم • احتفال مصغر' : '16cm diameter • Intimate celebration' },
-    { id: '2kg', title: isAr ? '2 كجم (12-15 حصة)' : '2 kg (12-15 servings)', basePrice: 290, desc: isAr ? 'قطر 22 سم • الخيار الأكثر طلباً' : '22cm diameter • Most Popular Choice', popular: true },
-    { id: '3kg', title: isAr ? '3 كجم (20-25 حصة)' : '3 kg (20-25 servings)', basePrice: 420, desc: isAr ? 'قطر 26 سم • حفلات الأصدقاء' : '26cm diameter • Family and party gatherings' },
-    { id: '5kg', title: isAr ? '5 كجم (40-50 حصة)' : '5 kg (40-50 servings)', basePrice: 680, desc: isAr ? 'مناسبات كبرى وحفلات تخرج' : 'Generous feast for corporate and milestone parties' },
-    { id: 'grand', title: isAr ? 'حجم ملكي (60-80 حصة)' : 'Grand Gala (60-80 servings)', basePrice: 1150, desc: isAr ? 'حفلات زفاف واستقبال فخم' : 'Spectacular scale for wedding banquets' },
+    { 
+      id: '1kg', 
+      title: isAr ? '1 كجم (6-8 حصص)' : '1 kg (6-8 servings)', 
+      basePrice: 180, 
+      servings: isAr ? '6-8 ضيوف' : '6-8 Guests',
+      diameter: isAr ? 'قطر 16 سم' : '16 cm Diameter',
+      desc: isAr ? 'قطر 16 سم • احتفال مصغر وأعياد ميلاد حميمة' : '16cm diameter • Perfect for intimate family birthdays',
+      image: '/customize/shapes/round cake.png'
+    },
+    { 
+      id: '2kg', 
+      title: isAr ? '2 كجم (12-15 حصة)' : '2 kg (12-15 servings)', 
+      basePrice: 290, 
+      servings: isAr ? '12-15 ضيفاً' : '12-15 Guests',
+      diameter: isAr ? 'قطر 22 سم' : '22 cm Diameter',
+      desc: isAr ? 'قطر 22 سم • الخيار الأكثر طلباً لمختلف المناسبات' : '22cm diameter • Most Popular choice for all celebrations', 
+      popular: true,
+      image: '/customize/shapes/round cake.png'
+    },
+    { 
+      id: '3kg', 
+      title: isAr ? '3 كجم (20-25 حصة)' : '3 kg (20-25 servings)', 
+      basePrice: 420, 
+      servings: isAr ? '20-25 ضيفاً' : '20-25 Guests',
+      diameter: isAr ? 'قطر 26 سم' : '26 cm Diameter',
+      desc: isAr ? 'قطر 26 سم • حفلات الأصدقاء واحتفالات التخرج' : '26cm diameter • Family feasts and joyful party gatherings',
+      image: '/customize/shapes/round tall cake.png'
+    },
+    { 
+      id: '4kg', 
+      title: isAr ? '4 كجم (30-35 حصة)' : '4 kg (30-35 servings)', 
+      basePrice: 540, 
+      servings: isAr ? '30-35 ضيفاً' : '30-35 Guests',
+      diameter: isAr ? 'قطر 28 سم' : '28 cm Diameter',
+      desc: isAr ? 'قطر 28 سم • مناسبات كبرى وتجمعات عائلية واسعة' : '28cm diameter • Large milestone events and gatherings',
+      image: '/customize/shapes/round tall cake.png'
+    },
+    { 
+      id: '5kg', 
+      title: isAr ? '5 كجم (40-50 حصة)' : '5 kg (40-50 servings)', 
+      basePrice: 680, 
+      servings: isAr ? '40-50 ضيفاً' : '40-50 Guests',
+      diameter: isAr ? 'طبقتان فاخرتان' : 'Two-Tier Structure',
+      desc: isAr ? 'طبقتان فاخرتان للمناسبات الكبرى وحفلات الشركات' : 'Generous two-tier feast for corporate and luxury parties',
+      image: '/customize/shapes/Two-Tier round Cake.png'
+    },
+    { 
+      id: 'grand', 
+      title: isAr ? 'حجم ملكي (60-80 حصة)' : 'Grand Gala (60-80 servings)', 
+      basePrice: 1150, 
+      servings: isAr ? '60-80 ضيفاً' : '60-80 Guests',
+      diameter: isAr ? '3 طبقات ملكية' : 'Three-Tier Royal Centerpiece',
+      desc: isAr ? '3 طبقات ملكية شاهقة لحفلات الزفاف والاستقبال الفخم' : 'Spectacular three-tier centerpiece for royal wedding banquets',
+      image: '/customize/shapes/Three-Tier round  Cake.png'
+    },
   ];
 
   // 9 Sponge Flavor Options matching user provided slice cutout images
@@ -598,7 +649,7 @@ export default function CustomizePage({
           </div>
         )}
 
-        {/* STEP 3: Size */}
+        {/* STEP 3: Size & Guest Count (3 in a row matching Step 1, 2, and 4) */}
         {currentStep === 3 && (
           <div className="animate-fadeIn">
             <div className="flex items-start gap-3 mb-6 sm:mb-8">
@@ -613,43 +664,71 @@ export default function CustomizePage({
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
+            {/* 6 Cake Size Cards Grid: 3 in a row */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-7 md:gap-8 mb-10">
               {sizeOptions.map((sz) => {
                 const isSelected = selectedSize === sz.id;
+
                 return (
                   <div
                     key={sz.id}
                     onClick={() => setSelectedSize(sz.id)}
-                    className={`bg-white rounded-2xl border p-4 sm:p-5 cursor-pointer transition-all duration-200 flex flex-col justify-between hover:shadow-lg hover:-translate-y-1 relative ${
-                      isSelected
-                        ? 'border-2 border-[#C58A19] shadow-md ring-2 ring-[#C58A19]/20'
-                        : 'border-[#F0E4D2] hover:border-[#C58A19]/70'
+                    className={`bg-white rounded-3xl border-2 transition-all duration-300 cursor-pointer p-5 sm:p-6 flex flex-col justify-between relative group hover:-translate-y-1.5 hover:shadow-xl ${
+                      isSelected 
+                        ? 'border-[#C58A19] shadow-lg ring-4 ring-[#C58A19]/15 bg-[#FFFDF9]' 
+                        : 'border-[#EEDECB] hover:border-[#C58A19]/70 shadow-sm'
                     }`}
                   >
+                    {/* Checkmark Badge on Top Right when selected */}
+                    {isSelected && (
+                      <div className="absolute top-4 right-4 rtl:right-auto rtl:left-4 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#C58A19] text-white flex items-center justify-center shadow-md z-10 animate-scaleIn">
+                        <Check className="w-4 h-4 stroke-[2.5]" />
+                      </div>
+                    )}
+
+                    {/* Popular Badge on Top Left if popular */}
                     {sz.popular && (
-                      <span className="absolute -top-2.5 left-1/2 -translate-x-1/2 bg-[#C58A19] text-white text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full shadow-xs">
-                        {isAr ? 'الأكثر طلباً' : 'Popular'}
+                      <span className="absolute top-4 left-4 rtl:left-auto rtl:right-4 bg-[#C58A19] text-white text-[11px] font-bold uppercase tracking-wider px-3 py-1 rounded-full shadow-sm z-10 select-none">
+                        {isAr ? 'الأكثر طلباً' : 'Most Popular'}
                       </span>
                     )}
-                    {isSelected && (
-                      <div className="absolute top-3 right-3 rtl:right-auto rtl:left-3 w-5 h-5 rounded-full bg-[#C58A19] text-white flex items-center justify-center shadow-xs">
-                        <Check className="w-3 h-3 stroke-[2.5]" />
+
+                    {/* Cake Size Image Box (Same size & aspect as Step 1, 2, 4) */}
+                    <div className="w-full aspect-[4/3] sm:h-52 md:h-60 flex items-center justify-center overflow-hidden mb-4 p-3 bg-[#FAF7F2]/60 rounded-2xl group-hover:bg-[#FAF7F2] transition-colors relative">
+                      <img 
+                        src={encodeURI(sz.image)} 
+                        alt={sz.title} 
+                        className={`w-full h-full object-contain drop-shadow-sm group-hover:scale-108 transition-transform duration-300 select-none ${
+                          sz.id === '1kg' ? 'scale-75' : 
+                          sz.id === '2kg' ? 'scale-85' : 
+                          sz.id === '3kg' ? 'scale-95' : 
+                          sz.id === '4kg' ? 'scale-100' : 
+                          sz.id === '5kg' ? 'scale-100' : 'scale-105'
+                        }`} 
+                      />
+
+                      {/* Guest Count Pill at bottom of image box */}
+                      <div className="absolute bottom-3 left-1/2 -translate-x-1/2 bg-white/95 backdrop-blur-xs border border-[#E5C583]/70 px-3 py-1 rounded-full shadow-xs flex items-center gap-1.5 whitespace-nowrap">
+                        <Users className="w-3.5 h-3.5 text-[#C58A19]" />
+                        <span className="font-poppins font-semibold text-xs text-[#4A2116] lining-nums tabular-nums">
+                          {sz.servings}
+                        </span>
                       </div>
-                    )}
-                    <div>
-                      <div className="w-10 h-10 rounded-xl bg-[#FFF9F0] border border-[#E5C583]/60 flex items-center justify-center text-[#C58A19] mb-3">
-                        <Scale className="w-5 h-5" />
-                      </div>
-                      <h3 className="font-serif font-bold text-sm sm:text-base text-[#4A2116] mb-1">
+                    </div>
+
+                    {/* Card Footer: Title, Description & Base Price Badge */}
+                    <div className="pt-3.5 border-t border-[#F2E7D5] text-center flex flex-col items-center">
+                      <h3 className="font-serif text-base sm:text-lg md:text-xl font-bold tracking-tight text-[#4A2116] mb-1">
                         {sz.title}
                       </h3>
-                      <p className="text-xs text-[#8C6D62] leading-relaxed mb-3">
+                      <p className="font-poppins text-xs text-[#8C6D62] leading-relaxed line-clamp-2 mb-3">
                         {sz.desc}
                       </p>
+                      <span className="inline-block text-xs font-bold text-[#C58A19] bg-[#FFF8EE] px-3.5 py-1 rounded-full border border-[#EACD9B]/60 shadow-xs lining-nums tabular-nums">
+                        AED {sz.basePrice}
+                      </span>
                     </div>
-                    <div className="text-sm font-bold text-[#C58A19] pt-2 border-t border-[#F8F1E6]">
-                      AED {sz.basePrice}
-                    </div>
+
                   </div>
                 );
               })}
@@ -951,9 +1030,17 @@ export default function CustomizePage({
                     )}
                   </div>
 
-                  <div className="p-3.5 rounded-xl bg-[#FFFBF5] border border-[#F5EBDD]">
-                    <span className="text-[#8C6D62] block mb-1 font-medium">{isAr ? 'الحجم وعدد الحصص' : 'Size and Servings'}</span>
-                    <span className="font-semibold text-[#4A2116] text-sm">{sizeOptions.find(s => s.id === selectedSize)?.title}</span>
+                  <div className="p-3.5 rounded-xl bg-[#FFFBF5] border border-[#F5EBDD] flex items-center justify-between">
+                    <div>
+                      <span className="text-[#8C6D62] block mb-1 font-medium">{isAr ? 'الحجم وعدد الحصص' : 'Size and Servings'}</span>
+                      <span className="font-semibold text-[#4A2116] text-sm">{sizeOptions.find(s => s.id === selectedSize)?.title}</span>
+                      <p className="text-[11px] text-[#8C6D62] mt-0.5">{sizeOptions.find(s => s.id === selectedSize)?.servings}</p>
+                    </div>
+                    {sizeOptions.find(s => s.id === selectedSize)?.image && (
+                      <div className="w-14 h-14 rounded-xl bg-white border border-[#E5C583]/60 flex items-center justify-center shrink-0 p-1">
+                        <img src={encodeURI(sizeOptions.find(s => s.id === selectedSize)?.image)} alt="" className="w-full h-full object-contain select-none" />
+                      </div>
+                    )}
                   </div>
 
                   <div className="sm:col-span-2 p-3.5 rounded-xl bg-[#FFFBF5] border border-[#F5EBDD] flex items-center justify-between">
