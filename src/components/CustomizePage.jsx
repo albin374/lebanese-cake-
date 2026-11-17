@@ -85,7 +85,7 @@ export default function CustomizePage({
     {
       id: 'wedding',
       title: isAr ? 'كيك الأعراس' : 'Wedding Cake',
-      image: '/customize/Wedding Cake.png',
+      image: '/customize/Elegant Ivory Wedding Cake Cutout.png',
       icon: (
         <svg className="w-5 h-5 stroke-current" viewBox="0 0 24 24" fill="none" strokeWidth="1.8">
           <circle cx="9" cy="12" r="5" />
@@ -120,7 +120,7 @@ export default function CustomizePage({
     {
       id: 'girls',
       title: isAr ? 'كيك للبنات' : 'Girls Cake',
-      image: '/customize/girls cake.png',
+      image: '/customize/Frozen-Style Elsa Birthday Cake Cutout.png',
       icon: <Heart className="w-5 h-5" />
     }
   ];
