@@ -35,11 +35,12 @@ export default function CustomizePage({
   const isAr = currentLang === 'ar';
   const t = translations[currentLang] || translations.en;
 
-  // Wizard state: 1 to 8
+  // Wizard state: 1 to 7
   const [currentStep, setCurrentStep] = useState(1);
 
   // Form state
   const [selectedOccasion, setSelectedOccasion] = useState('birthday');
+  const [selectedShapeLayer, setSelectedShapeLayer] = useState('round-1-tier');
   const [selectedLayers, setSelectedLayers] = useState('1-tier');
   const [selectedShape, setSelectedShape] = useState('round');
   const [selectedSize, setSelectedSize] = useState('2kg');
@@ -50,16 +51,15 @@ export default function CustomizePage({
   const [messageStyle, setMessageStyle] = useState('piped-gold');
   const [specialInstructions, setSpecialInstructions] = useState('');
 
-  // 8 Steps Definition
+  // 7 Steps Definition (Unified Shape & Layers)
   const steps = [
     { number: 1, id: 'cake-type', label: isAr ? 'نوع الكيك' : 'Cake Type' },
-    { number: 2, id: 'layers', label: isAr ? 'الطبقات' : 'Layers' },
-    { number: 3, id: 'shape', label: isAr ? 'الشكل' : 'Shape' },
-    { number: 4, id: 'size', label: isAr ? 'الحجم' : 'Size' },
-    { number: 5, id: 'flavors', label: isAr ? 'النكهات' : 'Flavors' },
-    { number: 6, id: 'toppings', label: isAr ? 'التصميم' : 'Design & Toppings' },
-    { number: 7, id: 'message', label: isAr ? 'الرسالة' : 'Message' },
-    { number: 8, id: 'review', label: isAr ? 'المراجعة' : 'Review' },
+    { number: 2, id: 'shape-layers', label: isAr ? 'الشكل والطبقات' : 'Shape & Layers' },
+    { number: 3, id: 'size', label: isAr ? 'الحجم' : 'Size' },
+    { number: 4, id: 'flavors', label: isAr ? 'النكهات' : 'Flavors' },
+    { number: 5, id: 'toppings', label: isAr ? 'التصميم' : 'Design & Toppings' },
+    { number: 6, id: 'message', label: isAr ? 'الرسالة' : 'Message' },
+    { number: 7, id: 'review', label: isAr ? 'المراجعة' : 'Review' },
   ];
 
   // 6 Occasions matching user request
@@ -125,20 +125,89 @@ export default function CustomizePage({
     }
   ];
 
-  // Layers options
-  const layerOptions = [
-    { id: '1-tier', title: isAr ? 'طبقة واحدة كلاسيكية' : 'Single Tier', desc: isAr ? 'مناسبة للاحتفالات العائلية حتى 15 شخصاً' : 'Classic single tier, perfect for gatherings up to 15 guests', extraPrice: 0 },
-    { id: '2-tier', title: isAr ? 'طبقتان فاخرتان' : '2 Tiers Grand', desc: isAr ? 'ارتفاع ملكي أنيق لحفلات الأعراس والذكرى السنوية' : 'Elegant stacked tiers for weddings, engagements & birthdays', extraPrice: 150 },
-    { id: '3-tier', title: isAr ? '3 طبقات ملكية' : '3 Tiers Royal', desc: isAr ? 'تحفة فنية تخطف الأنظار في كبرى المناسبات' : 'Majestic centerpiece designed for grand ballroom banquets', extraPrice: 350 },
-    { id: '4-tier', title: isAr ? '4 طبقات قصور فاخرة' : '4+ Tiers Palace Edition', desc: isAr ? 'تصميم حصري ضخم لحفلات الزفاف الملكية' : 'Monumental luxury gala showpiece with structural supports', extraPrice: 650 },
-  ];
-
-  // Shape options
-  const shapeOptions = [
-    { id: 'round', title: isAr ? 'دائري كلاسيكي' : 'Classic Round', desc: isAr ? 'الشكل الأكثر طلباً وفخامة' : 'Timeless circular silhouette with balanced proportions' },
-    { id: 'square', title: isAr ? 'مربع عصري' : 'Modern Square', desc: isAr ? 'حواف حادة وأناقة عصرية راقية' : 'Sharp geometric edges with contemporary architectural appeal' },
-    { id: 'heart', title: isAr ? 'قلب رومانسي' : 'Romantic Heart', desc: isAr ? 'مثالي لذكرى الزواج والمناسبات العاطفية' : 'Sweet sculptural heart for anniversaries & proposals' },
-    { id: 'hexagon', title: isAr ? 'سداسي ملكي' : 'Hexagon Royale', desc: isAr ? 'تصميم هندسي فخم ومميز' : 'Unique 6-sided faceted geometry for couture celebrations' },
+  // 9 Shape & Layer Options matching user provided 3D cake images
+  const shapeLayerOptions = [
+    {
+      id: 'round-1-tier',
+      title: isAr ? 'كيك دائري كلاسيكي (طبقة واحدة)' : 'Classic Round (1 Tier)',
+      shape: 'round',
+      layers: '1-tier',
+      desc: isAr ? 'تصميم دائري متوازن وأنيق لجميع المناسبات' : 'Timeless balanced circular silhouette for any celebration',
+      extraPrice: 0,
+      image: '/customize/shapes/round cake.png'
+    },
+    {
+      id: 'round-tall',
+      title: isAr ? 'كيك دائري طويل (طبقة ممتدة)' : 'Round Tall Cake (Extended Tier)',
+      shape: 'round',
+      layers: 'tall-1-tier',
+      desc: isAr ? 'ارتفاع مضاعف أنيق يمنح الكعكة فخامة وحضوراً عصرياً' : 'Double-height modern profile with sleek contemporary appeal',
+      extraPrice: 50,
+      image: '/customize/shapes/round tall cake.png'
+    },
+    {
+      id: 'round-2-tier',
+      title: isAr ? 'كيك دائري من طبقتين' : 'Two-Tier Round Cake',
+      shape: 'round',
+      layers: '2-tier',
+      desc: isAr ? 'طبقتان دائريتان متناسقتان للأعراس وحفلات الخطوبة' : 'Two stacked circular tiers for weddings & engagements',
+      extraPrice: 150,
+      image: '/customize/shapes/Two-Tier round Cake.png'
+    },
+    {
+      id: 'round-3-tier',
+      title: isAr ? 'كيك دائري ملكي من 3 طبقات' : 'Three-Tier Royal Round',
+      shape: 'round',
+      layers: '3-tier',
+      desc: isAr ? 'تحفة فنية بارتفاع مهيب لأفخم مناسبات الزفاف والفعاليات' : 'Majestic three-tier centerpiece designed for grand ballroom galas',
+      extraPrice: 350,
+      image: '/customize/shapes/Three-Tier round  Cake.png'
+    },
+    {
+      id: 'square-1-tier',
+      title: isAr ? 'كيك مربع كلاسيكي (طبقة واحدة)' : 'Classic Square (1 Tier)',
+      shape: 'square',
+      layers: '1-tier',
+      desc: isAr ? 'حواف هندسية حادة وأناقة عصرية راقية' : 'Sharp geometric lines with clean, modern architectural styling',
+      extraPrice: 0,
+      image: '/customize/shapes/square cake.png'
+    },
+    {
+      id: 'square-tall',
+      title: isAr ? 'كيك مربع طويل عصري' : 'Square Tall Cake (Cube Edition)',
+      shape: 'square',
+      layers: 'tall-1-tier',
+      desc: isAr ? 'مكعب بارتفاع إضافي مميز لحفلات أعياد الميلاد والشركات' : 'Sculptural tall cube silhouette for chic modern celebrations',
+      extraPrice: 50,
+      image: '/customize/shapes/sqaure cake.png'
+    },
+    {
+      id: 'square-2-tier',
+      title: isAr ? 'كيك مربع من طبقتين' : 'Two-Tier Square Cake',
+      shape: 'square',
+      layers: '2-tier',
+      desc: isAr ? 'طبقتان هندسيتان متدرجتان لحفلات التخرج والأعراس' : 'Stacked geometric tiers with striking modern architectural presence',
+      extraPrice: 180,
+      image: '/customize/shapes/two tier sqaure cake .png'
+    },
+    {
+      id: 'heart-1-tier',
+      title: isAr ? 'كيك القلب الرومانسي' : 'Romantic Heart Cake',
+      shape: 'heart',
+      layers: '1-tier',
+      desc: isAr ? 'شكل قلب رومانسي مميز لذكرى الزواج والمناسبات الخاصة' : 'Romantic sculpted heart silhouette for anniversaries & proposals',
+      extraPrice: 40,
+      image: '/customize/shapes/herat cake .png'
+    },
+    {
+      id: 'rectangular-1-tier',
+      title: isAr ? 'كيك مستطيل للعائلات والشركات' : 'Celebration Rectangle (Sheet)',
+      shape: 'rectangle',
+      layers: '1-tier',
+      desc: isAr ? 'مساحة واسعة وسهلة التقطيع للمناسبات الكبيرة والشركات' : 'Spacious sheet cake optimized for clean serving & grand crowds',
+      extraPrice: 60,
+      image: '/customize/shapes/recatanglur .png'
+    }
   ];
 
   // Size options
@@ -183,9 +252,12 @@ export default function CustomizePage({
     );
   };
 
+  // Selected shape & layer object
+  const selectedShapeLayerItem = shapeLayerOptions.find(item => item.id === selectedShapeLayer) || shapeLayerOptions[0];
+
   // Price Calculation
   const baseSizePrice = sizeOptions.find(s => s.id === selectedSize)?.basePrice || 290;
-  const extraLayerPrice = layerOptions.find(l => l.id === selectedLayers)?.extraPrice || 0;
+  const extraLayerPrice = selectedShapeLayerItem?.extraPrice || 0;
   const toppingsPrice = selectedToppings.reduce((total, topId) => {
     const item = toppingOptions.find(t => t.id === topId);
     return total + (item ? item.price : 0);
@@ -195,30 +267,29 @@ export default function CustomizePage({
 
   // Next step label helper
   const getNextStepLabel = () => {
-    if (currentStep === 1) return isAr ? 'التالي: اختر الطبقات' : 'Next: Choose Layers';
-    if (currentStep === 2) return isAr ? 'التالي: اختر الشكل' : 'Next: Choose Shape';
-    if (currentStep === 3) return isAr ? 'التالي: اختر الحجم' : 'Next: Choose Size';
-    if (currentStep === 4) return isAr ? 'التالي: اختر النكهات' : 'Next: Choose Flavors';
-    if (currentStep === 5) return isAr ? 'التالي: التصميم والإضافات' : 'Next: Design & Toppings';
-    if (currentStep === 6) return isAr ? 'التالي: كتابة الرسالة' : 'Next: Custom Message';
-    if (currentStep === 7) return isAr ? 'التالي: مراجعة الطلب' : 'Next: Review Order';
+    if (currentStep === 1) return isAr ? 'التالي: الشكل والطبقات' : 'Next: Shape & Layers';
+    if (currentStep === 2) return isAr ? 'التالي: اختر الحجم' : 'Next: Choose Size';
+    if (currentStep === 3) return isAr ? 'التالي: اختر النكهات' : 'Next: Choose Flavors';
+    if (currentStep === 4) return isAr ? 'التالي: التصميم والإضافات' : 'Next: Design & Toppings';
+    if (currentStep === 5) return isAr ? 'التالي: كتابة الرسالة' : 'Next: Custom Message';
+    if (currentStep === 6) return isAr ? 'التالي: مراجعة الطلب' : 'Next: Review Order';
     return isAr ? 'تأكيد وإضافة للحقيبة' : 'Add to Bag & Confirm';
   };
 
   const handleNext = () => {
-    if (currentStep < 8) {
-      setCurrentStep(prev => prev + 1);
+    if (currentStep < 7) {
+      setCurrentStep(prev => prev - 1 >= 0 ? prev + 1 : 2);
       window.scrollTo({ top: 120, behavior: 'smooth' });
     } else {
-      // Step 8 Confirm
+      // Step 7 Confirm
       const customCakeItem = {
         title: `${occasions.find(o => o.id === selectedOccasion)?.title || 'Custom Cake'} (${selectedSize})`,
         price: totalPrice.toFixed(2),
         flavor: `${spongeOptions.find(s => s.id === selectedSponge)?.name} with ${fillingOptions.find(f => f.id === selectedFilling)?.name}`,
         occasion: occasions.find(o => o.id === selectedOccasion)?.title,
         message: cakeMessage,
-        layers: selectedLayers,
-        shape: selectedShape,
+        layers: selectedShapeLayerItem?.title || selectedLayers,
+        shape: selectedShapeLayerItem?.shape || selectedShape,
         toppings: selectedToppings
       };
       if (onAddToCart) onAddToCart(customCakeItem);
@@ -407,53 +478,70 @@ export default function CustomizePage({
           </div>
         )}
 
-        {/* STEP 2: Layers */}
+        {/* STEP 2: Cake Shape & Layers (3 in a row with 9 3D Cake Shape Models) */}
         {currentStep === 2 && (
           <div className="animate-fadeIn">
+            {/* Section Heading with Left Gold Bar */}
             <div className="flex items-start gap-3 mb-6 sm:mb-8">
               <div className="w-1 sm:w-1.5 h-10 sm:h-12 bg-[#C58A19] rounded-full shrink-0 mt-0.5" />
               <div>
                 <h2 className="font-serif text-xl sm:text-2xl md:text-[26px] font-bold text-[#4A2116]">
-                  {isAr ? 'كم عدد الطبقات التي تفضلها؟' : 'How many layers or tiers?'}
+                  {isAr ? 'شكل الكيك والطبقات' : 'Cake Shape & Layers'}
                 </h2>
                 <p className="font-poppins text-xs sm:text-sm text-[#8C6D62] mt-0.5">
-                  {isAr ? 'اختر هيكل وارتفاع الكعكة المناسب لعدد ضيوفك.' : 'Select the tier structure for your celebration centerpiece.'}
+                  {isAr ? 'اختر شكل الكيك وهيكل الطبقات المناسب لمركز احتفالك.' : 'Select the tier structure and shape for your celebration centerpiece.'}
                 </p>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-              {layerOptions.map((layer) => {
-                const isSelected = selectedLayers === layer.id;
+            {/* 9 Cake Shape & Layer Cards Grid: 3 in a row */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-7 md:gap-8 mb-10">
+              {shapeLayerOptions.map((item) => {
+                const isSelected = selectedShapeLayer === item.id;
+
                 return (
                   <div
-                    key={layer.id}
-                    onClick={() => setSelectedLayers(layer.id)}
-                    className={`bg-white rounded-2xl border p-5 cursor-pointer transition-all duration-200 flex flex-col justify-between hover:shadow-lg hover:-translate-y-1 relative ${
-                      isSelected
-                        ? 'border-2 border-[#C58A19] shadow-md ring-2 ring-[#C58A19]/20'
-                        : 'border-[#F0E4D2] hover:border-[#C58A19]/70'
+                    key={item.id}
+                    onClick={() => {
+                      setSelectedShapeLayer(item.id);
+                      setSelectedShape(item.shape);
+                      setSelectedLayers(item.layers);
+                    }}
+                    className={`bg-white rounded-3xl border-2 transition-all duration-300 cursor-pointer p-5 sm:p-6 flex flex-col justify-between relative group hover:-translate-y-1.5 hover:shadow-xl ${
+                      isSelected 
+                        ? 'border-[#C58A19] shadow-lg ring-4 ring-[#C58A19]/15 bg-[#FFFDF9]' 
+                        : 'border-[#EEDECB] hover:border-[#C58A19]/70 shadow-sm'
                     }`}
                   >
+                    {/* Checkmark Badge on Top Right when selected */}
                     {isSelected && (
-                      <div className="absolute top-3 right-3 rtl:right-auto rtl:left-3 w-6 h-6 rounded-full bg-[#C58A19] text-white flex items-center justify-center shadow-xs">
-                        <Check className="w-3.5 h-3.5 stroke-[2.5]" />
+                      <div className="absolute top-4 right-4 rtl:right-auto rtl:left-4 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#C58A19] text-white flex items-center justify-center shadow-md z-10 animate-scaleIn">
+                        <Check className="w-4 h-4 stroke-[2.5]" />
                       </div>
                     )}
-                    <div>
-                      <div className="w-12 h-12 rounded-xl bg-[#FFF9F0] border border-[#E5C583]/60 flex items-center justify-center text-[#C58A19] mb-4">
-                        <Layers className="w-6 h-6" />
-                      </div>
-                      <h3 className="font-serif font-bold text-base text-[#4A2116] mb-1">
-                        {layer.title}
+
+                    {/* Cake Shape Image Box */}
+                    <div className="w-full aspect-[4/3] sm:h-52 md:h-60 flex items-center justify-center overflow-hidden mb-4 p-3 bg-[#FAF7F2]/60 rounded-2xl group-hover:bg-[#FAF7F2] transition-colors">
+                      <img 
+                        src={encodeURI(item.image)} 
+                        alt={item.title} 
+                        className="w-full h-full object-contain drop-shadow-sm group-hover:scale-108 transition-transform duration-300 select-none" 
+                      />
+                    </div>
+
+                    {/* Card Footer: Title, Description & Tier Price Badge */}
+                    <div className="pt-3.5 border-t border-[#F2E7D5] text-center flex flex-col items-center">
+                      <h3 className="font-serif text-base sm:text-lg md:text-xl font-bold tracking-tight text-[#4A2116] mb-1">
+                        {item.title}
                       </h3>
-                      <p className="text-xs text-[#8C6D62] leading-relaxed mb-4">
-                        {layer.desc}
+                      <p className="font-poppins text-xs text-[#8C6D62] leading-relaxed line-clamp-2 mb-3">
+                        {item.desc}
                       </p>
+                      <span className="inline-block text-xs font-bold text-[#C58A19] bg-[#FFF8EE] px-3.5 py-1 rounded-full border border-[#EACD9B]/60 shadow-xs">
+                        {item.extraPrice > 0 ? `+AED ${item.extraPrice}` : (isAr ? 'السعر الأساسي' : 'Included in Base Price')}
+                      </span>
                     </div>
-                    <div className="text-xs font-semibold text-[#C58A19] pt-2 border-t border-[#F8F1E6]">
-                      {layer.extraPrice > 0 ? `+AED ${layer.extraPrice}` : (isAr ? 'السعر الأساسي' : 'Standard Tier')}
-                    </div>
+
                   </div>
                 );
               })}
@@ -461,59 +549,8 @@ export default function CustomizePage({
           </div>
         )}
 
-        {/* STEP 3: Shape */}
+        {/* STEP 3: Size */}
         {currentStep === 3 && (
-          <div className="animate-fadeIn">
-            <div className="flex items-start gap-3 mb-6 sm:mb-8">
-              <div className="w-1 sm:w-1.5 h-10 sm:h-12 bg-[#C58A19] rounded-full shrink-0 mt-0.5" />
-              <div>
-                <h2 className="font-serif text-xl sm:text-2xl md:text-[26px] font-bold text-[#4A2116]">
-                  {isAr ? 'اختر شكل الكيك' : 'Choose Cake Shape'}
-                </h2>
-                <p className="font-poppins text-xs sm:text-sm text-[#8C6D62] mt-0.5">
-                  {isAr ? 'اختر التصميم الهندسي لقاعدة الكيك.' : 'Select the geometric foundation for your cake.'}
-                </p>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-              {shapeOptions.map((shape) => {
-                const isSelected = selectedShape === shape.id;
-                return (
-                  <div
-                    key={shape.id}
-                    onClick={() => setSelectedShape(shape.id)}
-                    className={`bg-white rounded-2xl border p-5 cursor-pointer transition-all duration-200 flex flex-col justify-between hover:shadow-lg hover:-translate-y-1 relative ${
-                      isSelected
-                        ? 'border-2 border-[#C58A19] shadow-md ring-2 ring-[#C58A19]/20'
-                        : 'border-[#F0E4D2] hover:border-[#C58A19]/70'
-                    }`}
-                  >
-                    {isSelected && (
-                      <div className="absolute top-3 right-3 rtl:right-auto rtl:left-3 w-6 h-6 rounded-full bg-[#C58A19] text-white flex items-center justify-center shadow-xs">
-                        <Check className="w-3.5 h-3.5 stroke-[2.5]" />
-                      </div>
-                    )}
-                    <div>
-                      <div className="w-12 h-12 rounded-xl bg-[#FFF9F0] border border-[#E5C583]/60 flex items-center justify-center text-[#C58A19] mb-4">
-                        <Shapes className="w-6 h-6" />
-                      </div>
-                      <h3 className="font-serif font-bold text-base text-[#4A2116] mb-1">
-                        {shape.title}
-                      </h3>
-                      <p className="text-xs text-[#8C6D62] leading-relaxed">
-                        {shape.desc}
-                      </p>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        )}
-
-        {/* STEP 4: Size */}
-        {currentStep === 4 && (
           <div className="animate-fadeIn">
             <div className="flex items-start gap-3 mb-6 sm:mb-8">
               <div className="w-1 sm:w-1.5 h-10 sm:h-12 bg-[#C58A19] rounded-full shrink-0 mt-0.5" />
@@ -571,8 +608,8 @@ export default function CustomizePage({
           </div>
         )}
 
-        {/* STEP 5: Flavors */}
-        {currentStep === 5 && (
+        {/* STEP 4: Flavors */}
+        {currentStep === 4 && (
           <div className="animate-fadeIn">
             <div className="flex items-start gap-3 mb-6 sm:mb-8">
               <div className="w-1 sm:w-1.5 h-10 sm:h-12 bg-[#C58A19] rounded-full shrink-0 mt-0.5" />
@@ -654,8 +691,8 @@ export default function CustomizePage({
           </div>
         )}
 
-        {/* STEP 6: Design & Toppings */}
-        {currentStep === 6 && (
+        {/* STEP 5: Design & Toppings */}
+        {currentStep === 5 && (
           <div className="animate-fadeIn">
             <div className="flex items-start gap-3 mb-6 sm:mb-8">
               <div className="w-1 sm:w-1.5 h-10 sm:h-12 bg-[#C58A19] rounded-full shrink-0 mt-0.5" />
@@ -707,8 +744,8 @@ export default function CustomizePage({
           </div>
         )}
 
-        {/* STEP 7: Message */}
-        {currentStep === 7 && (
+        {/* STEP 6: Message */}
+        {currentStep === 6 && (
           <div className="animate-fadeIn">
             <div className="flex items-start gap-3 mb-6 sm:mb-8">
               <div className="w-1 sm:w-1.5 h-10 sm:h-12 bg-[#C58A19] rounded-full shrink-0 mt-0.5" />
@@ -829,8 +866,8 @@ export default function CustomizePage({
           </div>
         )}
 
-        {/* STEP 8: Review & Order */}
-        {currentStep === 8 && (
+        {/* STEP 7: Review & Order */}
+        {currentStep === 7 && (
           <div className="animate-fadeIn">
             <div className="flex items-start gap-3 mb-6 sm:mb-8">
               <div className="w-1 sm:w-1.5 h-10 sm:h-12 bg-[#C58A19] rounded-full shrink-0 mt-0.5" />
@@ -869,14 +906,17 @@ export default function CustomizePage({
 
                 {/* Details Grid */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
-                  <div className="p-3.5 rounded-xl bg-[#FFFBF5] border border-[#F5EBDD]">
-                    <span className="text-[#8C6D62] block mb-1 font-medium">{isAr ? 'الهيكل والطبقات' : 'Tiers & Structure'}</span>
-                    <span className="font-semibold text-[#4A2116] text-sm">{layerOptions.find(l => l.id === selectedLayers)?.title}</span>
-                  </div>
-
-                  <div className="p-3.5 rounded-xl bg-[#FFFBF5] border border-[#F5EBDD]">
-                    <span className="text-[#8C6D62] block mb-1 font-medium">{isAr ? 'الشكل الهندسي' : 'Shape'}</span>
-                    <span className="font-semibold text-[#4A2116] text-sm">{shapeOptions.find(s => s.id === selectedShape)?.title}</span>
+                  <div className="sm:col-span-2 p-3.5 rounded-xl bg-[#FFFBF5] border border-[#F5EBDD] flex items-center justify-between">
+                    <div>
+                      <span className="text-[#8C6D62] block mb-1 font-medium">{isAr ? 'الشكل وهيكل الطبقات' : 'Shape & Tier Structure'}</span>
+                      <span className="font-semibold text-[#4A2116] text-sm">{selectedShapeLayerItem?.title}</span>
+                      <p className="text-[11px] text-[#8C6D62] mt-0.5">{selectedShapeLayerItem?.desc}</p>
+                    </div>
+                    {selectedShapeLayerItem?.image && (
+                      <div className="w-14 h-14 rounded-xl bg-white border border-[#E5C583]/60 flex items-center justify-center shrink-0 p-1">
+                        <img src={encodeURI(selectedShapeLayerItem.image)} alt="" className="w-full h-full object-contain select-none" />
+                      </div>
+                    )}
                   </div>
 
                   <div className="p-3.5 rounded-xl bg-[#FFFBF5] border border-[#F5EBDD]">
@@ -966,7 +1006,7 @@ export default function CustomizePage({
 
                   <a
                     href={`https://wa.me/971506063631?text=${encodeURIComponent(
-                      `Hello Lebanese Dream Bakery! I would like to order a custom cake:\nOccasion: ${occasions.find(o => o.id === selectedOccasion)?.title}\nSize: ${sizeOptions.find(s => s.id === selectedSize)?.title}\nFlavor: ${spongeOptions.find(s => s.id === selectedSponge)?.name}\nMessage: "${cakeMessage}"\nTotal: AED ${totalPrice}`
+                      `Hello Lebanese Dream Bakery! I would like to order a custom cake:\nOccasion: ${occasions.find(o => o.id === selectedOccasion)?.title}\nShape & Layers: ${selectedShapeLayerItem?.title}\nSize: ${sizeOptions.find(s => s.id === selectedSize)?.title}\nFlavor: ${spongeOptions.find(s => s.id === selectedSponge)?.name}\nMessage: "${cakeMessage}"\nTotal: AED ${totalPrice}`
                     )}`}
                     target="_blank"
                     rel="noopener noreferrer"
