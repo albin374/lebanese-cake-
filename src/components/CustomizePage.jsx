@@ -46,21 +46,22 @@ export default function CustomizePage({
   const [selectedShape, setSelectedShape] = useState('round');
   const [selectedSize, setSelectedSize] = useState('2kg');
   const [selectedSponge, setSelectedSponge] = useState('vanilla-flower-beans');
-  const [selectedFilling, setSelectedFilling] = useState('caramel-buttercream');
+  const [selectedFilling, setSelectedFilling] = useState('chocolate-mousse-chunks');
   const [selectedToppings, setSelectedToppings] = useState(['gold-leaf', 'candles']);
   const [cakeMessage, setCakeMessage] = useState('Happy Birthday!');
   const [messageStyle, setMessageStyle] = useState('piped-gold');
   const [specialInstructions, setSpecialInstructions] = useState('');
 
-  // 7 Steps Definition (Unified Shape & Layers, Dedicated Sponge Step)
+  // 8 Steps Definition (Unified Shape & Layers, Dedicated Sponge, Dedicated Filling Step)
   const steps = [
     { number: 1, id: 'cake-type', label: isAr ? 'نوع الكيك' : 'Cake Type' },
     { number: 2, id: 'shape-layers', label: isAr ? 'الشكل والطبقات' : 'Shape and Layers' },
     { number: 3, id: 'size', label: isAr ? 'الحجم' : 'Size' },
     { number: 4, id: 'sponge', label: isAr ? 'الإسفنجة' : 'Choose Sponge' },
-    { number: 5, id: 'toppings', label: isAr ? 'التصميم' : 'Design and Toppings' },
-    { number: 6, id: 'message', label: isAr ? 'الرسالة' : 'Message' },
-    { number: 7, id: 'review', label: isAr ? 'المراجعة' : 'Review' },
+    { number: 5, id: 'filling', label: isAr ? 'الحشوة' : 'Choose Filling' },
+    { number: 6, id: 'toppings', label: isAr ? 'التصميم' : 'Design and Toppings' },
+    { number: 7, id: 'message', label: isAr ? 'الرسالة' : 'Message' },
+    { number: 8, id: 'review', label: isAr ? 'المراجعة' : 'Review' },
   ];
 
   // 6 Occasions matching user request
@@ -328,12 +329,104 @@ export default function CustomizePage({
     }
   ];
 
-  // Fillings
+  // 16 Gourmet Filling Options matching user provided luxury bowls
   const fillingOptions = [
-    { id: 'caramel-buttercream', name: isAr ? 'كريمة الزبدة السويسرية والكراميل المملح' : 'Salted Caramel and Swiss Buttercream', desc: isAr ? 'كراميل ناعم محضر يدوياً مع كريمة مخملية' : 'Silky smooth caramel drip with French vanilla buttercream' },
-    { id: 'dark-ganache-hazelnut', name: isAr ? 'غاناش الشوكولاتة وبرالين البندق' : 'Dark Chocolate Ganache and Hazelnut Praline', desc: isAr ? 'شوكولاتة بلجيكية غنية مع بندق محمص مقرمش' : 'Rich dark chocolate ganache layered with crisp roasted praline crunch' },
-    { id: 'strawberry-chantilly', name: isAr ? 'توت وفراولة طازجة مع الشانتيي' : 'Fresh Berries and Chantilly Cream', desc: isAr ? 'طبقات فواكه طبيعية مع كريمة شانتيي فرنسية' : 'Sweet wild strawberry coulis with light whipped Chantilly cream' },
-    { id: 'pistachio-crunch-cream', name: isAr ? 'كريمة الفستق وخيوط الكنافة المقرمشة' : 'Pistachio Cream and Crispy Kunafa Threads', desc: isAr ? 'حشوة الحلم اللبناني الأصلية بطعم مقرمش وفاخر' : 'Rich emerald pistachio silk layered with golden roasted kunafa crunch' },
+    {
+      id: 'chocolate-mousse-chunks',
+      name: isAr ? 'موس الشوكولاتة وقطع الكاكاو' : 'Glossy Chocolate Mousse with Chunks',
+      desc: isAr ? 'موس شوكولاتة بلجيكية فاخرة غنية مع قطع كاكاو داكنة 70%' : 'Decadent 70% dark Belgian cocoa mousse loaded with rich chocolate chunks',
+      image: '/customize/filling/Glossy Chocolate Mousse Bowl with Chunks.png'
+    },
+    {
+      id: 'glossy-caramel',
+      name: isAr ? 'الكراميل المملح ومكعبات التوفي' : 'Glossy Caramel Cream and Cubes',
+      desc: isAr ? 'كريمة كراميل ذهبية ناعمة مع مكعبات فدج التوفي اللذيذة' : 'Rich golden caramel cream topped with soft artisanal toffee cubes',
+      image: '/customize/filling/Glossy Caramel Cream Bowl with Cubes.png'
+    },
+    {
+      id: 'classic-whipped-cream',
+      name: isAr ? 'كريمة الشانتيه الفرنسية المخفوقة' : 'Creamy Whipped Cream Swirl',
+      desc: isAr ? 'كريمة شانتيه نقية غنية بالفانيليا الطازجة وقوام مخملي' : 'Silky smooth French Chantilly cream infused with pure natural vanilla',
+      image: '/customize/filling/Creamy Whipped Cream Swirl in Bowl.png'
+    },
+    {
+      id: 'cookies-cream',
+      name: isAr ? 'كوكيز آند كريم أوريو المخفوقة' : 'Cookies and Cream Whipped Cream Bowl',
+      desc: isAr ? 'كريمة مخفوقة خفيفة غنية بقطع بسكويت الكوكيز المقرمشة' : 'Fluffy whipped cream folded with dark chocolate biscuit crunches',
+      image: '/customize/filling/Cookies and Cream Whipped Cream Bowl.png'
+    },
+    {
+      id: 'lotus-biscotti',
+      name: isAr ? 'كريمة بسكويت اللوتس المكرمل' : 'Lotus Biscuit Cream Bowl',
+      desc: isAr ? 'كريمة زبدة اللوتس الأصلية مع فتات البسكويت المتبل المقرمش' : 'Speculoos caramelized cookie butter cream with crunchy biscuit crumble',
+      image: '/customize/filling/Lotus Biscuit Cream Bowl.png'
+    },
+    {
+      id: 'hazelnut-chocolate',
+      name: isAr ? 'شوكولاتة البندق الإيطالية' : 'Hazelnut Chocolate Cream Bowl',
+      desc: isAr ? 'مزيج فاخر بين الشوكولاتة الذائبة ومعجون البندق المحمص' : 'Luxurious blend of molten dark chocolate and roasted hazelnut praline',
+      image: '/customize/filling/Hazelnut Chocolate Cream Bowl.png'
+    },
+    {
+      id: 'glossy-hazelnut-swirl',
+      name: isAr ? 'دوامات كريمة البندق اللامعة' : 'Glossy Hazelnut Cream Swirl',
+      desc: isAr ? 'كريمة برالين البندق الإيطالية الناعمة بطعم غني ومترف' : 'Velvety Italian hazelnut praline cream with an ultra-glossy finish',
+      image: '/customize/filling/Glossy Hazelnut Cream Swirl.png'
+    },
+    {
+      id: 'mango-cream-cubes',
+      name: isAr ? 'كريمة المانجو الاستوائية مع القطع' : 'Mango Cream Swirl with Fresh Cubes',
+      desc: isAr ? 'مهروس مانجو ألفونسو الفاخر مع قطع مانجو طازجة لذيذة' : 'Tropical Alphonso mango whip infused with succulent fresh fruit pieces',
+      image: '/customize/filling/Mango Cream Swirl with Fresh Cubes.png'
+    },
+    {
+      id: 'blueberry-yogurt',
+      name: isAr ? 'زبادي التوت البري المنعش' : 'Blueberry Yogurt Swirl Bowl',
+      desc: isAr ? 'زبادي يوناني خفيف منعش مع دوامات التوت الأزرق البري' : 'Tangy light Greek yogurt swirled with sweet wild blueberries',
+      image: '/customize/filling/Blueberry Yogurt Swirl Bowl.png'
+    },
+    {
+      id: 'raspberry-cream-swirl',
+      name: isAr ? 'كريمة التوت الأحمر (الراسبيري)' : 'Raspberry Cream Swirl Bowl',
+      desc: isAr ? 'كريمة التوت الأحمر الطبيعية بتوازن رائع بين الحلاوة والانتعاش' : 'Artisanal red raspberry mousse offering a bright sweet-tart balance',
+      image: '/customize/filling/Raspberry Cream Swirl Bowl.png'
+    },
+    {
+      id: 'pink-cherry-cream',
+      name: isAr ? 'كريمة الكرز والورود الوردية' : 'Pink Cream Bowl with Cherries',
+      desc: isAr ? 'كريمة زهرية ناعمة بنكهة الكرز الحلو وعصير التوت المنعش' : 'Blush pink whipped cream folded with sweet glazed wild cherries',
+      image: '/customize/filling/Pink Cream Bowl with Cherries.png'
+    },
+    {
+      id: 'peach-fresh-cream',
+      name: isAr ? 'كريمة الخوخ الصيفي الطازج' : 'Peach Cream Swirl with Fresh Peach',
+      desc: isAr ? 'كريمة الخوخ الصيفي العطري مع نكهة الفاكهة الطبيعية' : 'Sweet aromatic summer peach cream layered with delicate fruit coulis',
+      image: '/customize/filling/Peach Cream Swirl with Fresh Peach.png'
+    },
+    {
+      id: 'lemon-citrus-mousse',
+      name: isAr ? 'موس الليمون والحمضيات المنعشة' : 'Lemon Cream Mousse with Fresh Citrus',
+      desc: isAr ? 'كريمة ليمون صقلية منعشة مع لمسات حمضية متوازنة' : 'Zesty Sicilian lemon curd mousse with refreshing citrus notes',
+      image: '/customize/filling/Lemon Cream Mousse with Fresh Citrus.png'
+    },
+    {
+      id: 'pineapple-tropical-cream',
+      name: isAr ? 'كريمة الأناناس الذهبي الاستوائي' : 'Pineapple Cream Bowl with Leaves',
+      desc: isAr ? 'كريمة الأناناس الذهبي الغني المنعشة مع لمسات الفواكه الاستوائية' : 'Vibrant golden pineapple silk cream with tropical freshness',
+      image: '/customize/filling/Pineapple Cream Bowl with Leaves.png'
+    },
+    {
+      id: 'mocha-coffee-swirl',
+      name: isAr ? 'موكا الإسبريسو وحبوب القهوة' : 'Mocha Cream Swirl with Coffee Beans',
+      desc: isAr ? 'مزيج غني من قهوة الإسبريسو والشوكولاتة مع حبوب قهوة فاخرة' : 'Deep roasted espresso coffee blended with velvety cocoa cream',
+      image: '/customize/filling/Mocha Cream Swirl with Coffee Beans.png'
+    },
+    {
+      id: 'white-choco-cream',
+      name: isAr ? 'شوكولاتة بيضاء ومكعبات الكريمة' : 'Whipped Cream with White Chocolate Cubes',
+      desc: isAr ? 'شوكولاتة بيضاء سويسرية فاخرة مخفوقة مع كريمة الزبدة النقية' : 'Creamy Swiss white chocolate ganache whipped with sweet butter cream',
+      image: '/customize/filling/Whipped Cream Bowl with White Chocolate Cubes.png'
+    }
   ];
 
   // Design & Toppings
@@ -370,14 +463,15 @@ export default function CustomizePage({
     if (currentStep === 1) return isAr ? 'التالي: الشكل والطبقات' : 'Next: Shape and Layers';
     if (currentStep === 2) return isAr ? 'التالي: اختر الحجم' : 'Next: Choose Size';
     if (currentStep === 3) return isAr ? 'التالي: نكهة الإسفنجة' : 'Next: Choose Sponge';
-    if (currentStep === 4) return isAr ? 'التالي: التصميم والإضافات' : 'Next: Design and Toppings';
-    if (currentStep === 5) return isAr ? 'التالي: كتابة الرسالة' : 'Next: Custom Message';
-    if (currentStep === 6) return isAr ? 'التالي: مراجعة الطلب' : 'Next: Review Order';
+    if (currentStep === 4) return isAr ? 'التالي: حشوة الكيك' : 'Next: Choose Filling';
+    if (currentStep === 5) return isAr ? 'التالي: التصميم والإضافات' : 'Next: Design and Toppings';
+    if (currentStep === 6) return isAr ? 'التالي: كتابة الرسالة' : 'Next: Custom Message';
+    if (currentStep === 7) return isAr ? 'التالي: مراجعة الطلب' : 'Next: Review Order';
     return isAr ? 'تأكيد وإضافة للحقيبة' : 'Add to Bag and Confirm';
   };
 
   const handleNext = () => {
-    if (currentStep < 7) {
+    if (currentStep < 8) {
       setCurrentStep(prev => prev - 1 >= 0 ? prev + 1 : 2);
       window.scrollTo({ top: 120, behavior: 'smooth' });
     } else {
@@ -385,7 +479,9 @@ export default function CustomizePage({
       const customCakeItem = {
         title: `${occasions.find(o => o.id === selectedOccasion)?.title || 'Custom Cake'} (${selectedSize})`,
         price: totalPrice.toFixed(2),
-        flavor: `${spongeOptions.find(s => s.id === selectedSponge)?.name || 'Signature Vanilla'}`,
+        flavor: `${spongeOptions.find(s => s.id === selectedSponge)?.name || 'Signature Vanilla'} with ${fillingOptions.find(f => f.id === selectedFilling)?.name || 'Gourmet Filling'}`,
+        sponge: spongeOptions.find(s => s.id === selectedSponge)?.name,
+        filling: fillingOptions.find(f => f.id === selectedFilling)?.name,
         occasion: occasions.find(o => o.id === selectedOccasion)?.title,
         message: cakeMessage,
         layers: selectedShapeLayerItem?.title || selectedLayers,
@@ -461,7 +557,7 @@ export default function CustomizePage({
 
         {/* 8-Step Stepper Bar (Horizontal Progress Bar Matching Reference Image) */}
         <div className="mb-8 sm:mb-10 overflow-x-auto pb-3 sm:pb-0 scrollbar-none">
-          <div className="min-w-[700px] flex items-center justify-between relative px-4">
+          <div className="min-w-[820px] flex items-center justify-between relative px-4">
             
             {/* Connecting Gold Line */}
             <div className="absolute top-[15px] left-8 right-8 h-[1.5px] bg-[#E8D6B5] -z-0" />
@@ -802,8 +898,75 @@ export default function CustomizePage({
           </div>
         )}
 
-        {/* STEP 5: Design & Toppings */}
+        
+        {/* STEP 5: Choose Gourmet Filling (3 in a row with 16 Filling Bowls) */}
         {currentStep === 5 && (
+          <div className="animate-fadeIn">
+            {/* Section Heading with Left Gold Bar */}
+            <div className="flex items-start gap-3 mb-6 sm:mb-8">
+              <div className="w-1 sm:w-1.5 h-10 sm:h-12 bg-[#C58A19] rounded-full shrink-0 mt-0.5" />
+              <div>
+                <h2 className="font-serif text-xl sm:text-2xl md:text-[26px] font-bold text-[#4A2116]">
+                  {isAr ? 'اختر حشوة الكيك الفاخرة' : 'Choose Gourmet Filling'}
+                </h2>
+                <p className="font-poppins text-xs sm:text-sm text-[#8C6D62] mt-0.5">
+                  {isAr 
+                    ? 'محضرة طازجة يومياً من أجود أنواع الكريمة، الشوكولاتة والفاكهة الطبيعية.' 
+                    : 'Artisanal silky fillings handcrafted daily with Belgian chocolates, fresh fruits and organic creams.'}
+                </p>
+              </div>
+            </div>
+
+            {/* 16 Filling Bowl Cards Grid: 3 in a row */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-7 md:gap-8 mb-10">
+              {fillingOptions.map((fi) => {
+                const isSelected = selectedFilling === fi.id;
+
+                return (
+                  <div
+                    key={fi.id}
+                    onClick={() => setSelectedFilling(fi.id)}
+                    className={`bg-white rounded-3xl border-2 transition-all duration-300 cursor-pointer p-5 sm:p-6 flex flex-col justify-between relative group hover:-translate-y-1.5 hover:shadow-xl ${
+                      isSelected 
+                        ? 'border-[#C58A19] shadow-lg ring-4 ring-[#C58A19]/15 bg-[#FFFDF9]' 
+                        : 'border-[#EEDECB] hover:border-[#C58A19]/70 shadow-sm'
+                    }`}
+                  >
+                    {/* Checkmark Badge on Top Right when selected */}
+                    {isSelected && (
+                      <div className="absolute top-4 right-4 rtl:right-auto rtl:left-4 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#C58A19] text-white flex items-center justify-center shadow-md z-10 animate-scaleIn">
+                        <Check className="w-4 h-4 stroke-[2.5]" />
+                      </div>
+                    )}
+
+                    {/* Filling Bowl Image Box */}
+                    <div className="w-full aspect-[4/3] sm:h-52 md:h-60 flex items-center justify-center overflow-hidden mb-4 p-3 bg-[#FAF7F2]/60 rounded-2xl group-hover:bg-[#FAF7F2] transition-colors">
+                      <img 
+                        src={encodeURI(fi.image)} 
+                        alt={fi.name} 
+                        className="w-full h-full object-contain drop-shadow-sm group-hover:scale-108 transition-transform duration-300 select-none" 
+                      />
+                    </div>
+
+                    {/* Card Footer: Title & Description */}
+                    <div className="pt-3.5 border-t border-[#F2E7D5] text-center flex flex-col items-center">
+                      <h3 className="font-serif text-base sm:text-lg md:text-xl font-bold tracking-tight text-[#4A2116] mb-1">
+                        {fi.name}
+                      </h3>
+                      <p className="font-poppins text-xs text-[#8C6D62] leading-relaxed line-clamp-2">
+                        {fi.desc}
+                      </p>
+                    </div>
+
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {/* STEP 6: Design & Toppings */}
+        {currentStep === 6 && (
           <div className="animate-fadeIn">
             <div className="flex items-start gap-3 mb-6 sm:mb-8">
               <div className="w-1 sm:w-1.5 h-10 sm:h-12 bg-[#C58A19] rounded-full shrink-0 mt-0.5" />
@@ -855,8 +1018,8 @@ export default function CustomizePage({
           </div>
         )}
 
-        {/* STEP 6: Message */}
-        {currentStep === 6 && (
+        {/* STEP 7: Message */}
+        {currentStep === 7 && (
           <div className="animate-fadeIn">
             <div className="flex items-start gap-3 mb-6 sm:mb-8">
               <div className="w-1 sm:w-1.5 h-10 sm:h-12 bg-[#C58A19] rounded-full shrink-0 mt-0.5" />
@@ -977,8 +1140,8 @@ export default function CustomizePage({
           </div>
         )}
 
-        {/* STEP 7: Review & Order */}
-        {currentStep === 7 && (
+        {/* STEP 8: Review & Order */}
+        {currentStep === 8 && (
           <div className="animate-fadeIn">
             <div className="flex items-start gap-3 mb-6 sm:mb-8">
               <div className="w-1 sm:w-1.5 h-10 sm:h-12 bg-[#C58A19] rounded-full shrink-0 mt-0.5" />
@@ -1056,6 +1219,19 @@ export default function CustomizePage({
                     )}
                   </div>
 
+                  <div className="sm:col-span-2 p-3.5 rounded-xl bg-[#FFFBF5] border border-[#F5EBDD] flex items-center justify-between">
+                    <div>
+                      <span className="text-[#8C6D62] block mb-1 font-medium">{isAr ? 'حشوة الكيك' : 'Gourmet Filling'}</span>
+                      <span className="font-semibold text-[#4A2116] text-sm">{fillingOptions.find(f => f.id === selectedFilling)?.name}</span>
+                      <p className="text-[11px] text-[#8C6D62] mt-0.5">{fillingOptions.find(f => f.id === selectedFilling)?.desc}</p>
+                    </div>
+                    {fillingOptions.find(f => f.id === selectedFilling)?.image && (
+                      <div className="w-14 h-14 rounded-xl bg-white border border-[#E5C583]/60 flex items-center justify-center shrink-0 p-1">
+                        <img src={encodeURI(fillingOptions.find(f => f.id === selectedFilling)?.image)} alt="" className="w-full h-full object-contain select-none" />
+                      </div>
+                    )}
+                  </div>
+
                   <div className="sm:col-span-2 p-3.5 rounded-xl bg-[#FFFBF5] border border-[#F5EBDD]">
                     <span className="text-[#8C6D62] block mb-1 font-medium">{isAr ? 'الإضافات والتزيين' : 'Selected Toppings and Accents'}</span>
                     <div className="flex flex-wrap gap-1.5 mt-1">
@@ -1128,7 +1304,7 @@ export default function CustomizePage({
 
                   <a
                     href={`https://wa.me/971506063631?text=${encodeURIComponent(
-                      `Hello Lebanese Dream Bakery! I would like to order a custom cake:\nOccasion: ${occasions.find(o => o.id === selectedOccasion)?.title}\nShape and Layers: ${selectedShapeLayerItem?.title}\nSize: ${sizeOptions.find(s => s.id === selectedSize)?.title}\nFlavor: ${spongeOptions.find(s => s.id === selectedSponge)?.name}\nMessage: "${cakeMessage}"\nTotal: AED ${totalPrice}`
+                      `Hello Lebanese Dream Bakery! I would like to order a custom cake:\nOccasion: ${occasions.find(o => o.id === selectedOccasion)?.title}\nShape and Layers: ${selectedShapeLayerItem?.title}\nSize: ${sizeOptions.find(s => s.id === selectedSize)?.title}\nSponge: ${spongeOptions.find(s => s.id === selectedSponge)?.name}\nFilling: ${fillingOptions.find(f => f.id === selectedFilling)?.name}\nMessage: "${cakeMessage}"\nTotal: AED ${totalPrice}`
                     )}`}
                     target="_blank"
                     rel="noopener noreferrer"
