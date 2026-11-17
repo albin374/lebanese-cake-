@@ -62,12 +62,12 @@ export default function CustomizePage({
     { number: 8, id: 'review', label: isAr ? 'المراجعة' : 'Review' },
   ];
 
-  // 9 Occasions matching user's image
+  // 6 Occasions matching user request
   const occasions = [
     {
       id: 'birthday',
       title: isAr ? 'كيك أعياد الميلاد' : 'Birthday Cake',
-      image: '/customize/birthday-cake.png',
+      image: '/customize/birthday.png',
       icon: (
         <svg className="w-4 h-4 stroke-current" viewBox="0 0 24 24" fill="none" strokeWidth="1.8">
           <path d="M20 21v-8a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8" />
@@ -85,7 +85,7 @@ export default function CustomizePage({
     {
       id: 'wedding',
       title: isAr ? 'كيك الأعراس' : 'Wedding Cake',
-      image: '/customize/wedding-cake.png',
+      image: '/customize/Wedding Cake.png',
       icon: (
         <svg className="w-4 h-4 stroke-current" viewBox="0 0 24 24" fill="none" strokeWidth="1.8">
           <circle cx="9" cy="12" r="5" />
@@ -96,49 +96,32 @@ export default function CustomizePage({
     {
       id: 'graduation',
       title: isAr ? 'كيك التخرج' : 'Graduation Cake',
-      image: '/customize/graduation-cake.png',
+      image: '/customize/graduation.png',
       icon: <GraduationCap className="w-4 h-4" />
     },
     {
-      id: 'anniversary',
-      title: isAr ? 'كيك الذكرى السنوية' : 'Anniversary Cake',
-      image: '/customize/anniversary-cake.png',
-      icon: <Heart className="w-4 h-4" />
+      id: 'superhero',
+      title: isAr ? 'كيك الأبطال الخارقين' : 'Superhero Cake',
+      image: '/customize/Superhero Cake.png',
+      icon: <Sparkles className="w-4 h-4" />
     },
     {
-      id: 'baby-shower',
-      title: isAr ? 'كيك استقبال المواليد' : 'Baby Shower Cake',
-      image: '/customize/baby-shower-cake.png',
-      icon: <Baby className="w-4 h-4" />
-    },
-    {
-      id: 'corporate',
-      title: isAr ? 'كيك فعاليات الشركات' : 'Corporate Cake',
-      image: '/customize/corporate-cake.png',
-      icon: <Building2 className="w-4 h-4" />
-    },
-    {
-      id: 'religious',
-      title: isAr ? 'كيك المناسبات الدينية' : 'Religious Cake',
-      image: '/customize/religious-cake.png',
+      id: 'boys',
+      title: isAr ? 'كيك للأولاد' : 'Boys Cake',
+      image: '/customize/boys cake.png',
       icon: (
-        <svg className="w-4 h-4 stroke-current" viewBox="0 0 24 24" fill="none" strokeWidth="2">
-          <line x1="12" y1="4" x2="12" y2="20" />
-          <line x1="7" y1="9" x2="17" y2="9" />
+        <svg className="w-4 h-4 stroke-current" viewBox="0 0 24 24" fill="none" strokeWidth="1.8">
+          <circle cx="12" cy="12" r="8" />
+          <path d="M12 8v8" />
+          <path d="M8 12h8" />
         </svg>
       )
     },
     {
-      id: 'festive',
-      title: isAr ? 'كيك الأعياد والمواسم' : 'Festive Cake',
-      image: '/customize/festive-cake.png',
-      icon: <Gift className="w-4 h-4" />
-    },
-    {
-      id: 'custom',
-      title: isAr ? 'مناسبة مخصصة' : 'Custom Occasion',
-      image: '/customize/custom-cake.png',
-      icon: <Sparkles className="w-4 h-4" />
+      id: 'girls',
+      title: isAr ? 'كيك للبنات' : 'Girls Cake',
+      image: '/customize/girls cake.png',
+      icon: <Heart className="w-4 h-4" />
     }
   ];
 
@@ -428,8 +411,8 @@ export default function CustomizePage({
               </div>
             </div>
 
-            {/* 9 Cake Cards Grid (5 in row 1, 4 in row 2) */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3.5 sm:gap-4.5 mb-8">
+            {/* 6 Cake Cards Grid */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-6 gap-3.5 sm:gap-4.5 mb-8">
               {occasions.map((occ) => {
                 const isSelected = selectedOccasion === occ.id;
 
@@ -453,9 +436,9 @@ export default function CustomizePage({
                     {/* Cake Image Box */}
                     <div className="w-full aspect-[4/3] flex items-center justify-center overflow-hidden mb-2.5 pt-1">
                       <img 
-                        src={occ.image} 
+                        src={encodeURI(occ.image)} 
                         alt={occ.title} 
-                        className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300" 
+                        className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300 select-none" 
                       />
                     </div>
 
@@ -932,9 +915,9 @@ export default function CustomizePage({
                   </div>
                   <div className="w-14 h-14 rounded-xl bg-[#FFF9F0] border border-[#E5C583]/60 flex items-center justify-center shrink-0">
                     <img 
-                      src={occasions.find(o => o.id === selectedOccasion)?.image} 
+                      src={encodeURI(occasions.find(o => o.id === selectedOccasion)?.image || '/customize/birthday.png')} 
                       alt="Occasion" 
-                      className="w-10 h-10 object-contain"
+                      className="w-10 h-10 object-contain select-none"
                     />
                   </div>
                 </div>
