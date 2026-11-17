@@ -44,19 +44,19 @@ export default function CustomizePage({
   const [selectedLayers, setSelectedLayers] = useState('1-tier');
   const [selectedShape, setSelectedShape] = useState('round');
   const [selectedSize, setSelectedSize] = useState('2kg');
-  const [selectedSponge, setSelectedSponge] = useState('vanilla');
+  const [selectedSponge, setSelectedSponge] = useState('vanilla-flower-beans');
   const [selectedFilling, setSelectedFilling] = useState('caramel-buttercream');
   const [selectedToppings, setSelectedToppings] = useState(['gold-leaf', 'candles']);
   const [cakeMessage, setCakeMessage] = useState('Happy Birthday!');
   const [messageStyle, setMessageStyle] = useState('piped-gold');
   const [specialInstructions, setSpecialInstructions] = useState('');
 
-  // 7 Steps Definition (Unified Shape & Layers)
+  // 7 Steps Definition (Unified Shape & Layers, Dedicated Sponge Step)
   const steps = [
     { number: 1, id: 'cake-type', label: isAr ? 'نوع الكيك' : 'Cake Type' },
     { number: 2, id: 'shape-layers', label: isAr ? 'الشكل والطبقات' : 'Shape & Layers' },
     { number: 3, id: 'size', label: isAr ? 'الحجم' : 'Size' },
-    { number: 4, id: 'flavors', label: isAr ? 'النكهات' : 'Flavors' },
+    { number: 4, id: 'sponge', label: isAr ? 'الإسفنجة' : 'Choose Sponge' },
     { number: 5, id: 'toppings', label: isAr ? 'التصميم' : 'Design & Toppings' },
     { number: 6, id: 'message', label: isAr ? 'الرسالة' : 'Message' },
     { number: 7, id: 'review', label: isAr ? 'المراجعة' : 'Review' },
@@ -219,13 +219,62 @@ export default function CustomizePage({
     { id: 'grand', title: isAr ? 'حجم ملكي (60-80 حصة)' : 'Grand Gala (60-80 servings)', basePrice: 1150, desc: isAr ? 'حفلات زفاف واستقبال فخم' : 'Spectacular scale for wedding banquets' },
   ];
 
-  // Sponge Flavors
+  // 9 Sponge Flavor Options matching user provided slice cutout images
   const spongeOptions = [
-    { id: 'vanilla', name: isAr ? 'فانيليا مدغشقر العضوية' : 'Madagascar Vanilla Bean', desc: isAr ? 'إسفنجة طرية خفيفة غنية بحبوب الفانيليا الطبيعية' : 'Light, tender golden sponge infused with aromatic natural vanilla bean' },
-    { id: 'belgian-chocolate', name: isAr ? 'شوكولاتة بلجيكية فاخرة' : 'Rich Belgian Dark Chocolate', desc: isAr ? 'طبقات شوكولاتة كاكاو 70% عميقة وغنية' : 'Decadent 70% dark cocoa sponge with moist velvet crumb' },
-    { id: 'pistachio-kunafa', name: isAr ? 'فستق حلبي وكنافة محمصة' : 'Dubai Pistachio & Kunafa', desc: isAr ? 'نكهة المخبز التوقيعية مع فستق حلبي محمص' : 'Signature Lebanese cake sponge with roasted green pistachios' },
-    { id: 'red-velvet', name: isAr ? 'ريد فيلفيت كلاسيك' : 'Signature Red Velvet', desc: isAr ? 'كاكاو مخملي أحمر مع نكهة لا تقاوم' : 'Crimson cocoa velvet layers with delicate buttermilk essence' },
-    { id: 'saffron-cardamom', name: isAr ? 'زعفران ملكي وهيل' : 'Royal Saffron & Cardamom', desc: isAr ? 'أصالة عربية فاخرة بماء الورد والزعفران النقي' : 'Exquisite Emirati-Lebanese blend with pure golden saffron threads' },
+    {
+      id: 'vanilla-flower-beans',
+      name: isAr ? 'فانيليا مدغشقر والزهور الطبيعية' : 'Vanilla Layer with Flower & Beans',
+      desc: isAr ? 'إسفنجة فانيليا نقية مع حبوب الفانيليا العطرية وكريمة خفيفة' : 'Tender golden sponge infused with natural aromatic vanilla beans',
+      image: '/customize/sponge/Vanilla Layer Cake with Flower and Beans.png'
+    },
+    {
+      id: 'glossy-chocolate-4layer',
+      name: isAr ? 'شوكولاتة بلجيكية فاخرة من 4 طبقات' : 'Glossy Four-Layer Chocolate',
+      desc: isAr ? 'طبقات شوكولاتة كاكاو 70% داكنة مع غاناش بلجيكي لامع' : 'Decadent 70% dark cocoa sponge with rich glossy ganache layers',
+      image: '/customize/sponge/Glossy Four-Layer Chocolate Cake Slice.png'
+    },
+    {
+      id: 'red-velvet',
+      name: isAr ? 'ريد فيلفيت كلاسيكي فاخر' : 'Classic Red Velvet',
+      desc: isAr ? 'طبقات مخملية حمراء غنية مع كريمة الجبن الناعمة المتوازنة' : 'Crimson cocoa velvet layers paired with silky cream cheese frosting',
+      image: '/customize/sponge/Red Velvet Cake Slice Cutout.png'
+    },
+    {
+      id: 'layered-carrot-walnut',
+      name: isAr ? 'كيك الجزر مع الجوز المحمص' : 'Layered Carrot Cake with Walnuts',
+      desc: isAr ? 'جزر طازج مع قرفة دافئة وجوز محمص مقرمش وكريمة فاخرة' : 'Spiced moist carrot sponge packed with toasted walnuts & cream frosting',
+      image: '/customize/sponge/Layered Carrot Cake with Walnuts.png'
+    },
+    {
+      id: 'marbled-choco-chip',
+      name: isAr ? 'ماربلد تشوكليت تشيب' : 'Marbled Chocolate Chip',
+      desc: isAr ? 'مزيج رخامي مميز بين الفانيليا والكاكاو مع رقائق الشوكولاتة' : 'Artisanal vanilla and dark cocoa marble swirl with melted chocolate chips',
+      image: '/customize/sponge/Marbled Chocolate Chip Cake Slice.png'
+    },
+    {
+      id: 'rainbow-sprinkle',
+      name: isAr ? 'رينبو سبرينكلز للاحتفالات' : 'Rainbow Sprinkle Layer Cake',
+      desc: isAr ? 'إسفنجة فانيليا ملونة مبهجة مفعمة بحبيبات السكر المقرمشة' : 'Celebration funfetti sponge baked with vibrant rainbow sugar sprinkles',
+      image: '/customize/sponge/Rainbow Sprinkle Layer Cake Slice.png'
+    },
+    {
+      id: 'vanilla-chocolate-duo',
+      name: isAr ? 'مزدوج الفانيليا والشوكولاتة' : 'Vanilla Chocolate Layered Duo',
+      desc: isAr ? 'تناغم مثالي بين طبقات الفانيليا الذهبية والشوكولاتة الغنية' : 'Alternating layers of delicate vanilla sponge and rich cocoa fudge',
+      image: '/customize/sponge/Vanilla Chocolate Layered Cake Slice.png'
+    },
+    {
+      id: 'blue-white-velvet',
+      name: isAr ? 'بلو آند وايت لير كيك' : 'Blue & White Layered Velvet',
+      desc: isAr ? 'طبقات زرقاء وبيضاء ساحرة بنكهة التوت البري والفانيليا' : 'Striking sapphire & ivory layers with subtle blueberry cream notes',
+      image: '/customize/sponge/Blue and White Layered Cake Slice.png'
+    },
+    {
+      id: 'colorful-pastel-vanilla',
+      name: isAr ? 'فانيليا الباستيل الملونة' : 'Colorful Vanilla Layer Cake',
+      desc: isAr ? 'طبقات ألوان باستيل ناعمة بنكهة الفانيليا العضوية الفرنسية' : 'Dreamy multicolored pastel sponge layers with French vanilla essence',
+      image: '/customize/sponge/Colorful Vanilla Layer Cake Slice.png'
+    }
   ];
 
   // Fillings
@@ -269,7 +318,7 @@ export default function CustomizePage({
   const getNextStepLabel = () => {
     if (currentStep === 1) return isAr ? 'التالي: الشكل والطبقات' : 'Next: Shape & Layers';
     if (currentStep === 2) return isAr ? 'التالي: اختر الحجم' : 'Next: Choose Size';
-    if (currentStep === 3) return isAr ? 'التالي: اختر النكهات' : 'Next: Choose Flavors';
+    if (currentStep === 3) return isAr ? 'التالي: نكهة الإسفنجة' : 'Next: Choose Sponge';
     if (currentStep === 4) return isAr ? 'التالي: التصميم والإضافات' : 'Next: Design & Toppings';
     if (currentStep === 5) return isAr ? 'التالي: كتابة الرسالة' : 'Next: Custom Message';
     if (currentStep === 6) return isAr ? 'التالي: مراجعة الطلب' : 'Next: Review Order';
@@ -285,7 +334,7 @@ export default function CustomizePage({
       const customCakeItem = {
         title: `${occasions.find(o => o.id === selectedOccasion)?.title || 'Custom Cake'} (${selectedSize})`,
         price: totalPrice.toFixed(2),
-        flavor: `${spongeOptions.find(s => s.id === selectedSponge)?.name} with ${fillingOptions.find(f => f.id === selectedFilling)?.name}`,
+        flavor: `${spongeOptions.find(s => s.id === selectedSponge)?.name || 'Signature Vanilla'}`,
         occasion: occasions.find(o => o.id === selectedOccasion)?.title,
         message: cakeMessage,
         layers: selectedShapeLayerItem?.title || selectedLayers,
@@ -608,85 +657,68 @@ export default function CustomizePage({
           </div>
         )}
 
-        {/* STEP 4: Flavors */}
+        {/* STEP 4: Choose Sponge (3 in a row with 9 Sponge Slice Cutout Models) */}
         {currentStep === 4 && (
           <div className="animate-fadeIn">
+            {/* Section Heading with Left Gold Bar */}
             <div className="flex items-start gap-3 mb-6 sm:mb-8">
               <div className="w-1 sm:w-1.5 h-10 sm:h-12 bg-[#C58A19] rounded-full shrink-0 mt-0.5" />
               <div>
                 <h2 className="font-serif text-xl sm:text-2xl md:text-[26px] font-bold text-[#4A2116]">
-                  {isAr ? 'اختر نكهة الكيك والحشوة' : 'Choose Sponge & Gourmet Filling'}
+                  {isAr ? 'اختر نكهة الإسفنجة' : 'Choose Sponge'}
                 </h2>
                 <p className="font-poppins text-xs sm:text-sm text-[#8C6D62] mt-0.5">
-                  {isAr ? 'مخبوزة بأجود أنواع الكاكاو البلجيكي والفستق والزعفران الطبيعي.' : 'Mastercrafted with Belgian chocolate, Tahitian vanilla, and Dubai pistachios.'}
+                  {isAr 
+                    ? 'مخبوزة بأجود أنواع الشوكولاتة البلجيكية، الفانيليا التاهيتية والفستق الفاخر.' 
+                    : 'Mastercrafted with Belgian chocolate, Tahitian vanilla, and Dubai pistachios.'}
                 </p>
               </div>
             </div>
 
-            {/* Sub-section: Sponge Cake Base */}
-            <div className="mb-6">
-              <h3 className="font-serif font-bold text-base text-[#4A2116] mb-3">
-                {isAr ? '1. نكهة الإسفنجة الأساسية' : '1. Sponge Base Flavor'}
-              </h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5">
-                {spongeOptions.map((sp) => {
-                  const isSelected = selectedSponge === sp.id;
-                  return (
-                    <div
-                      key={sp.id}
-                      onClick={() => setSelectedSponge(sp.id)}
-                      className={`bg-white rounded-xl border p-4 cursor-pointer transition-all flex items-start justify-between ${
-                        isSelected
-                          ? 'border-2 border-[#C58A19] bg-[#FFFBF5] shadow-xs'
-                          : 'border-[#F0E4D2] hover:border-[#C58A19]/60'
-                      }`}
-                    >
-                      <div>
-                        <div className="font-semibold text-sm text-[#4A2116] mb-1">{sp.name}</div>
-                        <div className="text-xs text-[#8C6D62]">{sp.desc}</div>
-                      </div>
-                      <div className={`w-5 h-5 rounded-full border shrink-0 mt-0.5 flex items-center justify-center ${
-                        isSelected ? 'border-[#C58A19] bg-[#C58A19] text-white' : 'border-[#D4C3A3]'
-                      }`}>
-                        {isSelected && <Check className="w-3 h-3 stroke-[2.5]" />}
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
+            {/* 9 Sponge Slice Cards Grid: 3 in a row */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-7 md:gap-8 mb-10">
+              {spongeOptions.map((sp) => {
+                const isSelected = selectedSponge === sp.id;
 
-            {/* Sub-section: Gourmet Filling */}
-            <div>
-              <h3 className="font-serif font-bold text-base text-[#4A2116] mb-3">
-                {isAr ? '2. الحشوة والكريمة الفاخرة' : '2. Gourmet Filling & Layering Cream'}
-              </h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 mb-8">
-                {fillingOptions.map((fl) => {
-                  const isSelected = selectedFilling === fl.id;
-                  return (
-                    <div
-                      key={fl.id}
-                      onClick={() => setSelectedFilling(fl.id)}
-                      className={`bg-white rounded-xl border p-4 cursor-pointer transition-all flex items-start justify-between ${
-                        isSelected
-                          ? 'border-2 border-[#C58A19] bg-[#FFFBF5] shadow-xs'
-                          : 'border-[#F0E4D2] hover:border-[#C58A19]/60'
-                      }`}
-                    >
-                      <div>
-                        <div className="font-semibold text-sm text-[#4A2116] mb-1">{fl.name}</div>
-                        <div className="text-xs text-[#8C6D62]">{fl.desc}</div>
+                return (
+                  <div
+                    key={sp.id}
+                    onClick={() => setSelectedSponge(sp.id)}
+                    className={`bg-white rounded-3xl border-2 transition-all duration-300 cursor-pointer p-5 sm:p-6 flex flex-col justify-between relative group hover:-translate-y-1.5 hover:shadow-xl ${
+                      isSelected 
+                        ? 'border-[#C58A19] shadow-lg ring-4 ring-[#C58A19]/15 bg-[#FFFDF9]' 
+                        : 'border-[#EEDECB] hover:border-[#C58A19]/70 shadow-sm'
+                    }`}
+                  >
+                    {/* Checkmark Badge on Top Right when selected */}
+                    {isSelected && (
+                      <div className="absolute top-4 right-4 rtl:right-auto rtl:left-4 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#C58A19] text-white flex items-center justify-center shadow-md z-10 animate-scaleIn">
+                        <Check className="w-4 h-4 stroke-[2.5]" />
                       </div>
-                      <div className={`w-5 h-5 rounded-full border shrink-0 mt-0.5 flex items-center justify-center ${
-                        isSelected ? 'border-[#C58A19] bg-[#C58A19] text-white' : 'border-[#D4C3A3]'
-                      }`}>
-                        {isSelected && <Check className="w-3 h-3 stroke-[2.5]" />}
-                      </div>
+                    )}
+
+                    {/* Cake Sponge Slice Image Box */}
+                    <div className="w-full aspect-[4/3] sm:h-52 md:h-60 flex items-center justify-center overflow-hidden mb-4 p-3 bg-[#FAF7F2]/60 rounded-2xl group-hover:bg-[#FAF7F2] transition-colors">
+                      <img 
+                        src={encodeURI(sp.image)} 
+                        alt={sp.name} 
+                        className="w-full h-full object-contain drop-shadow-sm group-hover:scale-108 transition-transform duration-300 select-none" 
+                      />
                     </div>
-                  );
-                })}
-              </div>
+
+                    {/* Card Footer: Title & Description */}
+                    <div className="pt-3.5 border-t border-[#F2E7D5] text-center flex flex-col items-center">
+                      <h3 className="font-serif text-base sm:text-lg md:text-xl font-bold tracking-tight text-[#4A2116] mb-1">
+                        {sp.name}
+                      </h3>
+                      <p className="font-poppins text-xs text-[#8C6D62] leading-relaxed line-clamp-2">
+                        {sp.desc}
+                      </p>
+                    </div>
+
+                  </div>
+                );
+              })}
             </div>
           </div>
         )}
@@ -924,14 +956,17 @@ export default function CustomizePage({
                     <span className="font-semibold text-[#4A2116] text-sm">{sizeOptions.find(s => s.id === selectedSize)?.title}</span>
                   </div>
 
-                  <div className="p-3.5 rounded-xl bg-[#FFFBF5] border border-[#F5EBDD]">
-                    <span className="text-[#8C6D62] block mb-1 font-medium">{isAr ? 'نكهة الإسفنجة' : 'Sponge Flavor'}</span>
-                    <span className="font-semibold text-[#4A2116] text-sm">{spongeOptions.find(s => s.id === selectedSponge)?.name}</span>
-                  </div>
-
-                  <div className="sm:col-span-2 p-3.5 rounded-xl bg-[#FFFBF5] border border-[#F5EBDD]">
-                    <span className="text-[#8C6D62] block mb-1 font-medium">{isAr ? 'الحشوة والكريمة' : 'Gourmet Filling'}</span>
-                    <span className="font-semibold text-[#4A2116] text-sm">{fillingOptions.find(f => f.id === selectedFilling)?.name}</span>
+                  <div className="sm:col-span-2 p-3.5 rounded-xl bg-[#FFFBF5] border border-[#F5EBDD] flex items-center justify-between">
+                    <div>
+                      <span className="text-[#8C6D62] block mb-1 font-medium">{isAr ? 'نكهة الإسفنجة' : 'Sponge Flavor'}</span>
+                      <span className="font-semibold text-[#4A2116] text-sm">{spongeOptions.find(s => s.id === selectedSponge)?.name}</span>
+                      <p className="text-[11px] text-[#8C6D62] mt-0.5">{spongeOptions.find(s => s.id === selectedSponge)?.desc}</p>
+                    </div>
+                    {spongeOptions.find(s => s.id === selectedSponge)?.image && (
+                      <div className="w-14 h-14 rounded-xl bg-white border border-[#E5C583]/60 flex items-center justify-center shrink-0 p-1">
+                        <img src={encodeURI(spongeOptions.find(s => s.id === selectedSponge)?.image)} alt="" className="w-full h-full object-contain select-none" />
+                      </div>
+                    )}
                   </div>
 
                   <div className="sm:col-span-2 p-3.5 rounded-xl bg-[#FFFBF5] border border-[#F5EBDD]">
