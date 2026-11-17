@@ -142,7 +142,7 @@ export default function BestsellersSection({
                   </h3>
                 </div>
                 <div className="text-right rtl:text-left shrink-0">
-                  <span className="font-serif font-bold text-lg sm:text-xl text-[#72251F]">
+                  <span className="font-poppins font-bold text-lg sm:text-xl text-[#72251F] lining-nums tabular-nums">
                     {selectedCake.price} {selectedCake.currency}
                   </span>
                 </div>

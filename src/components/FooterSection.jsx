@@ -38,7 +38,7 @@ export default function FooterSection({
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-0 w-full">
           
           {/* Column 1: Logo, Location, Phone & Email (4 Columns on LG) */}
-          <div className="lg:col-span-4 lg:pr-8 lg:rtl:pr-0 lg:rtl:pl-8 lg:border-r lg:rtl:border-r-0 lg:rtl:border-l border-[#E5C583]/60 flex flex-col justify-start">
+          <div className="lg:col-span-4 lg:pr-8 lg:rtl:pr-0 lg:rtl:pl-8 lg:border-r lg:rtl:border-r-0 lg:rtl:border-l border-[#E5C583]/60 flex flex-col justify-start items-start">
             
             {/* Circular Heritage Logo Emblem */}
             <div className="mb-3.5">

@@ -54,10 +54,10 @@ export default function CustomizePage({
   // 7 Steps Definition (Unified Shape & Layers, Dedicated Sponge Step)
   const steps = [
     { number: 1, id: 'cake-type', label: isAr ? 'نوع الكيك' : 'Cake Type' },
-    { number: 2, id: 'shape-layers', label: isAr ? 'الشكل والطبقات' : 'Shape & Layers' },
+    { number: 2, id: 'shape-layers', label: isAr ? 'الشكل والطبقات' : 'Shape and Layers' },
     { number: 3, id: 'size', label: isAr ? 'الحجم' : 'Size' },
     { number: 4, id: 'sponge', label: isAr ? 'الإسفنجة' : 'Choose Sponge' },
-    { number: 5, id: 'toppings', label: isAr ? 'التصميم' : 'Design & Toppings' },
+    { number: 5, id: 'toppings', label: isAr ? 'التصميم' : 'Design and Toppings' },
     { number: 6, id: 'message', label: isAr ? 'الرسالة' : 'Message' },
     { number: 7, id: 'review', label: isAr ? 'المراجعة' : 'Review' },
   ];
@@ -150,7 +150,7 @@ export default function CustomizePage({
       title: isAr ? 'كيك دائري من طبقتين' : 'Two-Tier Round Cake',
       shape: 'round',
       layers: '2-tier',
-      desc: isAr ? 'طبقتان دائريتان متناسقتان للأعراس وحفلات الخطوبة' : 'Two stacked circular tiers for weddings & engagements',
+      desc: isAr ? 'طبقتان دائريتان متناسقتان للأعراس وحفلات الخطوبة' : 'Two stacked circular tiers for weddings and engagements',
       extraPrice: 150,
       image: '/customize/shapes/Two-Tier round Cake.png'
     },
@@ -195,7 +195,7 @@ export default function CustomizePage({
       title: isAr ? 'كيك القلب الرومانسي' : 'Romantic Heart Cake',
       shape: 'heart',
       layers: '1-tier',
-      desc: isAr ? 'شكل قلب رومانسي مميز لذكرى الزواج والمناسبات الخاصة' : 'Romantic sculpted heart silhouette for anniversaries & proposals',
+      desc: isAr ? 'شكل قلب رومانسي مميز لذكرى الزواج والمناسبات الخاصة' : 'Romantic sculpted heart silhouette for anniversaries and proposals',
       extraPrice: 40,
       image: '/customize/shapes/herat cake .png'
     },
@@ -204,7 +204,7 @@ export default function CustomizePage({
       title: isAr ? 'كيك مستطيل للعائلات والشركات' : 'Celebration Rectangle (Sheet)',
       shape: 'rectangle',
       layers: '1-tier',
-      desc: isAr ? 'مساحة واسعة وسهلة التقطيع للمناسبات الكبيرة والشركات' : 'Spacious sheet cake optimized for clean serving & grand crowds',
+      desc: isAr ? 'مساحة واسعة وسهلة التقطيع للمناسبات الكبيرة والشركات' : 'Spacious sheet cake optimized for clean serving and grand crowds',
       extraPrice: 60,
       image: '/customize/shapes/recatanglur .png'
     }
@@ -214,8 +214,8 @@ export default function CustomizePage({
   const sizeOptions = [
     { id: '1kg', title: isAr ? '1 كجم (6-8 حصص)' : '1 kg (6-8 servings)', basePrice: 180, desc: isAr ? 'قطر 16 سم • احتفال مصغر' : '16cm diameter • Intimate celebration' },
     { id: '2kg', title: isAr ? '2 كجم (12-15 حصة)' : '2 kg (12-15 servings)', basePrice: 290, desc: isAr ? 'قطر 22 سم • الخيار الأكثر طلباً' : '22cm diameter • Most Popular Choice', popular: true },
-    { id: '3kg', title: isAr ? '3 كجم (20-25 حصة)' : '3 kg (20-25 servings)', basePrice: 420, desc: isAr ? 'قطر 26 سم • حفلات الأصدقاء' : '26cm diameter • Family & party gatherings' },
-    { id: '5kg', title: isAr ? '5 كجم (40-50 حصة)' : '5 kg (40-50 servings)', basePrice: 680, desc: isAr ? 'مناسبات كبرى وحفلات تخرج' : 'Generous feast for corporate & milestone parties' },
+    { id: '3kg', title: isAr ? '3 كجم (20-25 حصة)' : '3 kg (20-25 servings)', basePrice: 420, desc: isAr ? 'قطر 26 سم • حفلات الأصدقاء' : '26cm diameter • Family and party gatherings' },
+    { id: '5kg', title: isAr ? '5 كجم (40-50 حصة)' : '5 kg (40-50 servings)', basePrice: 680, desc: isAr ? 'مناسبات كبرى وحفلات تخرج' : 'Generous feast for corporate and milestone parties' },
     { id: 'grand', title: isAr ? 'حجم ملكي (60-80 حصة)' : 'Grand Gala (60-80 servings)', basePrice: 1150, desc: isAr ? 'حفلات زفاف واستقبال فخم' : 'Spectacular scale for wedding banquets' },
   ];
 
@@ -223,7 +223,7 @@ export default function CustomizePage({
   const spongeOptions = [
     {
       id: 'vanilla-flower-beans',
-      name: isAr ? 'فانيليا مدغشقر والزهور الطبيعية' : 'Vanilla Layer with Flower & Beans',
+      name: isAr ? 'فانيليا مدغشقر والزهور الطبيعية' : 'Vanilla Layer with Flower and Beans',
       desc: isAr ? 'إسفنجة فانيليا نقية مع حبوب الفانيليا العطرية وكريمة خفيفة' : 'Tender golden sponge infused with natural aromatic vanilla beans',
       image: '/customize/sponge/Vanilla Layer Cake with Flower and Beans.png'
     },
@@ -242,7 +242,7 @@ export default function CustomizePage({
     {
       id: 'layered-carrot-walnut',
       name: isAr ? 'كيك الجزر مع الجوز المحمص' : 'Layered Carrot Cake with Walnuts',
-      desc: isAr ? 'جزر طازج مع قرفة دافئة وجوز محمص مقرمش وكريمة فاخرة' : 'Spiced moist carrot sponge packed with toasted walnuts & cream frosting',
+      desc: isAr ? 'جزر طازج مع قرفة دافئة وجوز محمص مقرمش وكريمة فاخرة' : 'Spiced moist carrot sponge packed with toasted walnuts and cream frosting',
       image: '/customize/sponge/Layered Carrot Cake with Walnuts.png'
     },
     {
@@ -265,8 +265,8 @@ export default function CustomizePage({
     },
     {
       id: 'blue-white-velvet',
-      name: isAr ? 'بلو آند وايت لير كيك' : 'Blue & White Layered Velvet',
-      desc: isAr ? 'طبقات زرقاء وبيضاء ساحرة بنكهة التوت البري والفانيليا' : 'Striking sapphire & ivory layers with subtle blueberry cream notes',
+      name: isAr ? 'بلو آند وايت لير كيك' : 'Blue and White Layered Velvet',
+      desc: isAr ? 'طبقات زرقاء وبيضاء ساحرة بنكهة التوت البري والفانيليا' : 'Striking sapphire and ivory layers with subtle blueberry cream notes',
       image: '/customize/sponge/Blue and White Layered Cake Slice.png'
     },
     {
@@ -279,19 +279,19 @@ export default function CustomizePage({
 
   // Fillings
   const fillingOptions = [
-    { id: 'caramel-buttercream', name: isAr ? 'كريمة الزبدة السويسرية والكراميل المملح' : 'Salted Caramel & Swiss Buttercream', desc: isAr ? 'كراميل ناعم محضر يدوياً مع كريمة مخملية' : 'Silky smooth caramel drip with French vanilla buttercream' },
-    { id: 'dark-ganache-hazelnut', name: isAr ? 'غاناش الشوكولاتة وبرالين البندق' : 'Dark Chocolate Ganache & Hazelnut Praline', desc: isAr ? 'شوكولاتة بلجيكية غنية مع بندق محمص مقرمش' : 'Rich dark chocolate ganache layered with crisp roasted praline crunch' },
-    { id: 'strawberry-chantilly', name: isAr ? 'توت وفراولة طازجة مع الشانتيي' : 'Fresh Berries & Chantilly Cream', desc: isAr ? 'طبقات فواكه طبيعية مع كريمة شانتيي فرنسية' : 'Sweet wild strawberry coulis with light whipped Chantilly cream' },
-    { id: 'pistachio-crunch-cream', name: isAr ? 'كريمة الفستق وخيوط الكنافة المقرمشة' : 'Pistachio Cream & Crispy Kunafa Threads', desc: isAr ? 'حشوة الحلم اللبناني الأصلية بطعم مقرمش وفاخر' : 'Rich emerald pistachio silk layered with golden roasted kunafa crunch' },
+    { id: 'caramel-buttercream', name: isAr ? 'كريمة الزبدة السويسرية والكراميل المملح' : 'Salted Caramel and Swiss Buttercream', desc: isAr ? 'كراميل ناعم محضر يدوياً مع كريمة مخملية' : 'Silky smooth caramel drip with French vanilla buttercream' },
+    { id: 'dark-ganache-hazelnut', name: isAr ? 'غاناش الشوكولاتة وبرالين البندق' : 'Dark Chocolate Ganache and Hazelnut Praline', desc: isAr ? 'شوكولاتة بلجيكية غنية مع بندق محمص مقرمش' : 'Rich dark chocolate ganache layered with crisp roasted praline crunch' },
+    { id: 'strawberry-chantilly', name: isAr ? 'توت وفراولة طازجة مع الشانتيي' : 'Fresh Berries and Chantilly Cream', desc: isAr ? 'طبقات فواكه طبيعية مع كريمة شانتيي فرنسية' : 'Sweet wild strawberry coulis with light whipped Chantilly cream' },
+    { id: 'pistachio-crunch-cream', name: isAr ? 'كريمة الفستق وخيوط الكنافة المقرمشة' : 'Pistachio Cream and Crispy Kunafa Threads', desc: isAr ? 'حشوة الحلم اللبناني الأصلية بطعم مقرمش وفاخر' : 'Rich emerald pistachio silk layered with golden roasted kunafa crunch' },
   ];
 
   // Design & Toppings
   const toppingOptions = [
     { id: 'gold-leaf', name: isAr ? 'ورق الذهب عيار 24 الصالح للأكل' : '24K Edible Gold Leaf Accents', price: 50, desc: isAr ? 'لمسات ذهبية ملكية فاخرة على أطراف الكيك' : 'Hand-applied pure edible 24K gold foil for royal elegance' },
-    { id: 'fresh-flowers', name: isAr ? 'ورود طبيعية منسقة يدوياً' : 'Fresh Organic Floral Cascade', price: 80, desc: isAr ? 'ورود وبراعم منتقاة بعناية للأعراس والاحتفال' : 'Handcrafted arrangement of edible organic roses & eucalyptus' },
+    { id: 'fresh-flowers', name: isAr ? 'ورود طبيعية منسقة يدوياً' : 'Fresh Organic Floral Cascade', price: 80, desc: isAr ? 'ورود وبراعم منتقاة بعناية للأعراس والاحتفال' : 'Handcrafted arrangement of edible organic roses and eucalyptus' },
     { id: 'chocolate-drip', name: isAr ? 'صوص شوكولاتة أو كراميل مقطر' : 'Artisanal Caramel / Chocolate Drip', price: 30, desc: isAr ? 'تقطير احترافي ناعم على حواف الكيك' : 'Glossy, warm Belgian ganache drip cascading over the tiers' },
     { id: 'wild-berries', name: isAr ? 'توت وتوت بري وفراولة طازجة' : 'Gourmet Wild Seasonal Berries', price: 40, desc: isAr ? 'توت أحمر وتوت أزرق طازج يومياً' : 'Sweet raspberries, blackberries, and glazed garden strawberries' },
-    { id: 'macarons', name: isAr ? 'ماكرون فرنسي فاخر (6 حبات)' : 'Handcrafted French Macarons (6 pcs)', price: 45, desc: isAr ? 'حبات ماكرون مقرمشة محشوة بالغاناش' : 'Crisp Parisian almond shells filled with pistachio & chocolate' },
+    { id: 'macarons', name: isAr ? 'ماكرون فرنسي فاخر (6 حبات)' : 'Handcrafted French Macarons (6 pcs)', price: 45, desc: isAr ? 'حبات ماكرون مقرمشة محشوة بالغاناش' : 'Crisp Parisian almond shells filled with pistachio and chocolate' },
     { id: 'candles', name: isAr ? 'طقم شموع ذهبية فاخرة' : 'Luxury Golden Candle Set', price: 0, desc: isAr ? 'شموع راقية مجانية مع الكيك' : 'Complimentary metallic gold celebration candles' },
   ];
 
@@ -316,13 +316,13 @@ export default function CustomizePage({
 
   // Next step label helper
   const getNextStepLabel = () => {
-    if (currentStep === 1) return isAr ? 'التالي: الشكل والطبقات' : 'Next: Shape & Layers';
+    if (currentStep === 1) return isAr ? 'التالي: الشكل والطبقات' : 'Next: Shape and Layers';
     if (currentStep === 2) return isAr ? 'التالي: اختر الحجم' : 'Next: Choose Size';
     if (currentStep === 3) return isAr ? 'التالي: نكهة الإسفنجة' : 'Next: Choose Sponge';
-    if (currentStep === 4) return isAr ? 'التالي: التصميم والإضافات' : 'Next: Design & Toppings';
+    if (currentStep === 4) return isAr ? 'التالي: التصميم والإضافات' : 'Next: Design and Toppings';
     if (currentStep === 5) return isAr ? 'التالي: كتابة الرسالة' : 'Next: Custom Message';
     if (currentStep === 6) return isAr ? 'التالي: مراجعة الطلب' : 'Next: Review Order';
-    return isAr ? 'تأكيد وإضافة للحقيبة' : 'Add to Bag & Confirm';
+    return isAr ? 'تأكيد وإضافة للحقيبة' : 'Add to Bag and Confirm';
   };
 
   const handleNext = () => {
@@ -535,7 +535,7 @@ export default function CustomizePage({
               <div className="w-1 sm:w-1.5 h-10 sm:h-12 bg-[#C58A19] rounded-full shrink-0 mt-0.5" />
               <div>
                 <h2 className="font-serif text-xl sm:text-2xl md:text-[26px] font-bold text-[#4A2116]">
-                  {isAr ? 'شكل الكيك والطبقات' : 'Cake Shape & Layers'}
+                  {isAr ? 'شكل الكيك والطبقات' : 'Cake Shape and Layers'}
                 </h2>
                 <p className="font-poppins text-xs sm:text-sm text-[#8C6D62] mt-0.5">
                   {isAr ? 'اختر شكل الكيك وهيكل الطبقات المناسب لمركز احتفالك.' : 'Select the tier structure and shape for your celebration centerpiece.'}
@@ -605,7 +605,7 @@ export default function CustomizePage({
               <div className="w-1 sm:w-1.5 h-10 sm:h-12 bg-[#C58A19] rounded-full shrink-0 mt-0.5" />
               <div>
                 <h2 className="font-serif text-xl sm:text-2xl md:text-[26px] font-bold text-[#4A2116]">
-                  {isAr ? 'اختر الحجم وعدد الحصص' : 'Select Size & Guest Count'}
+                  {isAr ? 'اختر الحجم وعدد الحصص' : 'Select Size and Guest Count'}
                 </h2>
                 <p className="font-poppins text-xs sm:text-sm text-[#8C6D62] mt-0.5">
                   {isAr ? 'نضمن لك حصصاً وافرة ومقادير فاخرة لكل ضيف.' : 'We ensure generous portions baked to perfection.'}
@@ -730,7 +730,7 @@ export default function CustomizePage({
               <div className="w-1 sm:w-1.5 h-10 sm:h-12 bg-[#C58A19] rounded-full shrink-0 mt-0.5" />
               <div>
                 <h2 className="font-serif text-xl sm:text-2xl md:text-[26px] font-bold text-[#4A2116]">
-                  {isAr ? 'التصميم الخارجي واللمسات الفاخرة' : 'Finishing, Accents & Toppings'}
+                  {isAr ? 'التصميم الخارجي واللمسات الفاخرة' : 'Finishing, Accents and Toppings'}
                 </h2>
                 <p className="font-poppins text-xs sm:text-sm text-[#8C6D62] mt-0.5">
                   {isAr ? 'اختر الإضافات الملكية لتزيين كعكتك (يمكنك اختيار أكثر من خيار).' : 'Select luxury handcrafted details to crown your celebration cake.'}
@@ -783,7 +783,7 @@ export default function CustomizePage({
               <div className="w-1 sm:w-1.5 h-10 sm:h-12 bg-[#C58A19] rounded-full shrink-0 mt-0.5" />
               <div>
                 <h2 className="font-serif text-xl sm:text-2xl md:text-[26px] font-bold text-[#4A2116]">
-                  {isAr ? 'رسالة الإهداء وكتابة الكيك' : 'Custom Inscription & Message'}
+                  {isAr ? 'رسالة الإهداء وكتابة الكيك' : 'Custom Inscription and Message'}
                 </h2>
                 <p className="font-poppins text-xs sm:text-sm text-[#8C6D62] mt-0.5">
                   {isAr ? 'أضف عبارة الاحتفال التي ستُكتب على الكيك أو على لوح السكر الفاخر.' : 'Personalize your cake with a piped message or luxury acrylic topper.'}
@@ -940,7 +940,7 @@ export default function CustomizePage({
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
                   <div className="sm:col-span-2 p-3.5 rounded-xl bg-[#FFFBF5] border border-[#F5EBDD] flex items-center justify-between">
                     <div>
-                      <span className="text-[#8C6D62] block mb-1 font-medium">{isAr ? 'الشكل وهيكل الطبقات' : 'Shape & Tier Structure'}</span>
+                      <span className="text-[#8C6D62] block mb-1 font-medium">{isAr ? 'الشكل وهيكل الطبقات' : 'Shape and Tier Structure'}</span>
                       <span className="font-semibold text-[#4A2116] text-sm">{selectedShapeLayerItem?.title}</span>
                       <p className="text-[11px] text-[#8C6D62] mt-0.5">{selectedShapeLayerItem?.desc}</p>
                     </div>
@@ -952,7 +952,7 @@ export default function CustomizePage({
                   </div>
 
                   <div className="p-3.5 rounded-xl bg-[#FFFBF5] border border-[#F5EBDD]">
-                    <span className="text-[#8C6D62] block mb-1 font-medium">{isAr ? 'الحجم وعدد الحصص' : 'Size & Servings'}</span>
+                    <span className="text-[#8C6D62] block mb-1 font-medium">{isAr ? 'الحجم وعدد الحصص' : 'Size and Servings'}</span>
                     <span className="font-semibold text-[#4A2116] text-sm">{sizeOptions.find(s => s.id === selectedSize)?.title}</span>
                   </div>
 
@@ -970,7 +970,7 @@ export default function CustomizePage({
                   </div>
 
                   <div className="sm:col-span-2 p-3.5 rounded-xl bg-[#FFFBF5] border border-[#F5EBDD]">
-                    <span className="text-[#8C6D62] block mb-1 font-medium">{isAr ? 'الإضافات والتزيين' : 'Selected Toppings & Accents'}</span>
+                    <span className="text-[#8C6D62] block mb-1 font-medium">{isAr ? 'الإضافات والتزيين' : 'Selected Toppings and Accents'}</span>
                     <div className="flex flex-wrap gap-1.5 mt-1">
                       {selectedToppings.map(topId => {
                         const item = toppingOptions.find(t => t.id === topId);
@@ -1036,12 +1036,12 @@ export default function CustomizePage({
                     className="w-full flex items-center justify-center gap-2 bg-[#C58A19] hover:bg-[#A87413] text-white font-semibold py-3.5 px-6 rounded-full shadow-md transition-all cursor-pointer text-sm"
                   >
                     <ShoppingBag className="w-4 h-4" />
-                    <span>{isAr ? 'إضافة للحقيبة ومتابعة الطلب' : 'Add to Bag & Proceed'}</span>
+                    <span>{isAr ? 'إضافة للحقيبة ومتابعة الطلب' : 'Add to Bag and Proceed'}</span>
                   </button>
 
                   <a
                     href={`https://wa.me/971506063631?text=${encodeURIComponent(
-                      `Hello Lebanese Dream Bakery! I would like to order a custom cake:\nOccasion: ${occasions.find(o => o.id === selectedOccasion)?.title}\nShape & Layers: ${selectedShapeLayerItem?.title}\nSize: ${sizeOptions.find(s => s.id === selectedSize)?.title}\nFlavor: ${spongeOptions.find(s => s.id === selectedSponge)?.name}\nMessage: "${cakeMessage}"\nTotal: AED ${totalPrice}`
+                      `Hello Lebanese Dream Bakery! I would like to order a custom cake:\nOccasion: ${occasions.find(o => o.id === selectedOccasion)?.title}\nShape and Layers: ${selectedShapeLayerItem?.title}\nSize: ${sizeOptions.find(s => s.id === selectedSize)?.title}\nFlavor: ${spongeOptions.find(s => s.id === selectedSponge)?.name}\nMessage: "${cakeMessage}"\nTotal: AED ${totalPrice}`
                     )}`}
                     target="_blank"
                     rel="noopener noreferrer"

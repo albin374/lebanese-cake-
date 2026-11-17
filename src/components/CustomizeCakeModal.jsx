@@ -5,7 +5,7 @@ export default function CustomizeCakeModal({ isOpen, onClose, onAddToCart, curre
   if (!isOpen) return null;
 
   const [occasion, setOccasion] = useState('Birthday');
-  const [flavor, setFlavor] = useState('Salted Caramel & Vanilla');
+  const [flavor, setFlavor] = useState('Salted Caramel and Vanilla');
   const [size, setSize] = useState('2kg (12-15 servings)');
   const [message, setMessage] = useState('Happy Birthday Sarah!');
   const [candles, setCandles] = useState(true);
@@ -25,10 +25,10 @@ export default function CustomizeCakeModal({ isOpen, onClose, onAddToCart, curre
     { id: 'belgian-choc', name: 'ترافل الشوكولاتة البلجيكية 70%', desc: 'غاناش شوكولاتة داكنة غنية مع برالين البندق.' },
     { id: 'pistachio-kunafa', name: 'فستق حلبي وكنافة مقرمشة', desc: 'كنافة محمصة ذهبية مقرمشة مع كريمة الفستق.' },
   ] : [
-    { id: 'caramel-vanilla', name: 'Salted Caramel & Vanilla', desc: 'Madagascar vanilla bean sponge with rich caramel drip and fresh berries.' },
+    { id: 'caramel-vanilla', name: 'Salted Caramel and Vanilla', desc: 'Madagascar vanilla bean sponge with rich caramel drip and fresh berries.' },
     { id: 'red-velvet', name: 'Signature Red Velvet', desc: 'Crimson cocoa layers with silky cream cheese frosting and strawberry garnish.' },
     { id: 'belgian-choc', name: 'Belgian Chocolate Truffle', desc: 'Deep 70% dark chocolate ganache with crisp hazelnut praline.' },
-    { id: 'pistachio-kunafa', name: 'Dubai Pistachio & Kunafa', desc: 'Crispy golden roasted kunafa threads layered with pistachio cream.' },
+    { id: 'pistachio-kunafa', name: 'Dubai Pistachio and Kunafa', desc: 'Crispy golden roasted kunafa threads layered with pistachio cream.' },
   ];
 
   const sizes = isAr ? [
@@ -117,7 +117,7 @@ export default function CustomizeCakeModal({ isOpen, onClose, onAddToCart, curre
           {/* Step 2: Flavor Selection */}
           <div>
             <label className="block text-xs font-bold uppercase tracking-wider text-[#C58A19] mb-2">
-              {isAr ? '2. نكهة الكيك والحشوة' : '2. Signature Cake Recipe & Flavor'}
+              {isAr ? '2. نكهة الكيك والحشوة' : '2. Signature Cake Recipe and Flavor'}
             </label>
             <div className="space-y-2">
               {flavors.map((f) => (
@@ -147,7 +147,7 @@ export default function CustomizeCakeModal({ isOpen, onClose, onAddToCart, curre
           {/* Step 3: Size & Portions */}
           <div>
             <label className="block text-xs font-bold uppercase tracking-wider text-[#C58A19] mb-2">
-              {isAr ? '3. الحجم وعدد الحصص' : '3. Size & Servings'}
+              {isAr ? '3. الحجم وعدد الحصص' : '3. Size and Servings'}
             </label>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {sizes.map((s) => (
@@ -179,7 +179,7 @@ export default function CustomizeCakeModal({ isOpen, onClose, onAddToCart, curre
               type="text" 
               value={message}
               onChange={(e) => setMessage(e.target.value)}
-              placeholder={isAr ? "مثال: مبروك التخرج يا سارة!" : "e.g. Happy Anniversary Mum & Dad!"}
+              placeholder={isAr ? "مثال: مبروك التخرج يا سارة!" : "e.g. Happy Anniversary Mum and Dad!"}
               maxLength={45}
               className="w-full px-4 py-2.5 rounded-xl border border-[#E6C783] bg-white text-sm text-[#4A2116] focus:outline-none focus:ring-1 focus:ring-[#C58A19]"
             />
@@ -206,7 +206,7 @@ export default function CustomizeCakeModal({ isOpen, onClose, onAddToCart, curre
                 onChange={(e) => setCandles(e.target.checked)} 
                 className="accent-[#C58A19] w-4 h-4 rounded"
               />
-              <span>{isAr ? 'شموع أعياد ميلاد وعلبة كبريت فاخرة' : 'Complimentary Birthday Candles & Luxury Matchbox'}</span>
+              <span>{isAr ? 'شموع أعياد ميلاد وعلبة كبريت فاخرة' : 'Complimentary Birthday Candles and Luxury Matchbox'}</span>
             </label>
           </div>
 
