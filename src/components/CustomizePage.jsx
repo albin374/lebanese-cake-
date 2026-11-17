@@ -990,7 +990,7 @@ export default function CustomizePage({
                     )}
                     <div className="pt-3 border-t border-[#F8F1E6] flex justify-between items-baseline">
                       <span className="font-bold text-sm text-[#4A2116]">{isAr ? 'المجموع الإجمالي:' : 'Total Price:'}</span>
-                      <span className="font-serif font-bold text-xl text-[#C58A19]">AED {totalPrice}</span>
+                      <span className="font-poppins font-bold text-xl text-[#C58A19] tabular-nums lining-nums">AED {totalPrice}</span>
                     </div>
                   </div>
                 </div>
@@ -1046,7 +1046,7 @@ export default function CustomizePage({
               <span className="text-[11px] text-[#8C6D62] block font-medium">
                 {isAr ? 'السعر التقديري:' : 'Estimated Price:'}
               </span>
-              <span className="font-serif font-bold text-base text-[#C58A19]">
+              <span className="font-poppins font-bold text-base text-[#C58A19] tabular-nums lining-nums">
                 AED {totalPrice}
               </span>
             </div>

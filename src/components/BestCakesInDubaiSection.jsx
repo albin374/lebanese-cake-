@@ -67,10 +67,10 @@ export default function BestCakesInDubaiSection({
                 {/* Bottom Price & Action Row */}
                 <div className="pt-4 mt-4 border-t border-[#F5EBDD] flex items-center justify-between gap-3">
                   <div>
-                    <span className="block text-[10px] uppercase tracking-wider text-[#8C6D62] font-medium">
-                      {isAr ? 'السعر التقديري' : 'Starting from'}
+                    <span className="block text-[10px] uppercase tracking-wider text-[#8C6D62] font-medium font-poppins">
+                      {isAr ? 'السعر يبدأ من' : 'Starting from'}
                     </span>
-                    <span className="font-serif font-bold text-base sm:text-lg text-[#72251F]">
+                    <span className="font-poppins font-bold text-base sm:text-lg text-[#72251F] tracking-tight lining-nums tabular-nums">
                       {cake.price} {cake.currency}
                     </span>
                   </div>
