@@ -70,10 +70,10 @@ export default function ReviewsSection({ currentLang = 'en' }) {
             <div className="h-[1px] w-10 sm:w-14 bg-gradient-to-l from-transparent to-[#C58A19]" />
           </div>
 
-          {/* Main Title: What Our Customers Say (with italic gold Customers) */}
+          {/* Main Title: What Our Customers Say (Upright Bold Gold) */}
           <h2 className="font-serif text-3xl sm:text-4xl lg:text-[44px] tracking-tight leading-tight mb-2.5 sm:mb-3">
             <span className="font-bold text-[#4A2116]">{t.reviewsTitleLead}</span>
-            <span className="italic font-normal text-[#C58A19]">{t.reviewsTitleHighlight}</span>
+            <span className="font-bold text-[#C58A19]">{t.reviewsTitleHighlight}</span>
             <span className="font-bold text-[#4A2116]">{t.reviewsTitleTrail}</span>
           </h2>
 

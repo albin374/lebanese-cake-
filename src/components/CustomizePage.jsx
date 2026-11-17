@@ -863,7 +863,7 @@ export default function CustomizePage({
                 </span>
                 
                 <div className="w-full max-w-xs bg-white rounded-2xl border-2 border-dashed border-[#C58A19]/60 p-6 shadow-sm flex flex-col items-center justify-center min-h-[140px]">
-                  <div className="font-serif italic font-bold text-lg sm:text-xl text-[#C58A19] tracking-wide break-words max-w-full">
+                  <div className="font-serif not-italic font-bold text-lg sm:text-xl text-[#C58A19] tracking-wide break-words max-w-full">
                     {cakeMessage || (isAr ? 'رسالتك هنا' : 'Your Message Here')}
                   </div>
                   <div className="text-[10px] text-[#8C6D62] mt-2 font-poppins">
@@ -966,7 +966,7 @@ export default function CustomizePage({
                   {cakeMessage && (
                     <div className="sm:col-span-2 p-3.5 rounded-xl bg-[#FFFBF5] border border-[#F5EBDD]">
                       <span className="text-[#8C6D62] block mb-1 font-medium">{isAr ? 'رسالة الكيك المكتوبة' : 'Piped Inscription'}</span>
-                      <span className="font-serif italic font-bold text-[#C58A19] text-base">"{cakeMessage}"</span>
+                      <span className="font-serif not-italic font-bold text-[#C58A19] text-base">"{cakeMessage}"</span>
                     </div>
                   )}
                 </div>

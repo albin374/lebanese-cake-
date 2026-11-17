@@ -45,7 +45,7 @@ export default function ChefStorySection({ currentLang = 'en' }) {
             <span className="font-serif font-bold text-2xl sm:text-3xl lg:text-[40px] text-[#4A2116] tracking-tight leading-tight">
               {t.chefStoryTitle}
             </span>
-            <span className="font-serif italic font-normal text-xl sm:text-2xl lg:text-[32px] text-[#C58A19] leading-tight whitespace-normal sm:whitespace-nowrap">
+            <span className="font-serif not-italic font-semibold text-xl sm:text-2xl lg:text-[32px] text-[#C58A19] leading-tight whitespace-normal sm:whitespace-nowrap">
               {t.chefStoryChef}
             </span>
           </h2>
