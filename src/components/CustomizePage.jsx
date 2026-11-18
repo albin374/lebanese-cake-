@@ -6,24 +6,14 @@ import {
   Cake, 
   Heart, 
   GraduationCap, 
-  Building2, 
-  Gift, 
   Sparkles, 
-  Baby, 
-  Cross, 
-  CircleDot,
-  ShoppingBag,
-  MessageCircle,
-  HelpCircle,
+  Scale, 
+  Users, 
+  UtensilsCrossed, 
   Layers,
-  Shapes,
-  Scale,
-  Users,
-  UtensilsCrossed,
-  Sparkle,
-  Type,
-  ClipboardCheck,
-  ChevronRight
+  ShoppingBag, 
+  MessageCircle, 
+  HelpCircle
 } from 'lucide-react';
 import { translations } from '../translations';
 
@@ -36,7 +26,7 @@ export default function CustomizePage({
   const isAr = currentLang === 'ar';
   const t = translations[currentLang] || translations.en;
 
-  // Wizard state: 1 to 7
+  // Wizard state: 1 to 8
   const [currentStep, setCurrentStep] = useState(1);
 
   // Form state
@@ -46,22 +36,22 @@ export default function CustomizePage({
   const [selectedShape, setSelectedShape] = useState('round');
   const [selectedSize, setSelectedSize] = useState('2kg');
   const [selectedSponge, setSelectedSponge] = useState('vanilla-flower-beans');
-  const [selectedFilling, setSelectedFilling] = useState('pineapple-cream-filling');
+  const [selectedFilling, setSelectedFilling] = useState(null);
   const [selectedToppings, setSelectedToppings] = useState(['gold-leaf', 'candles']);
   const [cakeMessage, setCakeMessage] = useState('Happy Birthday!');
   const [messageStyle, setMessageStyle] = useState('piped-gold');
   const [specialInstructions, setSpecialInstructions] = useState('');
 
-  // 8 Steps Definition (1: Shape & Layers, 2: Size, 3: Sponge, 4: Filling, 5: Cake Type, 6: Toppings, 7: Message, 8: Review)
+  // 8 Steps Definition (Clean sequence)
   const steps = [
     { number: 1, id: 'shape-layers', label: isAr ? 'الشكل والطبقات' : 'Shape and Layers' },
-    { number: 2, id: 'size', label: isAr ? 'الحجم' : 'Size' },
-    { number: 3, id: 'sponge', label: isAr ? 'الإسفنجة' : 'Choose Sponge' },
-    { number: 4, id: 'filling', label: isAr ? 'الحشوة' : 'Choose Filling' },
-    { number: 5, id: 'cake-type', label: isAr ? 'نوع الكيك' : 'Cake Type' },
-    { number: 6, id: 'toppings', label: isAr ? 'التصميم' : 'Design and Toppings' },
-    { number: 7, id: 'message', label: isAr ? 'الرسالة' : 'Message' },
-    { number: 8, id: 'review', label: isAr ? 'المراجعة' : 'Review' },
+    { number: 2, id: 'size', label: isAr ? 'الحجم وعدد الضيوف' : 'Size and Portions' },
+    { number: 3, id: 'sponge', label: isAr ? 'اختر الإسفنجة' : 'Choose Sponge' },
+    { number: 4, id: 'filling', label: isAr ? 'اختر الحشوة' : 'Choose Gourmet Filling' },
+    { number: 5, id: 'cake-type', label: isAr ? 'نوع الكيك والمناسبة' : 'Cake Type and Occasion' },
+    { number: 6, id: 'toppings', label: isAr ? 'التصميم واللمسات' : 'Design and Toppings' },
+    { number: 7, id: 'message', label: isAr ? 'رسالة الإهداء' : 'Custom Inscription' },
+    { number: 8, id: 'review', label: isAr ? 'المراجعة والتأكيد' : 'Review Your Cake' },
   ];
 
   // 6 Occasions matching user request
@@ -413,6 +403,39 @@ export default function CustomizePage({
     }
   ];
 
+  // Base Sponge Cutouts Map (public/customize/base/)
+  const spongeBaseMap = {
+    'vanilla-flower-beans': '/customize/base/Vanilla Layer with Flower and Beans base.png',
+    'glossy-chocolate-4layer': '/customize/base/chocolate-sponge-bottom.png',
+    'red-velvet': '/customize/base/Classic Red Velvet base.png',
+    'layered-carrot-walnut': '/customize/base/Layered Carrot Cake with Walnuts base.png',
+    'marbled-choco-chip': '/customize/base/Marbled Chocolate Chip base.png',
+    'rainbow-sprinkle': '/customize/base/Rainbow Sprinkle Layer Cake base.png',
+    'vanilla-chocolate-duo': '/customize/base/Vanilla Chocolate Layered Duo base.png',
+    'blue-white-velvet': '/customize/base/Blue and White Layered Velvet base .png',
+    'colorful-pastel-vanilla': '/customize/base/Colorful Vanilla Layer Cake Base.png'
+  };
+
+  // Chocolate Cake Gourmet Frosting Map (public/customize/chocalte froesting/)
+  const fillingFrostingMap = {
+    'pineapple-cream-filling': '/customize/chocalte froesting/Chocolate Cake with pineapple  Frosting.png',
+    'lotus-cream-filling': '/customize/chocalte froesting/Chocolate Cake with Lotus cream froseting.png',
+    'red-cherry-cream-filling': '/customize/chocalte froesting/Chocolate Cake with Red cherry cream Frosting.png',
+    'peach-cream-filling': '/customize/chocalte froesting/Chocolate Cake with Peach Cream Frosting.png',
+    'mocca-cream-filling': '/customize/chocalte froesting/Chocolate Cake with Mocha Frosted .png',
+    'lemon-cream-filling': '/customize/chocalte froesting/Chocolate Cake with Lemon froesting.png',
+    'cheese-cream': '/customize/chocalte froesting/Chocolate Cake with Cheese  froesting.png',
+    'toffee-caramel-filling': '/customize/chocalte froesting/Chocolate Cake with Toffee Caramel froesting.png',
+    'oreos-and-cream-filling': '/customize/chocalte froesting/Chocolate Cake with oreo froesting .png',
+    'nutella-filling': '/customize/chocalte froesting/Chocolate Cake with nutella foresting .png',
+    'mango-filling': '/customize/chocalte froesting/Chocolate  Cake with mago foresting.png',
+    'caramelized-hazelnut-praline-filling': '/customize/chocalte froesting/Chocolate Cakewith Hazelnut forsting.png',
+    'chocolate-ganache-filling': '/customize/chocalte froesting/Chocolate  Cake  with Ganache froesting .png',
+    'blueberry-filling': '/customize/chocalte froesting/chocalte  Cake with  Blueberry Cream foresting .png',
+    'raspberry-filling': '/customize/chocalte froesting/chocalte  Cake with Raspberry Cream foresting.png',
+    'fresh-whipped-cream-plain': '/customize/chocalte froesting/chocalte cream with white froesting .png'
+  };
+
   // Design & Toppings
   const toppingOptions = [
     { id: 'gold-leaf', name: isAr ? 'ورق الذهب عيار 24 الصالح للأكل' : '24K Edible Gold Leaf Accents', price: 50, desc: isAr ? 'لمسات ذهبية ملكية فاخرة على أطراف الكيك' : 'Hand-applied pure edible 24K gold foil for royal elegance' },
@@ -456,16 +479,16 @@ export default function CustomizePage({
 
   const handleNext = () => {
     if (currentStep < 8) {
-      setCurrentStep(prev => prev - 1 >= 0 ? prev + 1 : 2);
+      setCurrentStep(prev => prev + 1);
       window.scrollTo({ top: 120, behavior: 'smooth' });
     } else {
-      // Step 7 Confirm
+      // Step 8 Confirm
       const customCakeItem = {
         title: `${occasions.find(o => o.id === selectedOccasion)?.title || 'Custom Cake'} (${selectedSize})`,
         price: totalPrice.toFixed(2),
-        flavor: `${spongeOptions.find(s => s.id === selectedSponge)?.name || 'Signature Vanilla'} with ${fillingOptions.find(f => f.id === selectedFilling)?.name || 'Gourmet Filling'}`,
+        flavor: `${spongeOptions.find(s => s.id === selectedSponge)?.name || 'Signature Vanilla'}${selectedFilling ? ` with ${fillingOptions.find(f => f.id === selectedFilling)?.name}` : ''}`,
         sponge: spongeOptions.find(s => s.id === selectedSponge)?.name,
-        filling: fillingOptions.find(f => f.id === selectedFilling)?.name,
+        filling: fillingOptions.find(f => f.id === selectedFilling)?.name || (isAr ? 'حشوة كلاسيكية فاخرة' : 'Signature Bakery Filling'),
         occasion: occasions.find(o => o.id === selectedOccasion)?.title,
         message: cakeMessage,
         layers: selectedShapeLayerItem?.title || selectedLayers,
@@ -484,9 +507,130 @@ export default function CustomizePage({
     }
   };
 
+  const isChocolateSponge = selectedSponge === 'glossy-chocolate-4layer';
+  const isPineappleFilling = selectedFilling === 'pineapple-cream-filling';
+
+  // Should we show chocolate 2-tier assembled cake? (Step 5+ and Chocolate Sponge)
+  const showChocolateTopLayer = currentStep >= 5 && isChocolateSponge;
+
+  // Should we show pineapple frosting layer placed on top of other bases? (Step >= 4, Not Chocolate, Pineapple selected)
+  const showPineappleLayerOnOtherBase = currentStep >= 4 && !isChocolateSponge && isPineappleFilling;
+
+  // Determine current preview data based on step and selections
+  const getPreviewData = () => {
+    if (currentStep === 1) {
+      return {
+        image: selectedShapeLayerItem?.image || '/customize/shapes/round cake.png',
+        stage: isAr ? 'معاينة الشكل والطبقات' : 'Shape & Tier Preview',
+        title: selectedShapeLayerItem?.title || '',
+        badge: selectedShapeLayerItem?.extraPrice > 0 ? `+AED ${selectedShapeLayerItem.extraPrice}` : (isAr ? 'السعر الأساسي' : 'Included in Base')
+      };
+    }
+    if (currentStep === 2) {
+      const sz = sizeOptions.find(s => s.id === selectedSize) || sizeOptions[1];
+      return {
+        image: sz.image || selectedShapeLayerItem?.image,
+        stage: isAr ? 'معاينة الحجم والحصص' : 'Size & Servings Preview',
+        title: sz.title,
+        badge: sz.servings
+      };
+    }
+    if (currentStep === 3) {
+      const sp = spongeOptions.find(s => s.id === selectedSponge) || spongeOptions[0];
+      return {
+        image: spongeBaseMap[selectedSponge] || sp.image,
+        stage: isAr ? 'معاينة قاعدة الإسفنجة' : 'Sponge Base Preview',
+        title: sp.name,
+        badge: isAr ? 'إسفنجة طازجة' : 'Baked Base'
+      };
+    }
+    if (currentStep === 4) {
+      const fi = fillingOptions.find(f => f.id === selectedFilling);
+      const sp = spongeOptions.find(s => s.id === selectedSponge) || spongeOptions[0];
+
+      let previewImg = spongeBaseMap[selectedSponge];
+      if (isChocolateSponge && fi) {
+        previewImg = fillingFrostingMap[selectedFilling] || spongeBaseMap[selectedSponge];
+      } else if (!isChocolateSponge && isPineappleFilling) {
+        previewImg = '/pineapply foresting layer.png';
+      }
+
+      return {
+        image: previewImg,
+        stage: isAr ? 'اختر حشوة الكيك' : 'Choose Gourmet Filling',
+        title: fi ? fi.name : sp.name,
+        badge: fi ? (isAr ? 'حشوة مختارة' : 'Filling Selected') : (isAr ? 'قاعدة الإسفنجة' : 'Sponge Base')
+      };
+    }
+    if (currentStep === 5) {
+      const occ = occasions.find(o => o.id === selectedOccasion) || occasions[0];
+      let previewImg = spongeBaseMap[selectedSponge];
+      if (isChocolateSponge) {
+        previewImg = (selectedFilling && fillingFrostingMap[selectedFilling]) || spongeBaseMap[selectedSponge];
+      } else if (isPineappleFilling) {
+        previewImg = '/pineapply foresting layer.png';
+      }
+
+      return {
+        image: previewImg,
+        stage: isAr ? 'نوع الكيك والمناسبة' : 'Cake Type and Occasion',
+        title: `${occ.title}`,
+        badge: isChocolateSponge
+          ? (isAr ? 'الطبقة العلوية مثبتة' : 'Top Layer Placed')
+          : (isPineappleFilling ? (isAr ? 'حشوة الأناناس مثبتة' : 'Pineapple Layer Assembled') : (isAr ? 'تصميم مخصص' : 'Bespoke Theme'))
+      };
+    }
+    if (currentStep === 6) {
+      let previewImg = spongeBaseMap[selectedSponge];
+      if (isChocolateSponge) {
+        previewImg = (selectedFilling && fillingFrostingMap[selectedFilling]) || spongeBaseMap[selectedSponge];
+      } else if (isPineappleFilling) {
+        previewImg = '/pineapply foresting layer.png';
+      }
+
+      return {
+        image: previewImg,
+        stage: isAr ? 'التزيين واللمسات الفاخرة' : 'Gourmet Toppings & Accents',
+        title: isAr ? `${selectedToppings.length} إضافات تزيين` : `${selectedToppings.length} Accents Selected`,
+        badge: toppingsPrice > 0 ? `+AED ${toppingsPrice}` : (isAr ? 'مجاني' : 'Complimentary')
+      };
+    }
+    if (currentStep === 7) {
+      let previewImg = spongeBaseMap[selectedSponge];
+      if (isChocolateSponge) {
+        previewImg = (selectedFilling && fillingFrostingMap[selectedFilling]) || spongeBaseMap[selectedSponge];
+      } else if (isPineappleFilling) {
+        previewImg = '/pineapply foresting layer.png';
+      }
+
+      return {
+        image: previewImg,
+        stage: isAr ? 'معاينة رسالة الإهداء' : 'Live Inscription Plaque',
+        title: cakeMessage ? `"${cakeMessage}"` : (isAr ? 'رسالتك هنا' : 'Your Inscription'),
+        badge: messageStyle === 'acrylic-topper' ? '+AED 35' : (isAr ? 'مجاني' : 'Complimentary')
+      };
+    }
+    // Step 8: Review
+    let reviewImg = spongeBaseMap[selectedSponge];
+    if (isChocolateSponge) {
+      reviewImg = (selectedFilling && fillingFrostingMap[selectedFilling]) || spongeBaseMap[selectedSponge];
+    } else if (isPineappleFilling) {
+      reviewImg = '/pineapply foresting layer.png';
+    }
+
+    return {
+      image: reviewImg,
+      stage: isAr ? 'التحفة النهائية المكتملة' : 'Masterpiece Preview',
+      title: `${occasions.find(o => o.id === selectedOccasion)?.title} (${sizeOptions.find(s => s.id === selectedSize)?.title})`,
+      badge: `AED ${totalPrice}`
+    };
+  };
+
+  const previewData = getPreviewData();
+
   return (
-    <div className="min-h-screen bg-[#FFFDF8] text-[#4A2116] py-6 sm:py-10 px-3 sm:px-6 lg:px-12 relative overflow-hidden transition-colors selection:bg-[#C58A19] selection:text-white w-full max-w-full">
-      <div className="max-w-6xl mx-auto relative z-10">
+    <div className="min-h-screen bg-[#FFFDF8] text-[#4A2116] py-6 sm:py-10 px-3 sm:px-6 lg:px-10 relative overflow-hidden transition-colors selection:bg-[#C58A19] selection:text-white w-full max-w-full">
+      <div className="max-w-7xl mx-auto relative z-10">
 
         {/* Back to Home Breadcrumb & Button */}
         <div className="flex items-center justify-between mb-4">
@@ -497,7 +641,6 @@ export default function CustomizePage({
             <ArrowLeft className="w-4 h-4 rtl:rotate-180 group-hover:-translate-x-1 rtl:group-hover:translate-x-1 transition-transform" />
             <span>{isAr ? 'العودة إلى المتجر الرئيسي' : 'Back to Home'}</span>
           </button>
-          
           <div className="text-xs text-[#8C6D62] font-medium hidden sm:block">
             <span>{isAr ? 'الرئيسية' : 'Home'}</span>
             <span className="mx-2 text-[#C58A19]">/</span>
@@ -506,9 +649,7 @@ export default function CustomizePage({
         </div>
 
         {/* Header Section (Centered Title with Gold Accent Lines) */}
-        <div className="text-center mb-8 sm:mb-10">
-          
-          {/* Centered Golden Cake Icon */}
+        <div className="text-center mb-6 sm:mb-8">
           <div className="w-10 h-10 mx-auto mb-2 rounded-full bg-[#FFF9F0] border border-[#E5C583] flex items-center justify-center text-[#C58A19] shadow-xs">
             <svg className="w-5 h-5 stroke-current" viewBox="0 0 24 24" fill="none" strokeWidth="1.8">
               <path d="M20 21v-8a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8" />
@@ -523,7 +664,6 @@ export default function CustomizePage({
             </svg>
           </div>
 
-          {/* Title Flanked by Thin Golden Lines */}
           <div className="flex items-center justify-center gap-3 sm:gap-6">
             <div className="h-[1.5px] w-12 sm:w-20 bg-gradient-to-r from-transparent to-[#C58A19]" />
             <h1 className="font-serif text-2xl sm:text-3xl md:text-4xl font-bold text-[#4A2116] tracking-tight">
@@ -532,20 +672,61 @@ export default function CustomizePage({
             <div className="h-[1.5px] w-12 sm:w-20 bg-gradient-to-l from-transparent to-[#C58A19]" />
           </div>
 
-          {/* Subtitle */}
           <p className="font-poppins text-xs sm:text-sm text-[#7D5B50] mt-1.5 max-w-md mx-auto">
             {isAr ? 'اصنع كعكة فريدة تعبّر عن ذوقك وتناسب مناسبتك السعيدة' : "Create a cake that's uniquely yours"}
           </p>
-
         </div>
 
-        {/* 8-Step Stepper Bar (Horizontal Progress Bar Matching Reference Image) */}
-        <div className="mb-8 sm:mb-10 overflow-x-auto pb-3 sm:pb-0 scrollbar-none">
-          <div className="min-w-[820px] flex items-center justify-between relative px-4">
+        {/* Streamlined Step Header (Focuses strictly on the active step) */}
+        <div className="mb-6 bg-white border border-[#EEDECB] rounded-2xl p-3.5 sm:p-4 shadow-xs">
+          <div className="flex items-center justify-between gap-3">
             
-            {/* Connecting Gold Line */}
-            <div className="absolute top-[15px] left-8 right-8 h-[1.5px] bg-[#E8D6B5] -z-0" />
+            {/* Previous Step Button */}
+            {currentStep > 1 ? (
+              <button
+                type="button"
+                onClick={handlePrev}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-[#E5C583] text-[#7D5B50] hover:text-[#C58A19] hover:bg-[#FFF9F0] text-xs font-semibold transition-colors cursor-pointer"
+              >
+                <ArrowLeft className="w-3.5 h-3.5 rtl:rotate-180" />
+                <span className="hidden sm:inline">{isAr ? 'السابق' : 'Previous'}</span>
+              </button>
+            ) : (
+              <div className="w-8 sm:w-20" />
+            )}
 
+            {/* Active Step Indicator Pill & Title */}
+            <div className="flex flex-col items-center text-center">
+              <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-[#FFF8EE] border border-[#EACD9B] text-[#C58A19] text-xs font-bold mb-1">
+                <span>{isAr ? `الخطوة ${currentStep} من 8` : `Step ${currentStep} of 8`}</span>
+              </div>
+              <h2 className="font-serif text-base sm:text-lg md:text-xl font-bold text-[#4A2116]">
+                {steps.find(s => s.number === currentStep)?.label}
+              </h2>
+            </div>
+
+            {/* Next Step Button */}
+            <button
+              type="button"
+              onClick={handleNext}
+              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#C58A19] hover:bg-[#A87413] text-white text-xs font-semibold shadow-xs transition-colors cursor-pointer"
+            >
+              <span className="hidden sm:inline">{currentStep === 8 ? (isAr ? 'إنهاء' : 'Finish') : (isAr ? 'التالي' : 'Next')}</span>
+              <ArrowRight className="w-3.5 h-3.5 rtl:rotate-180" />
+            </button>
+
+          </div>
+
+          {/* Progress Bar (Gold gradient) */}
+          <div className="w-full bg-[#F3E8D8] h-2 rounded-full mt-3 overflow-hidden">
+            <div 
+              className="bg-gradient-to-r from-[#C58A19] to-[#E5A832] h-full rounded-full transition-all duration-300 ease-out"
+              style={{ width: `${(currentStep / 8) * 100}%` }}
+            />
+          </div>
+
+          {/* Compact Step Dots (1 to 8) without cluttered labels */}
+          <div className="flex items-center justify-between mt-2.5 px-1 sm:px-2">
             {steps.map((st) => {
               const isCurrent = currentStep === st.number;
               const isCompleted = currentStep > st.number;
@@ -555,718 +736,792 @@ export default function CustomizePage({
                   key={st.id}
                   type="button"
                   onClick={() => setCurrentStep(st.number)}
-                  className="flex flex-col items-center group cursor-pointer focus:outline-none relative z-10"
+                  className={`flex items-center justify-center transition-all cursor-pointer ${
+                    isCurrent
+                      ? 'w-6 h-6 rounded-full bg-[#C58A19] text-white font-bold text-xs shadow-xs ring-2 ring-[#C58A19]/30'
+                      : isCompleted
+                      ? 'w-5 h-5 rounded-full bg-[#4A2116] text-[#E6C783] text-[10px] font-semibold'
+                      : 'w-5 h-5 rounded-full bg-[#FAF5EC] border border-[#E5D7C3] text-[#8C6D62] text-[10px] hover:border-[#C58A19]'
+                  }`}
+                  title={st.label}
                 >
-                  {/* Step Bubble */}
-                  {isCurrent ? (
-                    /* Active filled pill/circle with gold background */
-                    <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#C58A19] text-white shadow-md text-xs font-semibold animate-scaleIn">
-                      <span className="w-4 h-4 rounded-full bg-white text-[#C58A19] flex items-center justify-center text-[10px] font-bold">
-                        {st.number}
-                      </span>
-                      <span className="whitespace-nowrap font-medium text-[11px] sm:text-xs">
-                        {st.label}
-                      </span>
-                    </div>
-                  ) : (
-                    /* Inactive / Completed step circle */
-                    <div className="flex flex-col items-center">
-                      <div className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-xs font-semibold transition-all ${
-                        isCompleted 
-                          ? 'bg-[#4A2116] text-[#E6C783] shadow-xs' 
-                          : 'bg-white border border-[#E5C583] text-[#7D5B50] hover:border-[#C58A19]'
-                      }`}>
-                        {isCompleted ? <Check className="w-3.5 h-3.5 stroke-[2.5]" /> : st.number}
-                      </div>
-                      <span className={`text-[11px] sm:text-xs font-medium mt-1.5 whitespace-nowrap ${
-                        isCompleted ? 'text-[#4A2116] font-semibold' : 'text-[#8C6D62]'
-                      }`}>
-                        {st.label}
-                      </span>
-                    </div>
-                  )}
+                  {isCompleted ? <Check className="w-3 h-3 stroke-[2.5]" /> : st.number}
                 </button>
               );
             })}
-
           </div>
         </div>
 
-        {/* STEP 1: Shape and Layers (3 in a row with 9 3D Cake Shape Models) */}
-        {currentStep === 1 && (
-          <div className="animate-fadeIn">
-            {/* Section Heading with Left Gold Bar */}
-            <div className="flex items-start gap-3 mb-6 sm:mb-8">
-              <div className="w-1 sm:w-1.5 h-10 sm:h-12 bg-[#C58A19] rounded-full shrink-0 mt-0.5" />
-              <div>
-                <h2 className="font-serif text-xl sm:text-2xl md:text-[26px] font-bold text-[#4A2116]">
-                  {isAr ? 'شكل الكيك والطبقات' : 'Cake Shape and Layers'}
-                </h2>
-                <p className="font-poppins text-xs sm:text-sm text-[#8C6D62] mt-0.5">
-                  {isAr ? 'اختر شكل الكيك وهيكل الطبقات المناسب لمركز احتفالك.' : 'Select the tier structure and shape for your celebration centerpiece.'}
-                </p>
-              </div>
-            </div>
-
-            {/* 9 Cake Shape & Layer Cards Grid: 3 in a row */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-7 md:gap-8 mb-10">
-              {shapeLayerOptions.map((item) => {
-                const isSelected = selectedShapeLayer === item.id;
-
-                return (
-                  <div
-                    key={item.id}
-                    onClick={() => {
-                      setSelectedShapeLayer(item.id);
-                      setSelectedShape(item.shape);
-                      setSelectedLayers(item.layers);
-                    }}
-                    className={`bg-white rounded-3xl border-2 transition-all duration-300 cursor-pointer p-5 sm:p-6 flex flex-col justify-between relative group hover:-translate-y-1.5 hover:shadow-xl ${
-                      isSelected 
-                        ? 'border-[#C58A19] shadow-lg ring-4 ring-[#C58A19]/15 bg-[#FFFDF9]' 
-                        : 'border-[#EEDECB] hover:border-[#C58A19]/70 shadow-sm'
-                    }`}
-                  >
-                    {/* Checkmark Badge on Top Right when selected */}
-                    {isSelected && (
-                      <div className="absolute top-4 right-4 rtl:right-auto rtl:left-4 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#C58A19] text-white flex items-center justify-center shadow-md z-10 animate-scaleIn">
-                        <Check className="w-4 h-4 stroke-[2.5]" />
-                      </div>
-                    )}
-
-                    {/* Cake Shape Image Box */}
-                    <div className="w-full aspect-[4/3] sm:h-52 md:h-60 flex items-center justify-center overflow-hidden mb-4 p-3 bg-[#FAF7F2]/60 rounded-2xl group-hover:bg-[#FAF7F2] transition-colors">
-                      <img 
-                        src={encodeURI(item.image)} 
-                        alt={item.title} 
-                        className="w-full h-full object-contain drop-shadow-sm group-hover:scale-108 transition-transform duration-300 select-none" 
-                      />
-                    </div>
-
-                    {/* Card Footer: Title, Description & Tier Price Badge */}
-                    <div className="pt-3.5 border-t border-[#F2E7D5] text-center flex flex-col items-center">
-                      <h3 className="font-serif text-base sm:text-lg md:text-xl font-bold tracking-tight text-[#4A2116] mb-1">
-                        {item.title}
-                      </h3>
-                      <p className="font-poppins text-xs text-[#8C6D62] leading-relaxed line-clamp-2 mb-3">
-                        {item.desc}
-                      </p>
-                      <span className="inline-block text-xs font-bold text-[#C58A19] bg-[#FFF8EE] px-3.5 py-1 rounded-full border border-[#EACD9B]/60 shadow-xs">
-                        {item.extraPrice > 0 ? `+AED ${item.extraPrice}` : (isAr ? 'السعر الأساسي' : 'Included in Base Price')}
-                      </span>
-                    </div>
-
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        )}
-
-        {/* STEP 2: Size and Guest Count (3 in a row matching other steps) */}
-        {currentStep === 2 && (
-          <div className="animate-fadeIn">
-            <div className="flex items-start gap-3 mb-6 sm:mb-8">
-              <div className="w-1 sm:w-1.5 h-10 sm:h-12 bg-[#C58A19] rounded-full shrink-0 mt-0.5" />
-              <div>
-                <h2 className="font-serif text-xl sm:text-2xl md:text-[26px] font-bold text-[#4A2116]">
-                  {isAr ? 'اختر الحجم وعدد الحصص' : 'Select Size and Guest Count'}
-                </h2>
-                <p className="font-poppins text-xs sm:text-sm text-[#8C6D62] mt-0.5">
-                  {isAr ? 'نضمن لك حصصاً وافرة ومقادير فاخرة لكل ضيف.' : 'We ensure generous portions baked to perfection.'}
-                </p>
-              </div>
-            </div>
-
-            {/* 6 Cake Size Cards Grid: 3 in a row */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-7 md:gap-8 mb-10">
-              {sizeOptions.map((sz) => {
-                const isSelected = selectedSize === sz.id;
-
-                return (
-                  <div
-                    key={sz.id}
-                    onClick={() => setSelectedSize(sz.id)}
-                    className={`bg-white rounded-3xl border-2 transition-all duration-300 cursor-pointer p-5 sm:p-6 flex flex-col justify-between relative group hover:-translate-y-1.5 hover:shadow-xl ${
-                      isSelected 
-                        ? 'border-[#C58A19] shadow-lg ring-4 ring-[#C58A19]/15 bg-[#FFFDF9]' 
-                        : 'border-[#EEDECB] hover:border-[#C58A19]/70 shadow-sm'
-                    }`}
-                  >
-                    {/* Checkmark Badge on Top Right when selected */}
-                    {isSelected && (
-                      <div className="absolute top-4 right-4 rtl:right-auto rtl:left-4 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#C58A19] text-white flex items-center justify-center shadow-md z-10 animate-scaleIn">
-                        <Check className="w-4 h-4 stroke-[2.5]" />
-                      </div>
-                    )}
-
-                    {/* Popular Badge on Top Left if popular */}
-                    {sz.popular && (
-                      <span className="absolute top-4 left-4 rtl:left-auto rtl:right-4 bg-[#C58A19] text-white text-[11px] font-bold uppercase tracking-wider px-3 py-1 rounded-full shadow-sm z-10 select-none">
-                        {isAr ? 'الأكثر طلباً' : 'Most Popular'}
-                      </span>
-                    )}
-
-                    {/* Cake Size Image Box (Same size & aspect as Step 1, 2, 4) */}
-                    <div className="w-full aspect-[4/3] sm:h-52 md:h-60 flex items-center justify-center overflow-hidden mb-4 p-3 bg-[#FAF7F2]/60 rounded-2xl group-hover:bg-[#FAF7F2] transition-colors relative">
-                      <img 
-                        src={encodeURI(sz.image)} 
-                        alt={sz.title} 
-                        className={`w-full h-full object-contain drop-shadow-sm group-hover:scale-108 transition-transform duration-300 select-none ${
-                          sz.id === '1kg' ? 'scale-75' : 
-                          sz.id === '2kg' ? 'scale-85' : 
-                          sz.id === '3kg' ? 'scale-95' : 
-                          sz.id === '4kg' ? 'scale-100' : 
-                          sz.id === '5kg' ? 'scale-100' : 'scale-105'
-                        }`} 
-                      />
-
-                      {/* Guest Count Pill at bottom of image box */}
-                      <div className="absolute bottom-3 left-1/2 -translate-x-1/2 bg-white/95 backdrop-blur-xs border border-[#E5C583]/70 px-3 py-1 rounded-full shadow-xs flex items-center gap-1.5 whitespace-nowrap">
-                        <Users className="w-3.5 h-3.5 text-[#C58A19]" />
-                        <span className="font-poppins font-semibold text-xs text-[#4A2116] lining-nums tabular-nums">
-                          {sz.servings}
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* Card Footer: Title, Description & Base Price Badge */}
-                    <div className="pt-3.5 border-t border-[#F2E7D5] text-center flex flex-col items-center">
-                      <h3 className="font-serif text-base sm:text-lg md:text-xl font-bold tracking-tight text-[#4A2116] mb-1">
-                        {sz.title}
-                      </h3>
-                      <p className="font-poppins text-xs text-[#8C6D62] leading-relaxed line-clamp-2 mb-3">
-                        {sz.desc}
-                      </p>
-                      <span className="inline-block text-xs font-bold text-[#C58A19] bg-[#FFF8EE] px-3.5 py-1 rounded-full border border-[#EACD9B]/60 shadow-xs lining-nums tabular-nums">
-                        AED {sz.basePrice}
-                      </span>
-                    </div>
-
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        )}
-
-        {/* STEP 3: Choose Sponge (3 in a row with 9 Sponge Slice Cutout Models) */}
-        {currentStep === 3 && (
-          <div className="animate-fadeIn">
-            {/* Section Heading with Left Gold Bar */}
-            <div className="flex items-start gap-3 mb-6 sm:mb-8">
-              <div className="w-1 sm:w-1.5 h-10 sm:h-12 bg-[#C58A19] rounded-full shrink-0 mt-0.5" />
-              <div>
-                <h2 className="font-serif text-xl sm:text-2xl md:text-[26px] font-bold text-[#4A2116]">
-                  {isAr ? 'اختر نكهة الإسفنجة' : 'Choose Sponge'}
-                </h2>
-                <p className="font-poppins text-xs sm:text-sm text-[#8C6D62] mt-0.5">
-                  {isAr 
-                    ? 'مخبوزة بأجود أنواع الشوكولاتة البلجيكية، الفانيليا التاهيتية والفستق الفاخر.' 
-                    : 'Mastercrafted with Belgian chocolate, Tahitian vanilla, and Dubai pistachios.'}
-                </p>
-              </div>
-            </div>
-
-            {/* 9 Sponge Slice Cards Grid: 3 in a row */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-7 md:gap-8 mb-10">
-              {spongeOptions.map((sp) => {
-                const isSelected = selectedSponge === sp.id;
-
-                return (
-                  <div
-                    key={sp.id}
-                    onClick={() => setSelectedSponge(sp.id)}
-                    className={`bg-white rounded-3xl border-2 transition-all duration-300 cursor-pointer p-5 sm:p-6 flex flex-col justify-between relative group hover:-translate-y-1.5 hover:shadow-xl ${
-                      isSelected 
-                        ? 'border-[#C58A19] shadow-lg ring-4 ring-[#C58A19]/15 bg-[#FFFDF9]' 
-                        : 'border-[#EEDECB] hover:border-[#C58A19]/70 shadow-sm'
-                    }`}
-                  >
-                    {/* Checkmark Badge on Top Right when selected */}
-                    {isSelected && (
-                      <div className="absolute top-4 right-4 rtl:right-auto rtl:left-4 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#C58A19] text-white flex items-center justify-center shadow-md z-10 animate-scaleIn">
-                        <Check className="w-4 h-4 stroke-[2.5]" />
-                      </div>
-                    )}
-
-                    {/* Cake Sponge Slice Image Box */}
-                    <div className="w-full aspect-[4/3] sm:h-52 md:h-60 flex items-center justify-center overflow-hidden mb-4 p-3 bg-[#FAF7F2]/60 rounded-2xl group-hover:bg-[#FAF7F2] transition-colors">
-                      <img 
-                        src={encodeURI(sp.image)} 
-                        alt={sp.name} 
-                        className="w-full h-full object-contain drop-shadow-sm group-hover:scale-108 transition-transform duration-300 select-none" 
-                      />
-                    </div>
-
-                    {/* Card Footer: Title & Description */}
-                    <div className="pt-3.5 border-t border-[#F2E7D5] text-center flex flex-col items-center">
-                      <h3 className="font-serif text-base sm:text-lg md:text-xl font-bold tracking-tight text-[#4A2116] mb-1">
-                        {sp.name}
-                      </h3>
-                      <p className="font-poppins text-xs text-[#8C6D62] leading-relaxed line-clamp-2">
-                        {sp.desc}
-                      </p>
-                    </div>
-
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        )}
-
-        
-        {/* STEP 4: Choose Gourmet Filling (Pixel-perfect aligned cards) */}
-        {currentStep === 4 && (
-          <div className="animate-fadeIn">
-            {/* Section Heading with Left Gold Bar */}
-            <div className="flex items-start gap-3 mb-6 sm:mb-8">
-              <div className="w-1 sm:w-1.5 h-10 sm:h-12 bg-[#C58A19] rounded-full shrink-0 mt-0.5" />
-              <div>
-                <h2 className="font-serif text-xl sm:text-2xl md:text-[26px] font-bold text-[#4A2116]">
-                  {isAr ? 'اختر حشوة الكيك الفاخرة' : 'Choose Gourmet Filling'}
-                </h2>
-                <p className="font-poppins text-xs sm:text-sm text-[#8C6D62] mt-0.5">
-                  {isAr 
-                    ? 'محضرة طازجة يومياً من أجود أنواع الكريمة، الشوكولاتة والفاكهة الطبيعية.' 
-                    : 'Artisanal silky fillings handcrafted daily with Belgian chocolates, fresh fruits and organic creams.'}
-                </p>
-              </div>
-            </div>
-
-            {/* 16 Filling Cards Grid: Perfectly aligned */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-4 sm:gap-5 md:gap-6 mb-10">
-              {fillingOptions.map((fi) => {
-                const isSelected = selectedFilling === fi.id;
-
-                return (
-                  <div
-                    key={fi.id}
-                    onClick={() => setSelectedFilling(fi.id)}
-                    className={`bg-white rounded-2xl sm:rounded-3xl border-2 transition-all duration-300 cursor-pointer p-3.5 sm:p-5 flex flex-col justify-between h-full relative group hover:-translate-y-1.5 hover:shadow-xl ${
-                      isSelected 
-                        ? 'border-[#C58A19] shadow-lg ring-4 ring-[#C58A19]/15 bg-[#FFFDF9]' 
-                        : 'border-[#EEDECB] hover:border-[#C58A19]/70 shadow-sm'
-                    }`}
-                  >
-                    {/* Checkmark Badge on Top Right when selected */}
-                    {isSelected && (
-                      <div className="absolute top-3 right-3 rtl:right-auto rtl:left-3 w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-[#C58A19] text-white flex items-center justify-center shadow-md z-10 animate-scaleIn">
-                        <Check className="w-3.5 h-3.5 stroke-[2.5]" />
-                      </div>
-                    )}
-
-                    {/* Filling Image Box with fixed uniform height */}
-                    <div className="w-full h-36 sm:h-44 md:h-48 flex items-center justify-center overflow-hidden mb-3 p-2.5 sm:p-3 bg-[#FAF7F2]/60 rounded-xl sm:rounded-2xl group-hover:bg-[#FAF7F2] transition-colors">
-                      <img 
-                        src={encodeURI(fi.image)} 
-                        alt={fi.name} 
-                        className="w-full h-full object-contain drop-shadow-sm group-hover:scale-108 transition-transform duration-300 select-none" 
-                      />
-                    </div>
-
-                    {/* Card Footer: Uniform height pill/label container */}
-                    <div className="pt-2.5 sm:pt-3 border-t border-[#F2E7D5] w-full min-h-[48px] sm:min-h-[52px] flex items-center justify-center">
-                      <div className={`w-full py-1.5 sm:py-2 px-2.5 sm:px-3 rounded-xl font-serif text-xs sm:text-[13px] md:text-sm font-bold tracking-tight text-center leading-snug transition-all ${
-                        isSelected 
-                          ? 'bg-[#C58A19] text-white shadow-xs' 
-                          : 'text-[#4A2116] group-hover:text-[#C58A19]'
-                      }`}>
-                        {fi.name}
-                      </div>
-                    </div>
-
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        )}
-
-        {/* STEP 5: Cake Type / Occasions */}
-        {currentStep === 5 && (
-          <div className="animate-fadeIn">
-            
-            {/* Section Heading with Left Gold Bar */}
-            <div className="flex items-start gap-3 mb-6 sm:mb-8">
-              <div className="w-1 sm:w-1.5 h-10 sm:h-12 bg-[#C58A19] rounded-full shrink-0 mt-0.5" />
-              <div>
-                <h2 className="font-serif text-xl sm:text-2xl md:text-[26px] font-bold text-[#4A2116]">
-                  {isAr ? 'ما هو نوع الكيك الذي ترغب به؟' : 'What type of cake do you want?'}
-                </h2>
-                <p className="font-poppins text-xs sm:text-sm text-[#8C6D62] mt-0.5">
-                  {isAr ? 'اختر مناسبة الكيك الخاصة بك.' : 'Choose the occasion for your cake.'}
-                </p>
-              </div>
-            </div>
-
-            {/* 6 Cake Cards Grid: 3 in a row, enlarged size */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-7 md:gap-8 mb-10">
-              {occasions.map((occ) => {
-                const isSelected = selectedOccasion === occ.id;
-
-                return (
-                  <div
-                    key={occ.id}
-                    onClick={() => setSelectedOccasion(occ.id)}
-                    className={`bg-white rounded-3xl border-2 transition-all duration-300 cursor-pointer p-5 sm:p-6 flex flex-col justify-between relative group hover:-translate-y-1.5 hover:shadow-xl ${
-                      isSelected 
-                        ? 'border-[#C58A19] shadow-lg ring-4 ring-[#C58A19]/15 bg-[#FFFDF9]' 
-                        : 'border-[#EEDECB] hover:border-[#C58A19]/70 shadow-sm'
-                    }`}
-                  >
-                    {/* Checkmark Badge on Top Right when selected */}
-                    {isSelected && (
-                      <div className="absolute top-4 right-4 rtl:right-auto rtl:left-4 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#C58A19] text-white flex items-center justify-center shadow-md z-10 animate-scaleIn">
-                        <Check className="w-4 h-4 stroke-[2.5]" />
-                      </div>
-                    )}
-
-                    {/* Cake Image Box (Enlarged) */}
-                    <div className="w-full aspect-[4/3] sm:h-52 md:h-60 flex items-center justify-center overflow-hidden mb-4 p-3 bg-[#FAF7F2]/60 rounded-2xl group-hover:bg-[#FAF7F2] transition-colors">
-                      <img 
-                        src={encodeURI(occ.image)} 
-                        alt={occ.title} 
-                        className="w-full h-full object-contain drop-shadow-sm group-hover:scale-108 transition-transform duration-300 select-none" 
-                      />
-                    </div>
-
-                    {/* Card Footer: Icon + Title */}
-                    <div className="flex items-center justify-center gap-2.5 pt-3.5 border-t border-[#F2E7D5]">
-                      <span className={`shrink-0 transition-colors ${isSelected ? 'text-[#C58A19]' : 'text-[#8C6D62] group-hover:text-[#C58A19]'}`}>
-                        {occ.icon}
-                      </span>
-                      <span className="font-serif text-base sm:text-lg md:text-xl font-bold tracking-tight text-[#4A2116] text-center">
-                        {occ.title}
-                      </span>
-                    </div>
-
-                  </div>
-                );
-              })}
-            </div>
-
-          </div>
-        )}
-
-        {/* STEP 6: Design & Toppings */}
-        {currentStep === 6 && (
-          <div className="animate-fadeIn">
-            <div className="flex items-start gap-3 mb-6 sm:mb-8">
-              <div className="w-1 sm:w-1.5 h-10 sm:h-12 bg-[#C58A19] rounded-full shrink-0 mt-0.5" />
-              <div>
-                <h2 className="font-serif text-xl sm:text-2xl md:text-[26px] font-bold text-[#4A2116]">
-                  {isAr ? 'التصميم الخارجي واللمسات الفاخرة' : 'Finishing, Accents and Toppings'}
-                </h2>
-                <p className="font-poppins text-xs sm:text-sm text-[#8C6D62] mt-0.5">
-                  {isAr ? 'اختر الإضافات الملكية لتزيين كعكتك (يمكنك اختيار أكثر من خيار).' : 'Select luxury handcrafted details to crown your celebration cake.'}
-                </p>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
-              {toppingOptions.map((top) => {
-                const isSelected = selectedToppings.includes(top.id);
-                return (
-                  <div
-                    key={top.id}
-                    onClick={() => toggleTopping(top.id)}
-                    className={`bg-white rounded-2xl border p-5 cursor-pointer transition-all flex flex-col justify-between hover:shadow-md relative ${
-                      isSelected
-                        ? 'border-2 border-[#C58A19] bg-[#FFFBF5] shadow-xs'
-                        : 'border-[#F0E4D2] hover:border-[#C58A19]/60'
-                    }`}
-                  >
-                    <div className="flex items-start justify-between gap-3 mb-3">
-                      <div>
-                        <h3 className="font-semibold text-sm sm:text-base text-[#4A2116] mb-1">
-                          {top.name}
-                        </h3>
-                        <p className="text-xs text-[#8C6D62] leading-relaxed">
-                          {top.desc}
-                        </p>
-                      </div>
-                      <div className={`w-5 h-5 rounded-md border shrink-0 flex items-center justify-center transition-colors ${
-                        isSelected ? 'border-[#C58A19] bg-[#C58A19] text-white' : 'border-[#D4C3A3] bg-white'
-                      }`}>
-                        {isSelected && <Check className="w-3.5 h-3.5 stroke-[2.5]" />}
-                      </div>
-                    </div>
-                    <div className="text-xs font-bold text-[#C58A19] pt-2 border-t border-[#F8F1E6]">
-                      {top.price > 0 ? `+AED ${top.price}` : (isAr ? 'مجاني' : 'Complimentary')}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        )}
-
-        {/* STEP 7: Message */}
-        {currentStep === 7 && (
-          <div className="animate-fadeIn">
-            <div className="flex items-start gap-3 mb-6 sm:mb-8">
-              <div className="w-1 sm:w-1.5 h-10 sm:h-12 bg-[#C58A19] rounded-full shrink-0 mt-0.5" />
-              <div>
-                <h2 className="font-serif text-xl sm:text-2xl md:text-[26px] font-bold text-[#4A2116]">
-                  {isAr ? 'رسالة الإهداء وكتابة الكيك' : 'Custom Inscription and Message'}
-                </h2>
-                <p className="font-poppins text-xs sm:text-sm text-[#8C6D62] mt-0.5">
-                  {isAr ? 'أضف عبارة الاحتفال التي ستُكتب على الكيك أو على لوح السكر الفاخر.' : 'Personalize your cake with a piped message or luxury acrylic topper.'}
-                </p>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-8">
+        {/* Main 2-Column Studio Grid: Left is Sticky Live Cake Preview Studio, Right is the Selected Step */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start mb-10">
+          
+          {/* LEFT COLUMN: Atelier Live Cake Studio Showcase (Sticky on desktop) */}
+          <div className="lg:col-span-5 xl:col-span-4 lg:sticky lg:top-20 z-20">
+            <div className="bg-gradient-to-b from-[#FFFDF9] via-[#FAF6EE] to-[#F5ECE0] border-2 border-[#E5C583]/70 rounded-3xl p-4 sm:p-5 shadow-xl shadow-[#4A2116]/8 relative overflow-hidden transition-all duration-300">
               
-              {/* Form Input */}
-              <div className="lg:col-span-7 space-y-5 bg-white p-6 rounded-2xl border border-[#F0E4D2] shadow-xs">
+              {/* Studio Header Bar */}
+              <div className="flex items-center justify-between pb-3 mb-3 border-b border-[#E8D6B5]">
+                <div className="flex items-center gap-2">
+                  <div className="w-7 h-7 rounded-full bg-[#FFF9F0] border border-[#E5C583] flex items-center justify-center text-[#C58A19] shadow-xs">
+                    <Sparkles className="w-3.5 h-3.5 text-[#C58A19] animate-pulse" />
+                  </div>
+                  <div>
+                    <h3 className="font-serif text-sm font-bold text-[#4A2116] leading-tight">
+                      {isAr ? 'استوديو الكيك المباشر' : 'Live Cake Studio'}
+                    </h3>
+                    <p className="text-[10px] text-[#8C6D62]">
+                      {previewData.stage}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Live Pulse Badge */}
+                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/80 border border-[#E5C583]/60 shadow-2xs">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 -ml-3.5" />
+                  <span className="text-[10px] font-bold text-[#4A2116] tracking-wider uppercase">
+                    {isAr ? 'مباشر' : 'Live'}
+                  </span>
+                </div>
+              </div>
+
+              {/* Turntable / Cake Stage Pedestal */}
+              <div className="relative w-full aspect-[4/3] min-h-[220px] sm:min-h-[250px] md:min-h-[270px] rounded-2xl bg-[radial-gradient(circle_at_center,_#FFF9EE_0%,_#F7ECE0_65%,_#EBD9C1_100%)] border border-[#E5CFA8] flex items-center justify-center p-3.5 overflow-hidden shadow-inner group">
                 
-                <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-[#C58A19] mb-1.5">
-                    {isAr ? 'نص الرسالة على الكيك' : 'Piped Inscription Message'}
-                  </label>
-                  <input
-                    type="text"
-                    value={cakeMessage}
-                    onChange={(e) => setCakeMessage(e.target.value)}
-                    placeholder={isAr ? 'مثال: مبروك التخرج يا سارة!' : 'e.g., Happy Birthday Sarah!'}
-                    className="w-full px-4 py-3 rounded-xl border border-[#E5D7C3] focus:border-[#C58A19] focus:ring-2 focus:ring-[#C58A19]/20 outline-none text-sm transition-all"
+                {/* Soft pedestal glow */}
+                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,_rgba(197,138,25,0.18)_0%,_transparent_70%)] pointer-events-none" />
+
+                {/* Pedestal Ellipse Shadow */}
+                <div className="absolute bottom-4 w-3/4 h-7 bg-[#4A2116]/12 rounded-full blur-md -z-0" />
+
+                {/* 1. Chocolate Sponge: When Step >= 5, show frosted cake with top layer placed above */}
+                {showChocolateTopLayer ? (
+                  <div 
+                    className="relative w-full h-full max-h-full max-w-full flex items-center justify-center group-hover:scale-105 transition-transform duration-500 z-10 animate-fadeIn"
+                    style={{ aspectRatio: '1774 / 1112' }}
+                  >
+                    {/* Base Cake with Gourmet Frosting Layer */}
+                    <img
+                      src={encodeURI((selectedFilling && fillingFrostingMap[selectedFilling]) || spongeBaseMap[selectedSponge])}
+                      alt="Base Cake and Gourmet Filling"
+                      className="absolute left-0 w-full object-contain drop-shadow-[0_16px_22px_rgba(74,33,22,0.22)] select-none z-10"
+                      style={{
+                        top: '20.2%',
+                        height: '79.8%'
+                      }}
+                    />
+
+                    {/* Top Chocolate Sponge Layer precisely matched in size to the frosting/base layer (88.5% width, centered) */}
+                    <img
+                      src="/chocolate-sponge-top.png"
+                      alt="Top Cake Sponge Layer"
+                      className="absolute object-contain drop-shadow-[0_14px_18px_rgba(74,33,22,0.25)] select-none z-20 pointer-events-none animate-fadeIn"
+                      style={{
+                        top: '0%',
+                        left: '5.75%',
+                        width: '88.5%',
+                        height: '70.6%'
+                      }}
+                    />
+                  </div>
+                ) : showPineappleLayerOnOtherBase ? (
+                  /* 2. Other Sponge Bases: When Pineapple cream filling chosen, place /pineapply foresting layer.png correctly on the chosen base */
+                  <div 
+                    className="relative w-full h-full max-h-full max-w-full flex items-center justify-center group-hover:scale-105 transition-transform duration-500 z-10 animate-fadeIn"
+                    style={{ aspectRatio: '1774 / 1112' }}
+                  >
+                    {/* Chosen Sponge Base (e.g. Classic Red Velvet base) */}
+                    <img
+                      src={encodeURI(spongeBaseMap[selectedSponge])}
+                      alt="Chosen Sponge Base"
+                      className="absolute left-0 w-full object-contain drop-shadow-[0_16px_22px_rgba(74,33,22,0.22)] select-none z-10"
+                      style={{
+                        top: '20.2%',
+                        height: '79.8%'
+                      }}
+                    />
+
+                    {/* Pineapple Cream Filling Layer positioned flush on top of the chosen base without gap */}
+                    <img
+                      src="/pineapply foresting layer.png"
+                      alt="Pineapple Cream Filling Layer"
+                      className="absolute object-contain drop-shadow-[0_14px_18px_rgba(74,33,22,0.25)] select-none z-20 pointer-events-none animate-fadeIn"
+                      style={{
+                        top: '3.6%',
+                        left: '2.5%',
+                        width: '95%',
+                        height: '74%'
+                      }}
+                    />
+                  </div>
+                ) : (
+                  /* 3. Single Cutout Image (Shape, Size, Sponge Base, Chocolate Frosting, etc.) */
+                  <img
+                    key={previewData.image}
+                    src={encodeURI(previewData.image)}
+                    alt={previewData.title}
+                    className="max-h-full max-w-full object-contain drop-shadow-[0_16px_22px_rgba(74,33,22,0.22)] group-hover:scale-105 transition-transform duration-500 select-none relative z-10 animate-fadeIn"
                   />
-                  <span className="text-[11px] text-[#8C6D62] mt-1 block">
-                    {isAr ? 'الحد الأقصى 45 حرفاً لضمان أفضل تنسيق جمالي.' : 'Up to 45 characters recommended for best aesthetic piping.'}
+                )}
+
+                {/* Inscription Plaque Overlay (Steps 7 & 8) */}
+                {(currentStep === 7 || currentStep === 8) && cakeMessage && (
+                  <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-30 w-[90%] max-w-xs animate-scaleIn">
+                    <div className="bg-white/95 backdrop-blur-md border-2 border-[#C58A19] rounded-xl px-3 py-1.5 shadow-lg text-center">
+                      <span className="text-[9px] uppercase font-bold text-[#8C6D62] tracking-wider block">
+                        {messageStyle === 'acrylic-topper' 
+                          ? (isAr ? 'توبر أكريليك ذهبي' : 'Gold Acrylic Topper') 
+                          : (isAr ? 'كتابة شكر وإهداء' : 'Hand-Piped Inscription')}
+                      </span>
+                      <span className="font-serif font-bold text-xs sm:text-sm text-[#C58A19] block truncate">
+                        "{cakeMessage}"
+                      </span>
+                    </div>
+                  </div>
+                )}
+
+                {/* Stage Tag Ribbon at top */}
+                <div className="absolute top-2.5 left-2.5 rtl:left-auto rtl:right-2.5 z-20">
+                  <span className="text-[10px] font-bold text-[#4A2116] bg-white/95 backdrop-blur-xs border border-[#E5C583] px-2.5 py-0.5 rounded-full shadow-xs">
+                    {previewData.badge}
+                  </span>
+                </div>
+              </div>
+
+              {/* Active Selection Title */}
+              <div className="mt-3 text-center">
+                <h4 className="font-serif font-bold text-sm sm:text-base text-[#4A2116] line-clamp-1">
+                  {previewData.title}
+                </h4>
+              </div>
+
+              {/* Quick Recipe Specs Pills */}
+              <div className="grid grid-cols-2 gap-1.5 mt-2.5 text-[11px]">
+                <div className="bg-white/80 border border-[#EEDECB] rounded-xl p-2 flex items-center gap-1.5 truncate">
+                  <Layers className="w-3.5 h-3.5 text-[#C58A19] shrink-0" />
+                  <span className="text-[#4A2116] font-medium truncate">{selectedShapeLayerItem?.title}</span>
+                </div>
+                <div className="bg-white/80 border border-[#EEDECB] rounded-xl p-2 flex items-center gap-1.5 truncate">
+                  <Scale className="w-3.5 h-3.5 text-[#C58A19] shrink-0" />
+                  <span className="text-[#4A2116] font-medium truncate">{sizeOptions.find(s => s.id === selectedSize)?.title}</span>
+                </div>
+                <div className="bg-white/80 border border-[#EEDECB] rounded-xl p-2 flex items-center gap-1.5 truncate">
+                  <Cake className="w-3.5 h-3.5 text-[#C58A19] shrink-0" />
+                  <span className="text-[#4A2116] font-medium truncate">{spongeOptions.find(s => s.id === selectedSponge)?.name}</span>
+                </div>
+                <div className="bg-white/80 border border-[#EEDECB] rounded-xl p-2 flex items-center gap-1.5 truncate">
+                  <UtensilsCrossed className="w-3.5 h-3.5 text-[#C58A19] shrink-0" />
+                  <span className="text-[#4A2116] font-medium truncate">
+                    {fillingOptions.find(f => f.id === selectedFilling)?.name || (isAr ? 'اختر الحشوة' : 'Choose Filling')}
+                  </span>
+                </div>
+              </div>
+
+              {/* Live Total & Quick Next Action */}
+              <div className="mt-3.5 pt-3 border-t border-[#E8D6B5] flex items-center justify-between">
+                <div>
+                  <span className="text-[10px] uppercase font-bold text-[#8C6D62] tracking-wider block">
+                    {isAr ? 'الإجمالي التقديري' : 'Estimated Total'}
+                  </span>
+                  <span className="font-poppins font-bold text-lg text-[#C58A19] lining-nums tabular-nums">
+                    AED {totalPrice}
                   </span>
                 </div>
 
-                {/* Inscription Style */}
-                <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-[#C58A19] mb-2">
-                    {isAr ? 'نمط الكتابة والتنسيق' : 'Inscription Style'}
-                  </label>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <button
-                      type="button"
-                      onClick={() => setMessageStyle('piped-gold')}
-                      className={`p-3 rounded-xl border text-left rtl:text-right cursor-pointer transition-all ${
-                        messageStyle === 'piped-gold'
-                          ? 'border-2 border-[#C58A19] bg-[#FFFBF5]'
-                          : 'border-[#F0E4D2] hover:border-[#C58A19]/50'
-                      }`}
-                    >
-                      <div className="font-semibold text-xs text-[#4A2116]">
-                        {isAr ? 'كتابة يدوية بالشوكولاتة أو الذهب' : 'Hand-Piped Chocolate / Gold Script'}
-                      </div>
-                      <div className="text-[11px] text-[#C58A19] font-medium mt-0.5">
-                        {isAr ? 'مجاني' : 'Complimentary'}
-                      </div>
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() => setMessageStyle('acrylic-topper')}
-                      className={`p-3 rounded-xl border text-left rtl:text-right cursor-pointer transition-all ${
-                        messageStyle === 'acrylic-topper'
-                          ? 'border-2 border-[#C58A19] bg-[#FFFBF5]'
-                          : 'border-[#F0E4D2] hover:border-[#C58A19]/50'
-                      }`}
-                    >
-                      <div className="font-semibold text-xs text-[#4A2116]">
-                        {isAr ? 'مجسم توبر أكريليك ذهبي مرآة' : 'Custom Gold Mirror Acrylic Topper'}
-                      </div>
-                      <div className="text-[11px] text-[#C58A19] font-medium mt-0.5">
-                        +AED 35
-                      </div>
-                    </button>
-                  </div>
-                </div>
-
-                {/* Special Instructions */}
-                <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-[#C58A19] mb-1.5">
-                    {isAr ? 'ملاحظات وتفضيلات خاصة للشيف' : 'Special Baker Instructions or Color Theme'}
-                  </label>
-                  <textarea
-                    rows="3"
-                    value={specialInstructions}
-                    onChange={(e) => setSpecialInstructions(e.target.value)}
-                    placeholder={isAr ? 'أي حساسية طعام، درجات ألوان محددة، أو ترتيب معين...' : 'Any color palette, dietary requests, or specific delivery timing notes...'}
-                    className="w-full px-4 py-2.5 rounded-xl border border-[#E5D7C3] focus:border-[#C58A19] focus:ring-2 focus:ring-[#C58A19]/20 outline-none text-xs leading-relaxed transition-all resize-none"
-                  />
-                </div>
-
-              </div>
-
-              {/* Live Visual Preview of Inscription */}
-              <div className="lg:col-span-5 bg-gradient-to-b from-[#FFF9F0] to-[#F8F1E6] rounded-2xl border border-[#E8D6B5] p-6 flex flex-col items-center justify-center text-center shadow-xs">
-                <span className="text-[11px] font-bold uppercase tracking-widest text-[#C58A19] mb-3">
-                  {isAr ? 'معاينة لوحة الإهداء' : 'Live Plaque Preview'}
-                </span>
-                
-                <div className="w-full max-w-xs bg-white rounded-2xl border-2 border-dashed border-[#C58A19]/60 p-6 shadow-sm flex flex-col items-center justify-center min-h-[140px]">
-                  <div className="font-serif not-italic font-bold text-lg sm:text-xl text-[#C58A19] tracking-wide break-words max-w-full">
-                    {cakeMessage || (isAr ? 'رسالتك هنا' : 'Your Message Here')}
-                  </div>
-                  <div className="text-[10px] text-[#8C6D62] mt-2 font-poppins">
-                    {messageStyle === 'acrylic-topper' 
-                      ? (isAr ? 'مجسم توبر أكريليك ذهبي' : 'Gold Acrylic Topper') 
-                      : (isAr ? 'كتابة يدوية أنيقة على السطح' : 'Piped on White Sugar Ribbon Plaque')}
-                  </div>
-                </div>
-
-                <p className="text-[11px] text-[#7D5B50] mt-4 leading-relaxed max-w-xs">
-                  {isAr 
-                    ? 'سيقوم شيف المخبز اللبناني بكتابة الرسالة بكل دقة وأناقة مطابقة للصورة.' 
-                    : 'Our pastry chef Saad will hand-pipe your message with artisanal precision.'}
-                </p>
+                <button
+                  type="button"
+                  onClick={handleNext}
+                  className="flex items-center gap-1.5 bg-[#C58A19] hover:bg-[#A87413] text-white text-xs font-semibold px-4 py-2 rounded-full shadow-md transition-all cursor-pointer group"
+                >
+                  <span>{currentStep === 8 ? (isAr ? 'تأكيد الطلب' : 'Confirm Order') : (isAr ? 'الخطوة التالية' : 'Next Step')}</span>
+                  <ArrowRight className="w-3.5 h-3.5 rtl:rotate-180 group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5 transition-transform" />
+                </button>
               </div>
 
             </div>
           </div>
-        )}
 
-        {/* STEP 8: Review & Order */}
-        {currentStep === 8 && (
-          <div className="animate-fadeIn">
-            <div className="flex items-start gap-3 mb-6 sm:mb-8">
-              <div className="w-1 sm:w-1.5 h-10 sm:h-12 bg-[#C58A19] rounded-full shrink-0 mt-0.5" />
-              <div>
-                <h2 className="font-serif text-xl sm:text-2xl md:text-[26px] font-bold text-[#4A2116]">
-                  {isAr ? 'مراجعة وتأكيد طلب الكيك المخصص' : 'Review Your Custom Cake'}
-                </h2>
-                <p className="font-poppins text-xs sm:text-sm text-[#8C6D62] mt-0.5">
-                  {isAr ? 'تأكد من اختياراتك ومكونات الكعكة قبل تأكيد الطلب.' : 'Review your customized selections and proceed to checkout or concierge WhatsApp.'}
-                </p>
-              </div>
-            </div>
+          {/* RIGHT COLUMN: Only the Selected Step Options */}
+          <div className="lg:col-span-7 xl:col-span-8">
 
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-8">
-              
-              {/* Summary Card */}
-              <div className="lg:col-span-8 bg-white rounded-2xl border border-[#F0E4D2] p-6 sm:p-8 shadow-sm space-y-6">
-                
-                <div className="flex items-center justify-between pb-4 border-b border-[#F8F1E6]">
+            {/* STEP 1: Shape and Layers */}
+            {currentStep === 1 && (
+              <div className="animate-fadeIn">
+                <div className="flex items-start gap-3 mb-6">
+                  <div className="w-1.5 h-10 bg-[#C58A19] rounded-full shrink-0 mt-0.5" />
                   <div>
-                    <h3 className="font-serif font-bold text-xl text-[#4A2116]">
-                      {occasions.find(o => o.id === selectedOccasion)?.title}
-                    </h3>
-                    <p className="text-xs text-[#C58A19] font-medium mt-0.5">
-                      {isAr ? 'تصميم مخصص حسب الطلب' : 'Bespoke Custom Cake Creation'}
+                    <h2 className="font-serif text-xl sm:text-2xl font-bold text-[#4A2116]">
+                      {isAr ? 'شكل الكيك والطبقات' : 'Cake Shape and Layers'}
+                    </h2>
+                    <p className="font-poppins text-xs sm:text-sm text-[#8C6D62] mt-0.5">
+                      {isAr ? 'اختر شكل الكيك وهيكل الطبقات المناسب لمركز احتفالك.' : 'Select the tier structure and shape for your celebration centerpiece.'}
                     </p>
                   </div>
-                  <div className="w-14 h-14 rounded-xl bg-[#FFF9F0] border border-[#E5C583]/60 flex items-center justify-center shrink-0">
-                    <img 
-                      src={encodeURI(occasions.find(o => o.id === selectedOccasion)?.image || '/customize/birthday.png')} 
-                      alt="Occasion" 
-                      className="w-10 h-10 object-contain select-none"
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5 mb-8">
+                  {shapeLayerOptions.map((item) => {
+                    const isSelected = selectedShapeLayer === item.id;
+                    return (
+                      <div
+                        key={item.id}
+                        onClick={() => {
+                          setSelectedShapeLayer(item.id);
+                          setSelectedShape(item.shape);
+                          setSelectedLayers(item.layers);
+                        }}
+                        className={`bg-white rounded-3xl border-2 transition-all duration-300 cursor-pointer p-4 sm:p-5 flex flex-col justify-between relative group hover:-translate-y-1 hover:shadow-xl ${
+                          isSelected 
+                            ? 'border-[#C58A19] shadow-lg ring-4 ring-[#C58A19]/15 bg-[#FFFDF9]' 
+                            : 'border-[#EEDECB] hover:border-[#C58A19]/70 shadow-sm'
+                        }`}
+                      >
+                        {isSelected && (
+                          <div className="absolute top-3 right-3 rtl:right-auto rtl:left-3 w-7 h-7 rounded-full bg-[#C58A19] text-white flex items-center justify-center shadow-md z-10 animate-scaleIn">
+                            <Check className="w-4 h-4 stroke-[2.5]" />
+                          </div>
+                        )}
+
+                        <div className="w-full aspect-[4/3] sm:h-44 xl:h-48 flex items-center justify-center overflow-hidden mb-3 p-2 bg-[#FAF7F2]/60 rounded-2xl group-hover:bg-[#FAF7F2] transition-colors">
+                          <img 
+                            src={encodeURI(item.image)} 
+                            alt={item.title} 
+                            className="w-full h-full object-contain drop-shadow-sm group-hover:scale-108 transition-transform duration-300 select-none" 
+                          />
+                        </div>
+
+                        <div className="pt-3 border-t border-[#F2E7D5] text-center flex flex-col items-center">
+                          <h3 className="font-serif text-sm sm:text-base font-bold tracking-tight text-[#4A2116] mb-1">
+                            {item.title}
+                          </h3>
+                          <p className="font-poppins text-xs text-[#8C6D62] leading-relaxed line-clamp-2 mb-2.5">
+                            {item.desc}
+                          </p>
+                          <span className="inline-block text-xs font-bold text-[#C58A19] bg-[#FFF8EE] px-3 py-0.5 rounded-full border border-[#EACD9B]/60 shadow-xs">
+                            {item.extraPrice > 0 ? `+AED ${item.extraPrice}` : (isAr ? 'السعر الأساسي' : 'Included in Base')}
+                          </span>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            {/* STEP 2: Size and Portions */}
+            {currentStep === 2 && (
+              <div className="animate-fadeIn">
+                <div className="flex items-start gap-3 mb-6">
+                  <div className="w-1.5 h-10 bg-[#C58A19] rounded-full shrink-0 mt-0.5" />
+                  <div>
+                    <h2 className="font-serif text-xl sm:text-2xl font-bold text-[#4A2116]">
+                      {isAr ? 'اختر الحجم وعدد الحصص' : 'Select Size and Guest Count'}
+                    </h2>
+                    <p className="font-poppins text-xs sm:text-sm text-[#8C6D62] mt-0.5">
+                      {isAr ? 'نضمن لك حصصاً وافرة ومقادير فاخرة لكل ضيف.' : 'We ensure generous portions baked to perfection.'}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5 mb-8">
+                  {sizeOptions.map((sz) => {
+                    const isSelected = selectedSize === sz.id;
+                    return (
+                      <div
+                        key={sz.id}
+                        onClick={() => setSelectedSize(sz.id)}
+                        className={`bg-white rounded-3xl border-2 transition-all duration-300 cursor-pointer p-4 sm:p-5 flex flex-col justify-between relative group hover:-translate-y-1 hover:shadow-xl ${
+                          isSelected 
+                            ? 'border-[#C58A19] shadow-lg ring-4 ring-[#C58A19]/15 bg-[#FFFDF9]' 
+                            : 'border-[#EEDECB] hover:border-[#C58A19]/70 shadow-sm'
+                        }`}
+                      >
+                        {isSelected && (
+                          <div className="absolute top-3 right-3 rtl:right-auto rtl:left-3 w-7 h-7 rounded-full bg-[#C58A19] text-white flex items-center justify-center shadow-md z-10 animate-scaleIn">
+                            <Check className="w-4 h-4 stroke-[2.5]" />
+                          </div>
+                        )}
+
+                        {sz.popular && (
+                          <span className="absolute top-3 left-3 rtl:left-auto rtl:right-3 bg-[#C58A19] text-white text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full shadow-sm z-10 select-none">
+                            {isAr ? 'الأكثر طلباً' : 'Most Popular'}
+                          </span>
+                        )}
+
+                        <div className="w-full aspect-[4/3] sm:h-44 xl:h-48 flex items-center justify-center overflow-hidden mb-3 p-2 bg-[#FAF7F2]/60 rounded-2xl group-hover:bg-[#FAF7F2] transition-colors relative">
+                          <img 
+                            src={encodeURI(sz.image)} 
+                            alt={sz.title} 
+                            className={`w-full h-full object-contain drop-shadow-sm group-hover:scale-108 transition-transform duration-300 select-none ${
+                              sz.id === '1kg' ? 'scale-75' : 
+                              sz.id === '2kg' ? 'scale-85' : 
+                              sz.id === '3kg' ? 'scale-95' : 
+                              sz.id === '4kg' ? 'scale-100' : 
+                              sz.id === '5kg' ? 'scale-100' : 'scale-105'
+                            }`} 
+                          />
+                          <div className="absolute bottom-2.5 left-1/2 -translate-x-1/2 bg-white/95 backdrop-blur-xs border border-[#E5C583]/70 px-3 py-0.5 rounded-full shadow-xs flex items-center gap-1.5 whitespace-nowrap">
+                            <Users className="w-3 h-3 text-[#C58A19]" />
+                            <span className="font-poppins font-semibold text-xs text-[#4A2116] lining-nums tabular-nums">
+                              {sz.servings}
+                            </span>
+                          </div>
+                        </div>
+
+                        <div className="pt-3 border-t border-[#F2E7D5] text-center flex flex-col items-center">
+                          <h3 className="font-serif text-sm sm:text-base font-bold tracking-tight text-[#4A2116] mb-1">
+                            {sz.title}
+                          </h3>
+                          <p className="font-poppins text-xs text-[#8C6D62] leading-relaxed line-clamp-2 mb-2.5">
+                            {sz.desc}
+                          </p>
+                          <span className="inline-block text-xs font-bold text-[#C58A19] bg-[#FFF8EE] px-3.5 py-0.5 rounded-full border border-[#EACD9B]/60 shadow-xs lining-nums tabular-nums">
+                            AED {sz.basePrice}
+                          </span>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            {/* STEP 3: Choose Sponge (9 Sponge Cutouts, live preview shows Base image from /customize/base/) */}
+            {currentStep === 3 && (
+              <div className="animate-fadeIn">
+                <div className="flex items-start gap-3 mb-6">
+                  <div className="w-1.5 h-10 bg-[#C58A19] rounded-full shrink-0 mt-0.5" />
+                  <div>
+                    <h2 className="font-serif text-xl sm:text-2xl font-bold text-[#4A2116]">
+                      {isAr ? 'اختر نكهة الإسفنجة' : 'Choose Sponge'}
+                    </h2>
+                    <p className="font-poppins text-xs sm:text-sm text-[#8C6D62] mt-0.5">
+                      {isAr 
+                        ? 'مخبوزة بأجود أنواع الشوكولاتة البلجيكية، الفانيليا التاهيتية والفستق الفاخر.' 
+                        : 'Mastercrafted with Belgian chocolate, Tahitian vanilla, and Dubai pistachios.'}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5 mb-8">
+                  {spongeOptions.map((sp) => {
+                    const isSelected = selectedSponge === sp.id;
+                    return (
+                      <div
+                        key={sp.id}
+                        onClick={() => {
+                          setSelectedSponge(sp.id);
+                          setSelectedFilling(null);
+                        }}
+                        className={`bg-white rounded-3xl border-2 transition-all duration-300 cursor-pointer p-4 sm:p-5 flex flex-col justify-between relative group hover:-translate-y-1 hover:shadow-xl ${
+                          isSelected 
+                            ? 'border-[#C58A19] shadow-lg ring-4 ring-[#C58A19]/15 bg-[#FFFDF9]' 
+                            : 'border-[#EEDECB] hover:border-[#C58A19]/70 shadow-sm'
+                        }`}
+                      >
+                        {isSelected && (
+                          <div className="absolute top-3 right-3 rtl:right-auto rtl:left-3 w-7 h-7 rounded-full bg-[#C58A19] text-white flex items-center justify-center shadow-md z-10 animate-scaleIn">
+                            <Check className="w-4 h-4 stroke-[2.5]" />
+                          </div>
+                        )}
+
+                        <div className="w-full aspect-[4/3] sm:h-44 xl:h-48 flex items-center justify-center overflow-hidden mb-3 p-2 bg-[#FAF7F2]/60 rounded-2xl group-hover:bg-[#FAF7F2] transition-colors">
+                          <img 
+                            src={encodeURI(sp.image)} 
+                            alt={sp.name} 
+                            className="w-full h-full object-contain drop-shadow-sm group-hover:scale-108 transition-transform duration-300 select-none" 
+                          />
+                        </div>
+
+                        <div className="pt-3 border-t border-[#F2E7D5] text-center flex flex-col items-center">
+                          <h3 className="font-serif text-sm sm:text-base font-bold tracking-tight text-[#4A2116] mb-1">
+                            {sp.name}
+                          </h3>
+                          <p className="font-poppins text-xs text-[#8C6D62] leading-relaxed line-clamp-2">
+                            {sp.desc}
+                          </p>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            {/* STEP 4: Choose Gourmet Filling (16 Fillings, live preview shows Frosted Chocolate Cake from /customize/chocalte froesting/) */}
+            {currentStep === 4 && (
+              <div className="animate-fadeIn">
+                <div className="flex items-start gap-3 mb-6">
+                  <div className="w-1.5 h-10 bg-[#C58A19] rounded-full shrink-0 mt-0.5" />
+                  <div>
+                    <h2 className="font-serif text-xl sm:text-2xl font-bold text-[#4A2116]">
+                      {isAr ? 'اختر حشوة وتغليف الكيك الفاخر' : 'Choose Gourmet Filling'}
+                    </h2>
+                    <p className="font-poppins text-xs sm:text-sm text-[#8C6D62] mt-0.5">
+                      {isAr 
+                        ? 'محضرة طازجة يومياً من أجود أنواع الكريمة، الشوكولاتة والفاكهة الطبيعية.' 
+                        : 'Artisanal silky fillings handcrafted daily with Belgian chocolates, fresh fruits and organic creams.'}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-4 mb-8">
+                  {fillingOptions.map((fi) => {
+                    const isSelected = selectedFilling === fi.id;
+                    return (
+                      <div
+                        key={fi.id}
+                        onClick={() => setSelectedFilling(fi.id)}
+                        className={`bg-white rounded-2xl sm:rounded-3xl border-2 transition-all duration-300 cursor-pointer p-3 sm:p-4 flex flex-col justify-between h-full relative group hover:-translate-y-1 hover:shadow-xl ${
+                          isSelected 
+                            ? 'border-[#C58A19] shadow-lg ring-4 ring-[#C58A19]/15 bg-[#FFFDF9]' 
+                            : 'border-[#EEDECB] hover:border-[#C58A19]/70 shadow-sm'
+                        }`}
+                      >
+                        {isSelected && (
+                          <div className="absolute top-2.5 right-2.5 rtl:right-auto rtl:left-2.5 w-6 h-6 rounded-full bg-[#C58A19] text-white flex items-center justify-center shadow-md z-10 animate-scaleIn">
+                            <Check className="w-3.5 h-3.5 stroke-[2.5]" />
+                          </div>
+                        )}
+
+                        <div className="w-full h-32 sm:h-36 flex items-center justify-center overflow-hidden mb-2.5 p-2 bg-[#FAF7F2]/60 rounded-xl group-hover:bg-[#FAF7F2] transition-colors">
+                          <img 
+                            src={encodeURI(fi.image)} 
+                            alt={fi.name} 
+                            className="w-full h-full object-contain drop-shadow-sm group-hover:scale-108 transition-transform duration-300 select-none" 
+                          />
+                        </div>
+
+                        <div className="pt-2 border-t border-[#F2E7D5] w-full min-h-[44px] flex items-center justify-center">
+                          <div className={`w-full py-1.5 px-2 rounded-xl font-serif text-xs font-bold tracking-tight text-center leading-snug transition-all ${
+                            isSelected 
+                              ? 'bg-[#C58A19] text-white shadow-xs' 
+                              : 'text-[#4A2116] group-hover:text-[#C58A19]'
+                          }`}>
+                            {fi.name}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            {/* STEP 5: Cake Type / Occasion */}
+            {currentStep === 5 && (
+              <div className="animate-fadeIn">
+                <div className="flex items-start gap-3 mb-6">
+                  <div className="w-1.5 h-10 bg-[#C58A19] rounded-full shrink-0 mt-0.5" />
+                  <div>
+                    <h2 className="font-serif text-xl sm:text-2xl font-bold text-[#4A2116]">
+                      {isAr ? 'ما هو نوع الكيك والمناسبة؟' : 'What type of cake do you want?'}
+                    </h2>
+                    <p className="font-poppins text-xs sm:text-sm text-[#8C6D62] mt-0.5">
+                      {isAr ? 'اختر مناسبة الكيك الخاصة بك.' : 'Choose the occasion for your celebration cake.'}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5 mb-8">
+                  {occasions.map((occ) => {
+                    const isSelected = selectedOccasion === occ.id;
+                    return (
+                      <div
+                        key={occ.id}
+                        onClick={() => setSelectedOccasion(occ.id)}
+                        className={`bg-white rounded-3xl border-2 transition-all duration-300 cursor-pointer p-4 sm:p-5 flex flex-col justify-between relative group hover:-translate-y-1 hover:shadow-xl ${
+                          isSelected 
+                            ? 'border-[#C58A19] shadow-lg ring-4 ring-[#C58A19]/15 bg-[#FFFDF9]' 
+                            : 'border-[#EEDECB] hover:border-[#C58A19]/70 shadow-sm'
+                        }`}
+                      >
+                        {isSelected && (
+                          <div className="absolute top-3 right-3 rtl:right-auto rtl:left-3 w-7 h-7 rounded-full bg-[#C58A19] text-white flex items-center justify-center shadow-md z-10 animate-scaleIn">
+                            <Check className="w-4 h-4 stroke-[2.5]" />
+                          </div>
+                        )}
+
+                        <div className="w-full aspect-[4/3] sm:h-44 xl:h-48 flex items-center justify-center overflow-hidden mb-3 p-2 bg-[#FAF7F2]/60 rounded-2xl group-hover:bg-[#FAF7F2] transition-colors">
+                          <img 
+                            src={encodeURI(occ.image)} 
+                            alt={occ.title} 
+                            className="w-full h-full object-contain drop-shadow-sm group-hover:scale-108 transition-transform duration-300 select-none" 
+                          />
+                        </div>
+
+                        <div className="flex items-center justify-center gap-2 pt-3 border-t border-[#F2E7D5]">
+                          <span className={`shrink-0 transition-colors ${isSelected ? 'text-[#C58A19]' : 'text-[#8C6D62] group-hover:text-[#C58A19]'}`}>
+                            {occ.icon}
+                          </span>
+                          <span className="font-serif text-sm sm:text-base font-bold tracking-tight text-[#4A2116] text-center">
+                            {occ.title}
+                          </span>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            {/* STEP 6: Finishing & Toppings */}
+            {currentStep === 6 && (
+              <div className="animate-fadeIn">
+                <div className="flex items-start gap-3 mb-6">
+                  <div className="w-1.5 h-10 bg-[#C58A19] rounded-full shrink-0 mt-0.5" />
+                  <div>
+                    <h2 className="font-serif text-xl sm:text-2xl font-bold text-[#4A2116]">
+                      {isAr ? 'التصميم الخارجي واللمسات الفاخرة' : 'Finishing, Accents and Toppings'}
+                    </h2>
+                    <p className="font-poppins text-xs sm:text-sm text-[#8C6D62] mt-0.5">
+                      {isAr ? 'اختر الإضافات الملكية لتزيين كعكتك (يمكنك اختيار أكثر من خيار).' : 'Select luxury handcrafted details to crown your celebration cake.'}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+                  {toppingOptions.map((top) => {
+                    const isSelected = selectedToppings.includes(top.id);
+                    return (
+                      <div
+                        key={top.id}
+                        onClick={() => toggleTopping(top.id)}
+                        className={`bg-white rounded-2xl border p-4 sm:p-5 cursor-pointer transition-all flex flex-col justify-between hover:shadow-md relative ${
+                          isSelected
+                            ? 'border-2 border-[#C58A19] bg-[#FFFBF5] shadow-xs'
+                            : 'border-[#F0E4D2] hover:border-[#C58A19]/60'
+                        }`}
+                      >
+                        <div className="flex items-start justify-between gap-3 mb-3">
+                          <div>
+                            <h3 className="font-semibold text-sm sm:text-base text-[#4A2116] mb-1">
+                              {top.name}
+                            </h3>
+                            <p className="text-xs text-[#8C6D62] leading-relaxed">
+                              {top.desc}
+                            </p>
+                          </div>
+                          <div className={`w-5 h-5 rounded-md border shrink-0 flex items-center justify-center transition-colors ${
+                            isSelected ? 'border-[#C58A19] bg-[#C58A19] text-white' : 'border-[#D4C3A3] bg-white'
+                          }`}>
+                            {isSelected && <Check className="w-3.5 h-3.5 stroke-[2.5]" />}
+                          </div>
+                        </div>
+                        <div className="text-xs font-bold text-[#C58A19] pt-2 border-t border-[#F8F1E6]">
+                          {top.price > 0 ? `+AED ${top.price}` : (isAr ? 'مجاني' : 'Complimentary')}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            {/* STEP 7: Custom Inscription */}
+            {currentStep === 7 && (
+              <div className="animate-fadeIn">
+                <div className="flex items-start gap-3 mb-6">
+                  <div className="w-1.5 h-10 bg-[#C58A19] rounded-full shrink-0 mt-0.5" />
+                  <div>
+                    <h2 className="font-serif text-xl sm:text-2xl font-bold text-[#4A2116]">
+                      {isAr ? 'رسالة الإهداء وكتابة الكيك' : 'Custom Inscription and Message'}
+                    </h2>
+                    <p className="font-poppins text-xs sm:text-sm text-[#8C6D62] mt-0.5">
+                      {isAr ? 'أضف عبارة الاحتفال التي ستُكتب على الكيك أو على لوح السكر الفاخر.' : 'Personalize your cake with a piped message or luxury acrylic topper.'}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="space-y-5 bg-white p-5 sm:p-6 rounded-2xl border border-[#F0E4D2] shadow-xs mb-8">
+                  <div>
+                    <label className="block text-xs font-bold uppercase tracking-wider text-[#C58A19] mb-1.5">
+                      {isAr ? 'نص الرسالة على الكيك' : 'Piped Inscription Message'}
+                    </label>
+                    <input
+                      type="text"
+                      value={cakeMessage}
+                      onChange={(e) => setCakeMessage(e.target.value)}
+                      placeholder={isAr ? 'مثال: مبروك التخرج يا سارة!' : 'e.g., Happy Birthday Sarah!'}
+                      className="w-full px-4 py-3 rounded-xl border border-[#E5D7C3] focus:border-[#C58A19] focus:ring-2 focus:ring-[#C58A19]/20 outline-none text-sm transition-all"
+                    />
+                    <span className="text-[11px] text-[#8C6D62] mt-1 block">
+                      {isAr ? 'الحد الأقصى 45 حرفاً لضمان أفضل تنسيق جمالي.' : 'Up to 45 characters recommended for best aesthetic piping.'}
+                    </span>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold uppercase tracking-wider text-[#C58A19] mb-2">
+                      {isAr ? 'نمط الكتابة والتنسيق' : 'Inscription Style'}
+                    </label>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <button
+                        type="button"
+                        onClick={() => setMessageStyle('piped-gold')}
+                        className={`p-3 rounded-xl border text-left rtl:text-right cursor-pointer transition-all ${
+                          messageStyle === 'piped-gold'
+                            ? 'border-2 border-[#C58A19] bg-[#FFFBF5]'
+                            : 'border-[#F0E4D2] hover:border-[#C58A19]/50'
+                        }`}
+                      >
+                        <div className="font-semibold text-xs text-[#4A2116]">
+                          {isAr ? 'كتابة يدوية بالشوكولاتة أو الذهب' : 'Hand-Piped Chocolate / Gold Script'}
+                        </div>
+                        <div className="text-[11px] text-[#C58A19] font-medium mt-0.5">
+                          {isAr ? 'مجاني' : 'Complimentary'}
+                        </div>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => setMessageStyle('acrylic-topper')}
+                        className={`p-3 rounded-xl border text-left rtl:text-right cursor-pointer transition-all ${
+                          messageStyle === 'acrylic-topper'
+                            ? 'border-2 border-[#C58A19] bg-[#FFFBF5]'
+                            : 'border-[#F0E4D2] hover:border-[#C58A19]/50'
+                        }`}
+                      >
+                        <div className="font-semibold text-xs text-[#4A2116]">
+                          {isAr ? 'مجسم توبر أكريليك ذهبي مرآة' : 'Custom Gold Mirror Acrylic Topper'}
+                        </div>
+                        <div className="text-[11px] text-[#C58A19] font-medium mt-0.5">
+                          +AED 35
+                        </div>
+                      </button>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold uppercase tracking-wider text-[#C58A19] mb-1.5">
+                      {isAr ? 'ملاحظات وتفضيلات خاصة للشيف' : 'Special Baker Instructions or Color Theme'}
+                    </label>
+                    <textarea
+                      rows="3"
+                      value={specialInstructions}
+                      onChange={(e) => setSpecialInstructions(e.target.value)}
+                      placeholder={isAr ? 'أي حساسية طعام، درجات ألوان محددة، أو ترتيب معين...' : 'Any color palette, dietary requests, or specific delivery timing notes...'}
+                      className="w-full px-4 py-2.5 rounded-xl border border-[#E5D7C3] focus:border-[#C58A19] focus:ring-2 focus:ring-[#C58A19]/20 outline-none text-xs leading-relaxed transition-all resize-none"
                     />
                   </div>
                 </div>
+              </div>
+            )}
 
-                {/* Details Grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
-                  <div className="sm:col-span-2 p-3.5 rounded-xl bg-[#FFFBF5] border border-[#F5EBDD] flex items-center justify-between">
-                    <div>
-                      <span className="text-[#8C6D62] block mb-1 font-medium">{isAr ? 'الشكل وهيكل الطبقات' : 'Shape and Tier Structure'}</span>
-                      <span className="font-semibold text-[#4A2116] text-sm">{selectedShapeLayerItem?.title}</span>
-                      <p className="text-[11px] text-[#8C6D62] mt-0.5">{selectedShapeLayerItem?.desc}</p>
-                    </div>
-                    {selectedShapeLayerItem?.image && (
-                      <div className="w-14 h-14 rounded-xl bg-white border border-[#E5C583]/60 flex items-center justify-center shrink-0 p-1">
-                        <img src={encodeURI(selectedShapeLayerItem.image)} alt="" className="w-full h-full object-contain select-none" />
-                      </div>
-                    )}
+            {/* STEP 8: Review & Confirm */}
+            {currentStep === 8 && (
+              <div className="animate-fadeIn">
+                <div className="flex items-start gap-3 mb-6">
+                  <div className="w-1.5 h-10 bg-[#C58A19] rounded-full shrink-0 mt-0.5" />
+                  <div>
+                    <h2 className="font-serif text-xl sm:text-2xl font-bold text-[#4A2116]">
+                      {isAr ? 'مراجعة وتأكيد طلب الكيك المخصص' : 'Review Your Custom Cake'}
+                    </h2>
+                    <p className="font-poppins text-xs sm:text-sm text-[#8C6D62] mt-0.5">
+                      {isAr ? 'تأكد من اختياراتك ومكونات الكعكة قبل تأكيد الطلب.' : 'Review your customized selections and proceed to checkout or concierge WhatsApp.'}
+                    </p>
                   </div>
-
-                  <div className="p-3.5 rounded-xl bg-[#FFFBF5] border border-[#F5EBDD] flex items-center justify-between">
-                    <div>
-                      <span className="text-[#8C6D62] block mb-1 font-medium">{isAr ? 'الحجم وعدد الحصص' : 'Size and Servings'}</span>
-                      <span className="font-semibold text-[#4A2116] text-sm">{sizeOptions.find(s => s.id === selectedSize)?.title}</span>
-                      <p className="text-[11px] text-[#8C6D62] mt-0.5">{sizeOptions.find(s => s.id === selectedSize)?.servings}</p>
-                    </div>
-                    {sizeOptions.find(s => s.id === selectedSize)?.image && (
-                      <div className="w-14 h-14 rounded-xl bg-white border border-[#E5C583]/60 flex items-center justify-center shrink-0 p-1">
-                        <img src={encodeURI(sizeOptions.find(s => s.id === selectedSize)?.image)} alt="" className="w-full h-full object-contain select-none" />
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="sm:col-span-2 p-3.5 rounded-xl bg-[#FFFBF5] border border-[#F5EBDD] flex items-center justify-between">
-                    <div>
-                      <span className="text-[#8C6D62] block mb-1 font-medium">{isAr ? 'نكهة الإسفنجة' : 'Sponge Flavor'}</span>
-                      <span className="font-semibold text-[#4A2116] text-sm">{spongeOptions.find(s => s.id === selectedSponge)?.name}</span>
-                      <p className="text-[11px] text-[#8C6D62] mt-0.5">{spongeOptions.find(s => s.id === selectedSponge)?.desc}</p>
-                    </div>
-                    {spongeOptions.find(s => s.id === selectedSponge)?.image && (
-                      <div className="w-14 h-14 rounded-xl bg-white border border-[#E5C583]/60 flex items-center justify-center shrink-0 p-1">
-                        <img src={encodeURI(spongeOptions.find(s => s.id === selectedSponge)?.image)} alt="" className="w-full h-full object-contain select-none" />
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="sm:col-span-2 p-3.5 rounded-xl bg-[#FFFBF5] border border-[#F5EBDD] flex items-center justify-between">
-                    <div>
-                      <span className="text-[#8C6D62] block mb-1 font-medium">{isAr ? 'حشوة الكيك' : 'Gourmet Filling'}</span>
-                      <span className="font-semibold text-[#4A2116] text-sm">{fillingOptions.find(f => f.id === selectedFilling)?.name}</span>
-                    </div>
-                    {fillingOptions.find(f => f.id === selectedFilling)?.image && (
-                      <div className="w-14 h-14 rounded-xl bg-white border border-[#E5C583]/60 flex items-center justify-center shrink-0 p-1">
-                        <img src={encodeURI(fillingOptions.find(f => f.id === selectedFilling)?.image)} alt="" className="w-full h-full object-contain select-none" />
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="sm:col-span-2 p-3.5 rounded-xl bg-[#FFFBF5] border border-[#F5EBDD] flex items-center justify-between">
-                    <div>
-                      <span className="text-[#8C6D62] block mb-1 font-medium">{isAr ? 'نوع الكيك والمناسبة' : 'Cake Type and Occasion'}</span>
-                      <span className="font-semibold text-[#4A2116] text-sm">{occasions.find(o => o.id === selectedOccasion)?.title}</span>
-                    </div>
-                    {occasions.find(o => o.id === selectedOccasion)?.image && (
-                      <div className="w-14 h-14 rounded-xl bg-white border border-[#E5C583]/60 flex items-center justify-center shrink-0 p-1">
-                        <img src={encodeURI(occasions.find(o => o.id === selectedOccasion)?.image || '/customize/birthday.png')} alt="" className="w-full h-full object-contain select-none" />
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="sm:col-span-2 p-3.5 rounded-xl bg-[#FFFBF5] border border-[#F5EBDD]">
-                    <span className="text-[#8C6D62] block mb-1 font-medium">{isAr ? 'الإضافات والتزيين' : 'Selected Toppings and Accents'}</span>
-                    <div className="flex flex-wrap gap-1.5 mt-1">
-                      {selectedToppings.map(topId => {
-                        const item = toppingOptions.find(t => t.id === topId);
-                        return (
-                          <span key={topId} className="px-2.5 py-1 rounded-full bg-white border border-[#E5C583] text-[#4A2116] text-[11px] font-medium">
-                            {item?.name}
-                          </span>
-                        );
-                      })}
-                    </div>
-                  </div>
-
-                  {cakeMessage && (
-                    <div className="sm:col-span-2 p-3.5 rounded-xl bg-[#FFFBF5] border border-[#F5EBDD]">
-                      <span className="text-[#8C6D62] block mb-1 font-medium">{isAr ? 'رسالة الكيك المكتوبة' : 'Piped Inscription'}</span>
-                      <span className="font-serif not-italic font-bold text-[#C58A19] text-base">"{cakeMessage}"</span>
-                    </div>
-                  )}
                 </div>
 
-              </div>
+                <div className="bg-white rounded-2xl border border-[#F0E4D2] p-5 sm:p-6 shadow-sm space-y-5 mb-8">
+                  <div className="flex items-center justify-between pb-3.5 border-b border-[#F8F1E6]">
+                    <div>
+                      <h3 className="font-serif font-bold text-lg sm:text-xl text-[#4A2116]">
+                        {occasions.find(o => o.id === selectedOccasion)?.title}
+                      </h3>
+                      <p className="text-xs text-[#C58A19] font-medium mt-0.5">
+                        {isAr ? 'تصميم مخصص حسب الطلب' : 'Bespoke Custom Cake Creation'}
+                      </p>
+                    </div>
+                    <div className="w-12 h-12 rounded-xl bg-[#FFF9F0] border border-[#E5C583]/60 flex items-center justify-center shrink-0">
+                      <img 
+                        src={encodeURI(occasions.find(o => o.id === selectedOccasion)?.image || '/customize/birthday.png')} 
+                        alt="Occasion" 
+                        className="w-9 h-9 object-contain select-none"
+                      />
+                    </div>
+                  </div>
 
-              {/* Price Breakdown & Actions */}
-              <div className="lg:col-span-4 bg-white rounded-2xl border border-[#F0E4D2] p-6 shadow-sm flex flex-col justify-between">
-                <div>
-                  <h3 className="font-serif font-bold text-lg text-[#4A2116] mb-4 pb-3 border-b border-[#F8F1E6]">
-                    {isAr ? 'ملخص التكلفة' : 'Order Pricing'}
-                  </h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                    <div className="p-3 rounded-xl bg-[#FFFBF5] border border-[#F5EBDD] flex items-center justify-between">
+                      <div>
+                        <span className="text-[#8C6D62] block mb-0.5 font-medium">{isAr ? 'الشكل والطبقات' : 'Shape and Tiers'}</span>
+                        <span className="font-semibold text-[#4A2116] text-sm">{selectedShapeLayerItem?.title}</span>
+                      </div>
+                      {selectedShapeLayerItem?.image && (
+                        <div className="w-10 h-10 rounded-lg bg-white border border-[#E5C583]/60 flex items-center justify-center shrink-0 p-1">
+                          <img src={encodeURI(selectedShapeLayerItem.image)} alt="" className="w-full h-full object-contain select-none" />
+                        </div>
+                      )}
+                    </div>
 
-                  <div className="space-y-2.5 text-xs text-[#7D5B50] mb-6">
+                    <div className="p-3 rounded-xl bg-[#FFFBF5] border border-[#F5EBDD] flex items-center justify-between">
+                      <div>
+                        <span className="text-[#8C6D62] block mb-0.5 font-medium">{isAr ? 'الحجم والضيوف' : 'Size & Servings'}</span>
+                        <span className="font-semibold text-[#4A2116] text-sm">{sizeOptions.find(s => s.id === selectedSize)?.title}</span>
+                      </div>
+                      {sizeOptions.find(s => s.id === selectedSize)?.image && (
+                        <div className="w-10 h-10 rounded-lg bg-white border border-[#E5C583]/60 flex items-center justify-center shrink-0 p-1">
+                          <img src={encodeURI(sizeOptions.find(s => s.id === selectedSize)?.image)} alt="" className="w-full h-full object-contain select-none" />
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="p-3 rounded-xl bg-[#FFFBF5] border border-[#F5EBDD] flex items-center justify-between">
+                      <div>
+                        <span className="text-[#8C6D62] block mb-0.5 font-medium">{isAr ? 'نكهة الإسفنجة' : 'Sponge Flavor'}</span>
+                        <span className="font-semibold text-[#4A2116] text-sm">{spongeOptions.find(s => s.id === selectedSponge)?.name}</span>
+                      </div>
+                      {spongeOptions.find(s => s.id === selectedSponge)?.image && (
+                        <div className="w-10 h-10 rounded-lg bg-white border border-[#E5C583]/60 flex items-center justify-center shrink-0 p-1">
+                          <img src={encodeURI(spongeOptions.find(s => s.id === selectedSponge)?.image)} alt="" className="w-full h-full object-contain select-none" />
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="p-3 rounded-xl bg-[#FFFBF5] border border-[#F5EBDD] flex items-center justify-between">
+                      <div>
+                        <span className="text-[#8C6D62] block mb-0.5 font-medium">{isAr ? 'حشوة وتغليف الكيك' : 'Frosting & Filling'}</span>
+                        <span className="font-semibold text-[#4A2116] text-sm">
+                          {fillingOptions.find(f => f.id === selectedFilling)?.name || (isAr ? 'حشوة كلاسيكية فاخرة' : 'Signature Bakery Filling')}
+                        </span>
+                      </div>
+                      {fillingOptions.find(f => f.id === selectedFilling)?.image && (
+                        <div className="w-10 h-10 rounded-lg bg-white border border-[#E5C583]/60 flex items-center justify-center shrink-0 p-1">
+                          <img src={encodeURI(fillingOptions.find(f => f.id === selectedFilling)?.image)} alt="" className="w-full h-full object-contain select-none" />
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="sm:col-span-2 p-3 rounded-xl bg-[#FFFBF5] border border-[#F5EBDD]">
+                      <span className="text-[#8C6D62] block mb-1 font-medium">{isAr ? 'الإضافات والتزيين' : 'Selected Accents'}</span>
+                      <div className="flex flex-wrap gap-1.5">
+                        {selectedToppings.map(topId => {
+                          const item = toppingOptions.find(t => t.id === topId);
+                          return (
+                            <span key={topId} className="px-2.5 py-0.5 rounded-full bg-white border border-[#E5C583] text-[#4A2116] text-[11px] font-medium">
+                              {item?.name}
+                            </span>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    {cakeMessage && (
+                      <div className="sm:col-span-2 p-3 rounded-xl bg-[#FFFBF5] border border-[#F5EBDD]">
+                        <span className="text-[#8C6D62] block mb-0.5 font-medium">{isAr ? 'رسالة الكيك المكتوبة' : 'Piped Inscription'}</span>
+                        <span className="font-serif not-italic font-bold text-[#C58A19] text-base">"{cakeMessage}"</span>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="space-y-2 pt-3 border-t border-[#F8F1E6] text-xs text-[#7D5B50]">
                     <div className="flex justify-between">
                       <span>{isAr ? 'الحجم الأساسي:' : 'Base Cake Size:'}</span>
                       <span className="font-semibold text-[#4A2116]">AED {baseSizePrice}</span>
                     </div>
                     {extraLayerPrice > 0 && (
                       <div className="flex justify-between">
-                        <span>{isAr ? 'إضافة الطبقات:' : 'Tier Upgrade:'}</span>
+                        <span>{isAr ? 'ترقية الطبقات:' : 'Tier Upgrade:'}</span>
                         <span className="font-semibold text-[#4A2116]">+AED {extraLayerPrice}</span>
                       </div>
                     )}
@@ -1282,84 +1537,85 @@ export default function CustomizePage({
                         <span className="font-semibold text-[#4A2116]">+AED {acrylicTopperPrice}</span>
                       </div>
                     )}
-                    <div className="pt-3 border-t border-[#F8F1E6] flex justify-between items-baseline">
+                    <div className="pt-2.5 border-t border-[#F8F1E6] flex justify-between items-baseline">
                       <span className="font-bold text-sm text-[#4A2116]">{isAr ? 'المجموع الإجمالي:' : 'Total Price:'}</span>
                       <span className="font-poppins font-bold text-xl text-[#C58A19] tabular-nums lining-nums">AED {totalPrice}</span>
                     </div>
                   </div>
+
+                  <div className="space-y-2.5 pt-3 border-t border-[#F8F1E6]">
+                    <button
+                      onClick={handleNext}
+                      className="w-full flex items-center justify-center gap-2 bg-[#C58A19] hover:bg-[#A87413] text-white font-semibold py-3.5 px-6 rounded-full shadow-md transition-all cursor-pointer text-sm"
+                    >
+                      <ShoppingBag className="w-4 h-4" />
+                      <span>{isAr ? 'إضافة للحقيبة ومتابعة الطلب' : 'Add to Bag and Proceed'}</span>
+                    </button>
+
+                    <a
+                      href={`https://wa.me/971506063631?text=${encodeURIComponent(
+                        `Hello Lebanese Dream Bakery! I would like to order a custom cake:
+Occasion: ${occasions.find(o => o.id === selectedOccasion)?.title}
+Shape and Layers: ${selectedShapeLayerItem?.title}
+Size: ${sizeOptions.find(s => s.id === selectedSize)?.title}
+Sponge: ${spongeOptions.find(s => s.id === selectedSponge)?.name}
+Filling: ${fillingOptions.find(f => f.id === selectedFilling)?.name || 'Signature Bakery Filling'}
+Message: "${cakeMessage}"
+Total: AED ${totalPrice}`
+                      )}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#1EBE5D] text-white font-semibold py-2.5 px-6 rounded-full shadow-xs transition-all text-xs"
+                    >
+                      <MessageCircle className="w-4 h-4" />
+                      <span>{isAr ? 'تأكيد مباشر عبر الواتساب' : 'Direct WhatsApp Order (+971 506063631)'}</span>
+                    </a>
+                  </div>
                 </div>
-
-                <div className="space-y-3 pt-4 border-t border-[#F8F1E6]">
-                  <button
-                    onClick={handleNext}
-                    className="w-full flex items-center justify-center gap-2 bg-[#C58A19] hover:bg-[#A87413] text-white font-semibold py-3.5 px-6 rounded-full shadow-md transition-all cursor-pointer text-sm"
-                  >
-                    <ShoppingBag className="w-4 h-4" />
-                    <span>{isAr ? 'إضافة للحقيبة ومتابعة الطلب' : 'Add to Bag and Proceed'}</span>
-                  </button>
-
-                  <a
-                    href={`https://wa.me/971506063631?text=${encodeURIComponent(
-                      `Hello Lebanese Dream Bakery! I would like to order a custom cake:\nOccasion: ${occasions.find(o => o.id === selectedOccasion)?.title}\nShape and Layers: ${selectedShapeLayerItem?.title}\nSize: ${sizeOptions.find(s => s.id === selectedSize)?.title}\nSponge: ${spongeOptions.find(s => s.id === selectedSponge)?.name}\nFilling: ${fillingOptions.find(f => f.id === selectedFilling)?.name}\nMessage: "${cakeMessage}"\nTotal: AED ${totalPrice}`
-                    )}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-full flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#1EBE5D] text-white font-semibold py-3 px-6 rounded-full shadow-xs transition-all text-xs"
-                  >
-                    <MessageCircle className="w-4 h-4" />
-                    <span>{isAr ? 'تأكيد مباشر عبر الواتساب' : 'Direct WhatsApp Order (+971 506063631)'}</span>
-                  </a>
-                </div>
-
               </div>
+            )}
 
+            {/* Bottom Action Footer for Option Pane */}
+            <div className="pt-4 border-t border-[#E8D6B5] flex items-center justify-between">
+              {currentStep > 1 ? (
+                <button
+                  type="button"
+                  onClick={handlePrev}
+                  className="flex items-center gap-2 px-5 py-2.5 rounded-full border border-[#C58A19] text-[#C58A19] hover:bg-[#FFF9F0] text-xs sm:text-sm font-semibold transition-colors cursor-pointer"
+                >
+                  <ArrowLeft className="w-4 h-4 rtl:rotate-180" />
+                  <span>{isAr ? 'السابق' : 'Previous Step'}</span>
+                </button>
+              ) : (
+                <div />
+              )}
+
+              <div className="flex items-center gap-4">
+                <div className="text-right rtl:text-left hidden sm:block">
+                  <span className="text-[10px] uppercase font-bold text-[#8C6D62] block">
+                    {isAr ? 'السعر التقديري:' : 'Estimated Price:'}
+                  </span>
+                  <span className="font-poppins font-bold text-base text-[#C58A19] tabular-nums lining-nums">
+                    AED {totalPrice}
+                  </span>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={handleNext}
+                  className="flex items-center gap-2 bg-[#C58A19] hover:bg-[#A87413] text-white font-poppins font-semibold text-xs sm:text-sm px-6 py-2.5 sm:py-3 rounded-full shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer group"
+                >
+                  <span>{getNextStepLabel()}</span>
+                  <ArrowRight className="w-4 h-4 rtl:rotate-180 group-hover:translate-x-1 rtl:group-hover:-translate-x-1 transition-transform" />
+                </button>
+              </div>
             </div>
-          </div>
-        )}
 
-        {/* Bottom Action Footer (Back on left, Next Button on right) */}
-        <div className="mt-8 pt-6 border-t border-[#E8D6B5] flex items-center justify-between">
-          
-          {/* Back Button */}
-          {currentStep > 1 ? (
-            <button
-              type="button"
-              onClick={handlePrev}
-              className="flex items-center gap-2 px-5 sm:px-6 py-2.5 sm:py-3 rounded-full border border-[#C58A19] text-[#C58A19] hover:bg-[#FFF9F0] text-xs sm:text-sm font-semibold transition-colors cursor-pointer"
-            >
-              <ArrowLeft className="w-4 h-4 rtl:rotate-180" />
-              <span>{isAr ? 'السابق' : 'Previous Step'}</span>
-            </button>
-          ) : (
-            <div />
-          )}
-
-          {/* Right Group: Estimated Price + Next Action Button */}
-          <div className="flex items-center gap-4">
-            <div className="text-right rtl:text-left hidden sm:block">
-              <span className="text-[11px] text-[#8C6D62] block font-medium">
-                {isAr ? 'السعر التقديري:' : 'Estimated Price:'}
-              </span>
-              <span className="font-poppins font-bold text-base text-[#C58A19] tabular-nums lining-nums">
-                AED {totalPrice}
-              </span>
-            </div>
-
-            {/* Next Step Button (Golden Pill Button Matching Reference Image) */}
-            <button
-              type="button"
-              onClick={handleNext}
-              className="flex items-center gap-2.5 bg-[#C58A19] hover:bg-[#A87413] text-white font-poppins font-semibold text-xs sm:text-sm px-6 sm:px-8 py-3 rounded-full shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer group"
-            >
-              <span>{getNextStepLabel()}</span>
-              <ArrowRight className="w-4 h-4 rtl:rotate-180 group-hover:translate-x-1 rtl:group-hover:-translate-x-1 transition-transform" />
-            </button>
           </div>
 
         </div>
 
       </div>
-
     </div>
   );
 }
