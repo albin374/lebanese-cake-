@@ -508,13 +508,86 @@ export default function CustomizePage({
   };
 
   const isChocolateSponge = selectedSponge === 'glossy-chocolate-4layer';
-  const isPineappleFilling = selectedFilling === 'pineapple-cream-filling';
+
+  // Frosting Layer Map for Other Sponge Bases (public/customize/froesting layer/ & /pineapply foresting layer.png)
+  const otherBaseFrostingLayerMap = {
+    'pineapple-cream-filling': '/pineapply foresting layer.png',
+    'lotus-cream-filling': '/customize/froesting layer/lotus forsting layer.png',
+    'red-cherry-cream-filling': '/customize/froesting layer/Red cherry froesting.png',
+    'peach-cream-filling': '/customize/froesting layer/peach forestng layer.png',
+    'mocca-cream-filling': '/customize/froesting layer/mocha froesting layer .png',
+    'lemon-cream-filling': '/customize/froesting layer/Lemon froesting.png',
+    'cheese-cream': '/customize/froesting layer/cheese froesting.png',
+    'toffee-caramel-filling': '/customize/froesting layer/toffie carmel froesting.png',
+    'oreos-and-cream-filling': '/customize/froesting layer/oreo froesting.png',
+    'nutella-filling': '/customize/froesting layer/nutella froesting layer.png',
+    'mango-filling': '/customize/froesting layer/Mango foresting .png',
+    'caramelized-hazelnut-praline-filling': '/customize/froesting layer/hazelenut froesting layer.png',
+    'chocolate-ganache-filling': '/customize/froesting layer/Ganache froesting layer.png',
+    'blueberry-filling': '/customize/froesting layer/Blueberry Frosting layer.png',
+    'raspberry-filling': '/customize/froesting layer/rasbery Frosting layer.png',
+    'fresh-whipped-cream-plain': '/customize/froesting layer/white  Frosting layer.png'
+  };
+
+  const selectedFrostingLayer = selectedFilling ? otherBaseFrostingLayerMap[selectedFilling] : null;
+
+  // Dimensions and bounds of each sponge base (in 1774 x 887 canvas)
+  const spongeMeta = {
+    'classic-red-velvet': { width: 1589, center: 886.5, rim: 815 },
+    'colorful-pastel-vanilla': { width: 1476, center: 884.0, rim: 820 },
+    'vanilla-flower-beans': { width: 1550, center: 874.0, rim: 805 },
+    'layered-carrot-walnut': { width: 1560, center: 882.0, rim: 810 },
+    'marbled-chocolate-chip': { width: 1503, center: 884.5, rim: 815 },
+    'rainbow-sprinkle': { width: 1561, center: 872.5, rim: 815 },
+    'blue-white-velvet': { width: 1540, center: 880.0, rim: 815 },
+    'vanilla-choco-duo': { width: 1552, center: 887.0, rim: 815 },
+  };
+
+  // Dimensions and bounds of each frosting swirl layer (in 1774 x 887 canvas)
+  const frostingLayerMeta = {
+    'pineapple-cream-filling': { swirlWidth: 1672, centerBottom: 842 },
+    'lotus-cream-filling': { swirlWidth: 1744, centerBottom: 886 },
+    'red-cherry-cream-filling': { swirlWidth: 1709, centerBottom: 867 },
+    'peach-cream-filling': { swirlWidth: 1704, centerBottom: 857 },
+    'mocca-cream-filling': { swirlWidth: 1744, centerBottom: 854 },
+    'lemon-cream-filling': { swirlWidth: 1755, centerBottom: 872 },
+    'cheese-cream': { swirlWidth: 1720, centerBottom: 875 },
+    'toffee-caramel-filling': { swirlWidth: 1750, centerBottom: 878 },
+    'oreos-and-cream-filling': { swirlWidth: 1737, centerBottom: 874 },
+    'nutella-filling': { swirlWidth: 1718, centerBottom: 857 },
+    'mango-filling': { swirlWidth: 1678, centerBottom: 874 },
+    'caramelized-hazelnut-praline-filling': { swirlWidth: 1736, centerBottom: 871 },
+    'chocolate-ganache-filling': { swirlWidth: 1683, centerBottom: 856 },
+    'blueberry-filling': { swirlWidth: 1682, centerBottom: 865 },
+    'raspberry-filling': { swirlWidth: 1719, centerBottom: 875 },
+    'fresh-whipped-cream-plain': { swirlWidth: 1659, centerBottom: 850 },
+  };
+
+  // Dynamically compute positioning and scaling for any sponge + frosting combination
+  // so the swirl fits flush without overhanging the sides or leaving gaps
+  const getFrostingLayerStyle = () => {
+    const sp = spongeMeta[selectedSponge] || { width: 1550, center: 884, rim: 814 };
+    const fr = (selectedFilling && frostingLayerMeta[selectedFilling]) || { swirlWidth: 1700, centerBottom: 865 };
+
+    const s = sp.width / fr.swirlWidth;
+    const renderedW = 1774 * s;
+    const renderedH = 887 * s;
+    const leftPx = sp.center - (renderedW / 2);
+    const topPx = Math.max(0, sp.rim - (fr.centerBottom * s) + 6);
+
+    return {
+      top: `${((topPx / 1112) * 100).toFixed(2)}%`,
+      left: `${((leftPx / 1774) * 100).toFixed(2)}%`,
+      width: `${((renderedW / 1774) * 100).toFixed(2)}%`,
+      height: `${((renderedH / 1112) * 100).toFixed(2)}%`,
+    };
+  };
 
   // Should we show chocolate 2-tier assembled cake? (Step 5+ and Chocolate Sponge)
   const showChocolateTopLayer = currentStep >= 5 && isChocolateSponge;
 
-  // Should we show pineapple frosting layer placed on top of other bases? (Step >= 4, Not Chocolate, Pineapple selected)
-  const showPineappleLayerOnOtherBase = currentStep >= 4 && !isChocolateSponge && isPineappleFilling;
+  // Should we show gourmet frosting layer placed on top of other bases? (Step >= 4, Not Chocolate, Any Filling selected)
+  const showFrostingLayerOnOtherBase = currentStep >= 4 && !isChocolateSponge && !!selectedFrostingLayer;
 
   // Determine current preview data based on step and selections
   const getPreviewData = () => {
@@ -551,8 +624,8 @@ export default function CustomizePage({
       let previewImg = spongeBaseMap[selectedSponge];
       if (isChocolateSponge && fi) {
         previewImg = fillingFrostingMap[selectedFilling] || spongeBaseMap[selectedSponge];
-      } else if (!isChocolateSponge && isPineappleFilling) {
-        previewImg = '/pineapply foresting layer.png';
+      } else if (!isChocolateSponge && selectedFrostingLayer) {
+        previewImg = selectedFrostingLayer;
       }
 
       return {
@@ -567,8 +640,8 @@ export default function CustomizePage({
       let previewImg = spongeBaseMap[selectedSponge];
       if (isChocolateSponge) {
         previewImg = (selectedFilling && fillingFrostingMap[selectedFilling]) || spongeBaseMap[selectedSponge];
-      } else if (isPineappleFilling) {
-        previewImg = '/pineapply foresting layer.png';
+      } else if (selectedFrostingLayer) {
+        previewImg = selectedFrostingLayer;
       }
 
       return {
@@ -577,15 +650,15 @@ export default function CustomizePage({
         title: `${occ.title}`,
         badge: isChocolateSponge
           ? (isAr ? 'الطبقة العلوية مثبتة' : 'Top Layer Placed')
-          : (isPineappleFilling ? (isAr ? 'حشوة الأناناس مثبتة' : 'Pineapple Layer Assembled') : (isAr ? 'تصميم مخصص' : 'Bespoke Theme'))
+          : (selectedFrostingLayer ? (isAr ? 'حشوة الكريمة مثبتة' : 'Gourmet Layer Assembled') : (isAr ? 'تصميم مخصص' : 'Bespoke Theme'))
       };
     }
     if (currentStep === 6) {
       let previewImg = spongeBaseMap[selectedSponge];
       if (isChocolateSponge) {
         previewImg = (selectedFilling && fillingFrostingMap[selectedFilling]) || spongeBaseMap[selectedSponge];
-      } else if (isPineappleFilling) {
-        previewImg = '/pineapply foresting layer.png';
+      } else if (selectedFrostingLayer) {
+        previewImg = selectedFrostingLayer;
       }
 
       return {
@@ -599,8 +672,8 @@ export default function CustomizePage({
       let previewImg = spongeBaseMap[selectedSponge];
       if (isChocolateSponge) {
         previewImg = (selectedFilling && fillingFrostingMap[selectedFilling]) || spongeBaseMap[selectedSponge];
-      } else if (isPineappleFilling) {
-        previewImg = '/pineapply foresting layer.png';
+      } else if (selectedFrostingLayer) {
+        previewImg = selectedFrostingLayer;
       }
 
       return {
@@ -614,8 +687,8 @@ export default function CustomizePage({
     let reviewImg = spongeBaseMap[selectedSponge];
     if (isChocolateSponge) {
       reviewImg = (selectedFilling && fillingFrostingMap[selectedFilling]) || spongeBaseMap[selectedSponge];
-    } else if (isPineappleFilling) {
-      reviewImg = '/pineapply foresting layer.png';
+    } else if (selectedFrostingLayer) {
+      reviewImg = selectedFrostingLayer;
     }
 
     return {
@@ -824,8 +897,8 @@ export default function CustomizePage({
                       }}
                     />
                   </div>
-                ) : showPineappleLayerOnOtherBase ? (
-                  /* 2. Other Sponge Bases: When Pineapple cream filling chosen, place /pineapply foresting layer.png correctly on the chosen base */
+                ) : showFrostingLayerOnOtherBase ? (
+                  /* 2. Other Sponge Bases: When any Gourmet filling chosen, place matching frosting layer correctly on the chosen base */
                   <div 
                     className="relative w-full h-full max-h-full max-w-full flex items-center justify-center group-hover:scale-105 transition-transform duration-500 z-10 animate-fadeIn"
                     style={{ aspectRatio: '1774 / 1112' }}
@@ -841,17 +914,12 @@ export default function CustomizePage({
                       }}
                     />
 
-                    {/* Pineapple Cream Filling Layer positioned flush on top of the chosen base without gap */}
+                    {/* Gourmet Filling Layer positioned flush on top of the chosen base without gap or overhang */}
                     <img
-                      src="/pineapply foresting layer.png"
-                      alt="Pineapple Cream Filling Layer"
+                      src={encodeURI(selectedFrostingLayer)}
+                      alt="Gourmet Filling Layer"
                       className="absolute object-contain drop-shadow-[0_14px_18px_rgba(74,33,22,0.25)] select-none z-20 pointer-events-none animate-fadeIn"
-                      style={{
-                        top: '3.6%',
-                        left: '2.5%',
-                        width: '95%',
-                        height: '74%'
-                      }}
+                      style={getFrostingLayerStyle()}
                     />
                   </div>
                 ) : (
