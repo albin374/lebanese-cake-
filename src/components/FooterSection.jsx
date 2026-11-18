@@ -156,7 +156,7 @@ export default function FooterSection({
             </div>
           </div>
 
-          {/* Column 4: The House of Cakes Dubai (2 Columns on LG) + Cupcake Art */}
+          {/* Column 4: Lebanese Dream Bakery (2 Columns on LG) + Cupcake Art */}
           <div className="lg:col-span-2 lg:pl-8 lg:rtl:pl-0 lg:rtl:pr-8 flex flex-col justify-between relative min-h-[180px]">
             <div>
               <h3 className="font-serif font-bold text-base sm:text-[17px] text-[#4A2116] tracking-tight">

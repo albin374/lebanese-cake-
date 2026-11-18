@@ -377,7 +377,7 @@ export const translations = {
     footerCustomizationTitle: "Customization Services",
     footerDesignYourCake: "Design your own cake",
     footerConsultation: "Consultation and tasting",
-    footerCompanyTitle: "The House of Cakes Dubai",
+    footerCompanyTitle: "Lebanese Dream Bakery",
     footerCompanyLinks: [
       { text: "About us", id: "about" },
       { text: "Sales policy", id: "sales" },
