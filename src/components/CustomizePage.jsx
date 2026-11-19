@@ -5,12 +5,11 @@ import {
   ArrowLeft, 
   Cake, 
   Heart, 
-  GraduationCap, 
   Sparkles, 
   Scale, 
   Users, 
   UtensilsCrossed, 
-  Layers,
+  Layers, 
   ShoppingBag, 
   MessageCircle, 
   HelpCircle
@@ -37,7 +36,10 @@ export default function CustomizePage({
   const [selectedSize, setSelectedSize] = useState('2kg');
   const [selectedSponge, setSelectedSponge] = useState('vanilla-flower-beans');
   const [selectedFilling, setSelectedFilling] = useState(null);
-  const [selectedToppings, setSelectedToppings] = useState(['gold-leaf', 'candles']);
+  const [selectedToppings, setSelectedToppings] = useState([]);
+  const [selectedBirthdayItems, setSelectedBirthdayItems] = useState([]);
+  const [selectedSuperheroDesign, setSelectedSuperheroDesign] = useState(null);
+  const [selectedBoysDesign, setSelectedBoysDesign] = useState(null);
   const [cakeMessage, setCakeMessage] = useState('Happy Birthday!');
   const [messageStyle, setMessageStyle] = useState('piped-gold');
   const [specialInstructions, setSpecialInstructions] = useState('');
@@ -73,23 +75,6 @@ export default function CustomizePage({
           <circle cx="17" cy="4" r="0.5" fill="currentColor" />
         </svg>
       )
-    },
-    {
-      id: 'wedding',
-      title: isAr ? 'كيك الأعراس' : 'Wedding Cake',
-      image: '/customize/Elegant Ivory Wedding Cake Cutout.png',
-      icon: (
-        <svg className="w-5 h-5 stroke-current" viewBox="0 0 24 24" fill="none" strokeWidth="1.8">
-          <circle cx="9" cy="12" r="5" />
-          <circle cx="15" cy="12" r="5" />
-        </svg>
-      )
-    },
-    {
-      id: 'graduation',
-      title: isAr ? 'كيك التخرج' : 'Graduation Cake',
-      image: '/customize/graduation.png',
-      icon: <GraduationCap className="w-5 h-5" />
     },
     {
       id: 'superhero',
@@ -452,6 +437,275 @@ export default function CustomizePage({
     );
   };
 
+  // Birthday Decorations & Toppings (from public/customize/birthday)
+  const birthdayToppingOptions = [
+    {
+      id: 'happy-birthday-topper',
+      name: isAr ? 'توبر أكريليك "عيد ميلاد سعيد"' : 'Happy Birthday Acrylic Topper',
+      category: isAr ? 'توبر واحتفال' : 'Topper & Celebration',
+      desc: isAr ? 'مجسم أكريليك ذهبي ملكي فاخر يثبت في أعلى الكيك' : 'Luxury gold mirror acrylic celebration topper standing upright',
+      image: '/customize/birthday/happy-birthday-topper.png',
+      price: 25,
+      type: 'topper',
+      defaultPos: { x: 50, y: 17 },
+      defaultWidthPct: 28,
+      anchor: '50% 95%',
+      shadow: 'drop-shadow(0 12px 16px rgba(74, 33, 22, 0.35))'
+    },
+    {
+      id: 'gold-one-candle',
+      name: isAr ? 'شمعة رقم 1 ذهبية براقة' : 'Glittering Gold Number Candle (#1)',
+      category: isAr ? 'شموع عيد الميلاد' : 'Birthday Candle',
+      desc: isAr ? 'شمعة احتفال ذهبية لامعة بتفاصيل ثلاثية الأبعاد' : 'Sparkling metallic gold 3D celebration milestone candle',
+      image: '/customize/birthday/Glittering Gold Number One Candle.png',
+      price: 15,
+      type: 'candle',
+      defaultPos: { x: 42, y: 19 },
+      defaultWidthPct: 9.5,
+      anchor: '50% 98%',
+      shadow: 'drop-shadow(0 10px 14px rgba(74, 33, 22, 0.3))'
+    },
+    {
+      id: 'pink-spiral-candle',
+      name: isAr ? 'شمعة حلزونية وردية مضيئة' : 'Lit Pink Spiral Birthday Candle',
+      category: isAr ? 'شموع عيد الميلاد' : 'Birthday Candle',
+      desc: isAr ? 'شمعة باستيل حلزونية أنيقة بلهب دافئ ومضيء' : 'Artisanal pastel spiral candle with a warm glowing flame',
+      image: '/customize/birthday/Lit Pink Spiral Birthday Candle PNG.png',
+      price: 10,
+      type: 'candle',
+      defaultPos: { x: 58, y: 19 },
+      defaultWidthPct: 3.5,
+      anchor: '50% 98%',
+      shadow: 'drop-shadow(0 8px 12px rgba(74, 33, 22, 0.3))'
+    },
+    {
+      id: 'fresh-strawberries',
+      name: isAr ? 'توت وفراولة حمراء طازجة' : 'Fresh Ruby Strawberry Trio',
+      category: isAr ? 'فواكه طازجة' : 'Fresh Fruits',
+      desc: isAr ? 'حبات فراولة نضرة ملمعة مع أوراق نعناع طبيعية' : 'Hand-selected farm-fresh glazed strawberries with wild mint leaves',
+      image: '/customize/birthday/Fresh Strawberry Trio Cutout.png',
+      price: 20,
+      type: 'accent',
+      defaultPos: { x: 50, y: 23 },
+      defaultWidthPct: 24,
+      anchor: '50% 85%',
+      shadow: 'drop-shadow(0 10px 14px rgba(74, 33, 22, 0.28))'
+    },
+    {
+      id: 'rainbow-sprinkles',
+      name: isAr ? 'حبيبات سكاكر رينبو ملونة' : 'Vibrant Rainbow Cake Sprinkles',
+      category: isAr ? 'حبيبات وسكاكر' : 'Sprinkles & Confetti',
+      desc: isAr ? 'حبيبات سكر ملونة مبهجة منثورة على سطح الكيك' : 'Festive multi-color crunchy sugar confetti scattered on top',
+      image: '/customize/birthday/Vibrant Rainbow Cake Sprinkles.png',
+      price: 15,
+      type: 'scatter',
+      defaultPos: { x: 50, y: 20 },
+      defaultWidthPct: 44,
+      anchor: '50% 50%',
+      shadow: 'drop-shadow(0 6px 10px rgba(74, 33, 22, 0.2))'
+    },
+    {
+      id: 'chocolate-chips',
+      name: isAr ? 'حبيبات شوكولاتة بلجيكية فاخرة' : 'Glossy Belgian Chocolate Chips',
+      category: isAr ? 'شوكولاتة فاخرة' : 'Fine Chocolates',
+      desc: isAr ? 'حبيبات شوكولاتة داكنة منثورة بأسلوب شيف حلويات' : 'Artisanal mound of rich Belgian chocolate drops',
+      image: '/customize/birthday/Glossy Chocolate Chip Mound.png',
+      price: 15,
+      type: 'scatter',
+      defaultPos: { x: 50, y: 20 },
+      defaultWidthPct: 38,
+      anchor: '50% 50%',
+      shadow: 'drop-shadow(0 8px 12px rgba(74, 33, 22, 0.25))'
+    },
+    {
+      id: 'red-candy-gems',
+      name: isAr ? 'حبات حلوى كريستالية حمراء' : 'Glossy Red Candy Ruby Gems',
+      category: isAr ? 'جواهر سكرية' : 'Sugar Gems',
+      desc: isAr ? 'حبات سكر كريستالية براقة كالزمرد والياقوت' : 'Glossy hand-crafted ruby candy drops glowing on the cake',
+      image: '/customize/birthday/Glossy Red Candy Gem.png',
+      price: 15,
+      type: 'accent',
+      defaultPos: { x: 50, y: 23 },
+      defaultWidthPct: 22,
+      anchor: '50% 85%',
+      shadow: 'drop-shadow(0 8px 12px rgba(74, 33, 22, 0.25))'
+    }
+  ];
+
+  const toggleBirthdayItem = (id) => {
+    setSelectedBirthdayItems(prev => 
+      prev.includes(id) ? prev.filter(item => item !== id) : [...prev, id]
+    );
+  };
+
+  // Superhero Cake Designs (from public/customize/superhero cakes)
+  const superheroDesignOptions = [
+    {
+      id: 'spiderman-2tier-city',
+      name: isAr ? 'كيك سبايدرمان من طبقتين وأبراج المدينة' : 'Spider-Man 2-Tier Cityscape Cake',
+      category: 'Spider-Man',
+      hero: isAr ? 'سبايدرمان المزدوج' : 'Dual Spider-Man',
+      desc: isAr ? 'كيك من طبقتين بمجسم سبايدرمان وبدلة السيمبيوت السوداء مع تفاصيل أبراج المدينة' : '2-tier spectacle with Spider-Man & Symbiote figures overlooking 3D city buildings',
+      image: '/customize/superhero cakes/images.jpg'
+    },
+    {
+      id: 'superman-classic-emblem',
+      name: isAr ? 'كيك سوبرمان الكلاسيكي بدرع القوة' : 'Superman Classic Shield Emblem Cake',
+      category: 'Superman',
+      hero: isAr ? 'سوبرمان' : 'Superman',
+      desc: isAr ? 'كيك أزرق ملكي ببريق النجوم وشعار درع سوبرمان الأيقوني ومجسم البطل الطائر' : 'Royal blue sky cake with yellow stars, iconic S-shield emblem and flying Superman topper',
+      image: '/customize/superhero cakes/images (1).jpg'
+    },
+    {
+      id: 'spiderman-red-web',
+      name: isAr ? 'كيك شبكة سبايدرمان الحمراء مع العنكبوت' : 'Spider-Man Red Web & Spider Emblem Cake',
+      category: 'Spider-Man',
+      hero: isAr ? 'سبايدرمان' : 'Spider-Man',
+      desc: isAr ? 'كيك أحمر احتفالي بنقش شبكة العنكبوت ثلاثية الأبعاد وشعار العنكبوت والكرات الذهبية' : 'Vibrant red cake with hand-piped web textures, spider crest, and luxury milestone balls',
+      image: '/customize/superhero cakes/images (2).jpg'
+    },
+    {
+      id: 'spiderman-pastel-2tier',
+      name: isAr ? 'كيك سبايدرمان من طبقتين مع كرات الاحتفال' : 'Two-Tier Spider-Man Sky Balloon Cake',
+      category: 'Spider-Man',
+      hero: isAr ? 'سبايدرمان' : 'Spider-Man',
+      desc: isAr ? 'كيك من طبقتين باللون السماوي الهادئ وشخصيات سبايدرمان وكرات ذهبية وزرقاء' : 'Two tiers in sky blue with action Spiderman graphics, web art, and gold-blue baubles',
+      image: '/customize/superhero cakes/images (3).jpg'
+    },
+    {
+      id: 'batman-gotham-city',
+      name: isAr ? 'كيك باتمان مدينة غوثام والشعار الذهبي' : 'Batman Gotham City Silhouette Cake',
+      category: 'Batman',
+      hero: isAr ? 'باتمان' : 'Batman',
+      desc: isAr ? 'مجسم باتمان اللطيف مع خلفية مباني غوثام الليلية وشعار الخفاش الأصفر المميز' : 'Charming Batman figure perched above sleek black-yellow Gotham skyline with bat signal',
+      image: '/customize/superhero cakes/images (4).jpg'
+    },
+    {
+      id: 'all-heroes-avengers-justice',
+      name: isAr ? 'كيك تحالف الأبطال الخارقين الشامل' : 'All-Heroes Champions Multi-Hero Cake',
+      category: 'Multi-Hero',
+      hero: isAr ? 'الأفنجرز وجستس ليغ' : 'Avengers & Justice',
+      desc: isAr ? 'يجمع درع سوبرمان، قناع باتمان، قبضة هالك، مطرقة ثور، شارة فلاش ودرع كابتن أمريكا' : 'Features Superman crest, Batman cowl, Hulk fist, Thor hammer, Flash bolt & Cap shield',
+      image: '/customize/superhero cakes/images (5).jpg'
+    },
+    {
+      id: 'kitkat-gravity-superhero',
+      name: isAr ? 'كيك كيت كات وشلال إم آند إمز الخارق' : 'KitKat & M&M Gravity-Defying Superhero Cake',
+      category: 'Avengers',
+      hero: isAr ? 'مارفل أفنجرز' : 'Marvel Avengers',
+      desc: isAr ? 'سور كيت كات مع شلال شوكولاتة إم آند إمز الملونة بحراسة سبايدرمان وآيرون مان وكابتن أمريكا' : 'KitKat perimeter spilling with vibrant M&Ms, manned by Spider-Man, Iron Man & Captain America',
+      image: '/customize/superhero cakes/images (6).jpg'
+    },
+    {
+      id: 'tri-hero-buttercream',
+      name: isAr ? 'كيك الكريمة الثلاثي (باتمان، سوبرمان وسبايدرمان)' : 'Tri-Hero Buttercream Rosette Crest Cake',
+      category: 'Tri-Hero',
+      hero: isAr ? 'ثلاثي الأبطال' : 'Trinity Heroes',
+      desc: isAr ? 'تزيين كريمة الزبدة الفاخرة المقسمة بدقة لرموز باتمان، سوبرمان وسبايدرمان' : 'Artisanal piped rosettes dividing the cake into Batman, Superman, and Spider-Man crests',
+      image: '/customize/superhero cakes/images (7).jpg'
+    },
+    {
+      id: 'hulk-smash-cracked',
+      name: isAr ? 'كيك هالك الخارق محطم الجدران' : 'The Incredible Hulk Wall-Smash Cake',
+      category: 'The Hulk',
+      hero: isAr ? 'هالك العملاق' : 'The Hulk',
+      desc: isAr ? 'تأثير جدار خرساني محطم بتفاصيل حجرية واقعية يخرج منه العملاق هالك الأخضر' : 'Dramatic 3D rubble concrete wall-smash effect with the powerful Green Hulk bursting through',
+      image: '/customize/superhero cakes/images (8).jpg'
+    },
+    {
+      id: 'spiderman-crimson-spider',
+      name: isAr ? 'كيك العنكبوت القرمزي الكلاسيكي' : 'Crimson Spider-Man Round Web Cake',
+      category: 'Spider-Man',
+      hero: isAr ? 'سبايدرمان' : 'Spider-Man',
+      desc: isAr ? 'كيك أحمر مخملي بنقش شبكة عنكبوت سوداء دقيقة وشعار العنكبوت الأبيض البارز' : 'Vivid red cake accented with intricate black spider webbing and bold white 3D spider crest',
+      image: '/customize/superhero cakes/images (9).jpg'
+    },
+    {
+      id: 'hulk-spiderman-comic',
+      name: isAr ? 'كيك كوميكس سبايدرمان وهالك المزدوج' : 'Half & Half Spider-Man & Hulk Comic Cake',
+      category: 'Duo Heroes',
+      hero: isAr ? 'سبايدرمان وهالك' : 'Spidey & Hulk',
+      desc: isAr ? 'نصف شبكة سبايدرمان ونصف جدار هالك الأخضر مع ملصقات الأكشن والكوميكس الحماسية' : 'Split comic-book style: half red web Spider-Man and half green brick Hulk with action POW! tags',
+      image: '/customize/superhero cakes/images (10).jpg'
+    }
+  ];
+
+  const selectedSuperheroItem = selectedSuperheroDesign
+    ? (superheroDesignOptions.find(d => d.id === selectedSuperheroDesign) || null)
+    : null;
+
+  // 8 Boys Cake Designs (from public/customize/boys cake)
+  const boysDesignOptions = [
+    {
+      id: 'messi-world-cup',
+      name: isAr ? 'كيك الأسطورة ميسي وبطولة العالم' : 'Messi World Champion Football Cake',
+      category: isAr ? 'رياضة وكرة قدم' : 'Football & Sports',
+      hero: isAr ? 'كرة قدم - ميسي' : 'Soccer Legend',
+      desc: isAr ? 'تصميم كرة قدم سماوي فاخر مع مجسم ميسي بقميص الأرجنتين رقم 10 يحتفل بالنصر مع كرات قدم صغيرة ونجوم ذهبية' : 'Celebration cake with hexagonal football pattern, featuring 3D Messi #10 celebrating victory, mini soccer balls, and golden stars',
+      image: '/customize/boys cake/images.jpg'
+    },
+    {
+      id: 'supercar-grand-prix',
+      name: isAr ? 'كيك سباق السوبركار ثلاثي الطبقات' : '3-Tier Supercar Grand Prix Racing Cake',
+      category: isAr ? 'سباقات وسيارات خارقة' : 'Supercars & Racing',
+      hero: isAr ? 'سيارات خارقة' : 'Supercars',
+      desc: isAr ? 'كيك مذهل 3 طبقات يضم سيارات فيراري ولامبورغيني وبورش رياضية مع مسار سباق شطرنجي وكأس البطولة رقم 1' : 'Epic 3-tier grand prix cake with handcrafted Ferrari, Lamborghini & Porsche supercars, checkered flag track, and #1 champion trophy',
+      image: '/customize/boys cake/images (1).jpg'
+    },
+    {
+      id: 'blaze-monster-truck',
+      name: isAr ? 'كيك شاحنة مونستر تراك والأبطال' : 'Blaze Monster Truck & Drip Cake',
+      category: isAr ? 'شاحنات وسيارات' : 'Monster Trucks',
+      hero: isAr ? 'شاحنة مونستر' : 'Monster Truck',
+      desc: isAr ? 'شاحنة مونستر تراك حمراء ثلاثية الأبعاد مع صوص أصفر متساقط وقاعدة سباق شطرنجية وحبوب شوكولاتة ملونة' : 'Vibrant blue cake topped with a sculpted 3D red monster truck, yellow candy drip, colorful M&M sprinkles, and checkered flag border',
+      image: '/customize/boys cake/Monster-Truck-Cake-3.jpg'
+    },
+    {
+      id: 'hot-wheels-racing',
+      name: isAr ? 'كيك سباق هوت ويلز المزدوج' : 'Hot Wheels Turbo Racing Cake',
+      category: isAr ? 'سيارات وسباقات' : 'Hot Wheels Racing',
+      hero: isAr ? 'هوت ويلز' : 'Hot Wheels',
+      desc: isAr ? 'كيك أزرق مميز بطبقتين مع شعار هوت ويلز وسيارتي سباق حمراء وبيضاء وشعلات نارية وإطارات سباق سريعة' : 'Blue two-tier cake with signature Hot Wheels flame emblem, red and white sports cars, checkered flags, and racing wheels',
+      image: '/customize/boys cake/1-1-768x1024.webp'
+    },
+    {
+      id: 'football-ferrari-split',
+      name: isAr ? 'كيك مدمج: ملعب كرة القدم وفيراري F1' : 'Football & Ferrari F1 Duo Split Cake',
+      category: isAr ? 'كرة قدم وفيراري' : 'Sports & F1',
+      hero: isAr ? 'كرة وفيراري' : 'Duo Passion',
+      desc: isAr ? 'تصميم نصف ونصف فريد: نصف ملعب عشب أخضر مع حذاء وكرة وقميص #10، ونصف حلبة فيراري F1 بشعار الحصان الإيطالي' : 'Clever split design: half green football pitch with cleats and soccer jersey, half Scuderia Ferrari F1 with prancing horse shield',
+      image: '/customize/boys cake/images (2).jpg'
+    },
+    {
+      id: 'ferrari-f1-speed',
+      name: isAr ? 'كيك سكوديريا فيراري فورمولا 1' : 'Scuderia Ferrari Formula 1 Speed Cake',
+      category: isAr ? 'فورمولا 1 وسيارات' : 'Formula 1',
+      hero: isAr ? 'فيراري F1' : 'Scuderia Ferrari',
+      desc: isAr ? 'كيك أحمر وأبيض ملكي يعتليه مجسم سيارة فورمولا 1 وسائقها بالخوذة مع درع الحصان الجامح وأعلام نهاية السباق' : 'Striking two-tier red & white cake topped with sculpted F1 race car, helmet driver, Ferrari shield, and checkered victory flags',
+      image: '/customize/boys cake/images (3).jpg'
+    },
+    {
+      id: 'roblox-gamer-cake',
+      name: isAr ? 'كيك محبي ألعاب روبلوكس وجيمينج' : 'Roblox Ultimate Gamer Birthday Cake',
+      category: isAr ? 'ألعاب إلكترونية' : 'Gaming & Roblox',
+      hero: isAr ? 'روبلوكس' : 'Roblox & Gaming',
+      desc: isAr ? 'كيك أزرق شبابي مستوحى من عالم روبلوكس مع شخصية روبلوكس وسماعة رأس وأيدي التحكم بالبلايستيشن ورسومات جرافيتي' : 'Bold blue textured gamer cake featuring Roblox character, gaming controller, RGB headset, and graffiti level milestone graphics',
+      image: '/customize/boys cake/images (4).jpg'
+    },
+    {
+      id: 'bmw-m-power',
+      name: isAr ? 'كيك بي إم دبليو إم باور الفاخر' : 'BMW M-Power Luxury Emblem Cake',
+      category: isAr ? 'سيارات فاخرة' : 'Luxury Automotive',
+      hero: isAr ? 'بي إم دبليو' : 'BMW M-Power',
+      desc: isAr ? 'كيك دائري أنيق بشعار بي إم دبليو الدائري مع مجسم مفتاح السيارة الذكي وألوان حزام إم باور ثلاثية الألوان' : 'Crisp white celebration cake featuring BMW roundel emblem, 3D smart key fob, and iconic tri-color M-Power twisted border',
+      image: '/customize/boys cake/download.webp'
+    }
+  ];
+
+  const selectedBoysItem = selectedBoysDesign
+    ? (boysDesignOptions.find(d => d.id === selectedBoysDesign) || null)
+    : null;
+
   // Selected shape & layer object
   const selectedShapeLayerItem = shapeLayerOptions.find(item => item.id === selectedShapeLayer) || shapeLayerOptions[0];
 
@@ -462,8 +716,12 @@ export default function CustomizePage({
     const item = toppingOptions.find(t => t.id === topId);
     return total + (item ? item.price : 0);
   }, 0);
+  const birthdayToppingsPrice = selectedBirthdayItems.reduce((total, bId) => {
+    const item = birthdayToppingOptions.find(b => b.id === bId);
+    return total + (item ? item.price : 0);
+  }, 0);
   const acrylicTopperPrice = messageStyle === 'acrylic-topper' ? 35 : 0;
-  const totalPrice = baseSizePrice + extraLayerPrice + toppingsPrice + acrylicTopperPrice;
+  const totalPrice = baseSizePrice + extraLayerPrice + toppingsPrice + birthdayToppingsPrice + acrylicTopperPrice;
 
   // Next step label helper
   const getNextStepLabel = () => {
@@ -471,7 +729,11 @@ export default function CustomizePage({
     if (currentStep === 2) return isAr ? 'التالي: نكهة الإسفنجة' : 'Next: Choose Sponge';
     if (currentStep === 3) return isAr ? 'التالي: حشوة الكيك' : 'Next: Choose Filling';
     if (currentStep === 4) return isAr ? 'التالي: نوع الكيك' : 'Next: Cake Type';
-    if (currentStep === 5) return isAr ? 'التالي: التصميم والإضافات' : 'Next: Design and Toppings';
+    if (currentStep === 5) {
+      if (selectedOccasion === 'superhero') return isAr ? 'التالي: تصاميم الأبطال الخارقين' : 'Next: Superhero Designs';
+      if (selectedOccasion === 'boys') return isAr ? 'التالي: تصاميم كيك الأولاد' : 'Next: Boys Cake Designs';
+      return isAr ? 'التالي: التصميم والإضافات' : 'Next: Design and Toppings';
+    }
     if (currentStep === 6) return isAr ? 'التالي: كتابة الرسالة' : 'Next: Custom Message';
     if (currentStep === 7) return isAr ? 'التالي: مراجعة الطلب' : 'Next: Review Order';
     return isAr ? 'تأكيد وإضافة للحقيبة' : 'Add to Bag and Confirm';
@@ -490,10 +752,23 @@ export default function CustomizePage({
         sponge: spongeOptions.find(s => s.id === selectedSponge)?.name,
         filling: fillingOptions.find(f => f.id === selectedFilling)?.name || (isAr ? 'حشوة كلاسيكية فاخرة' : 'Signature Bakery Filling'),
         occasion: occasions.find(o => o.id === selectedOccasion)?.title,
+        superheroDesign: selectedOccasion === 'superhero' ? selectedSuperheroItem?.name : null,
+        boysDesign: selectedOccasion === 'boys' ? selectedBoysItem?.name : null,
         message: cakeMessage,
         layers: selectedShapeLayerItem?.title || selectedLayers,
         shape: selectedShapeLayerItem?.shape || selectedShape,
-        toppings: selectedToppings
+        toppings: [
+          ...selectedToppings.map(t => toppingOptions.find(x => x.id === t)?.name).filter(Boolean),
+          ...selectedBirthdayItems.map(t => birthdayToppingOptions.find(x => x.id === t)?.name).filter(Boolean)
+        ],
+        birthdayDecorations: selectedBirthdayItems.map(id => {
+          const item = birthdayToppingOptions.find(b => b.id === id);
+          return {
+            id,
+            name: item?.name,
+            price: item?.price
+          };
+        })
       };
       if (onAddToCart) onAddToCart(customCakeItem);
       if (onBackToHome) onBackToHome();
@@ -531,16 +806,40 @@ export default function CustomizePage({
 
   const selectedFrostingLayer = selectedFilling ? otherBaseFrostingLayerMap[selectedFilling] : null;
 
+  // Final Finished Cakes based on user selected filling flavor (from public/customize/final cake/)
+  const finalCakeMap = {
+    'pineapple-cream-filling': '/customize/final cake/pine apple cake .png',
+    'lotus-cream-filling': '/customize/final cake/lotus cake.png',
+    'red-cherry-cream-filling': '/customize/final cake/red cherry  Cake.png',
+    'peach-cream-filling': '/customize/final cake/Peach  Cake.png',
+    'mocca-cream-filling': '/customize/final cake/moche cake.png',
+    'lemon-cream-filling': '/customize/final cake/lemon cake .png',
+    'cheese-cream': '/customize/final cake/cheese cake.png',
+    'toffee-caramel-filling': '/customize/final cake/toffie carmel Cake.png',
+    'oreos-and-cream-filling': '/customize/final cake/oreoCake.png',
+    'nutella-filling': '/customize/final cake/nutella cake .png',
+    'mango-filling': '/customize/final cake/mango  Cake.png',
+    'caramelized-hazelnut-praline-filling': '/customize/final cake/hazzelnut Cake.png',
+    'chocolate-ganache-filling': '/customize/final cake/ganache  Cake.png',
+    'blueberry-filling': '/customize/final cake/blue burry Cake.png',
+    'raspberry-filling': '/customize/final cake/rasberry  Cake.png',
+    'fresh-whipped-cream-plain': '/customize/final cake/White Frosted Spiral Cake.png'
+  };
+
+  const selectedFinalCakeImg = selectedFilling 
+    ? (finalCakeMap[selectedFilling] || finalCakeMap['fresh-whipped-cream-plain']) 
+    : finalCakeMap['fresh-whipped-cream-plain'];
+
   // Dimensions and bounds of each sponge base (in 1774 x 887 canvas)
   const spongeMeta = {
-    'classic-red-velvet': { width: 1589, center: 886.5, rim: 815 },
-    'colorful-pastel-vanilla': { width: 1476, center: 884.0, rim: 820 },
-    'vanilla-flower-beans': { width: 1550, center: 874.0, rim: 805 },
-    'layered-carrot-walnut': { width: 1560, center: 882.0, rim: 810 },
-    'marbled-chocolate-chip': { width: 1503, center: 884.5, rim: 815 },
-    'rainbow-sprinkle': { width: 1561, center: 872.5, rim: 815 },
-    'blue-white-velvet': { width: 1540, center: 880.0, rim: 815 },
-    'vanilla-choco-duo': { width: 1552, center: 887.0, rim: 815 },
+    'red-velvet': { width: 1589, center: 886.5, rim: 590, bottom: 844 },
+    'colorful-pastel-vanilla': { width: 1476, center: 884.0, rim: 595, bottom: 871 },
+    'vanilla-flower-beans': { width: 1550, center: 874.0, rim: 580, bottom: 825 },
+    'layered-carrot-walnut': { width: 1560, center: 882.0, rim: 585, bottom: 832 },
+    'marbled-choco-chip': { width: 1503, center: 884.5, rim: 590, bottom: 853 },
+    'rainbow-sprinkle': { width: 1561, center: 872.5, rim: 590, bottom: 872 },
+    'blue-white-velvet': { width: 1540, center: 880.0, rim: 590, bottom: 872 },
+    'vanilla-chocolate-duo': { width: 1552, center: 887.0, rim: 590, bottom: 857 },
   };
 
   // Dimensions and bounds of each frosting swirl layer (in 1774 x 887 canvas)
@@ -566,14 +865,14 @@ export default function CustomizePage({
   // Dynamically compute positioning and scaling for any sponge + frosting combination
   // so the swirl fits flush without overhanging the sides or leaving gaps
   const getFrostingLayerStyle = () => {
-    const sp = spongeMeta[selectedSponge] || { width: 1550, center: 884, rim: 814 };
+    const sp = spongeMeta[selectedSponge] || { width: 1550, center: 884, rim: 580, bottom: 840 };
     const fr = (selectedFilling && frostingLayerMeta[selectedFilling]) || { swirlWidth: 1700, centerBottom: 865 };
 
     const s = sp.width / fr.swirlWidth;
     const renderedW = 1774 * s;
     const renderedH = 887 * s;
     const leftPx = sp.center - (renderedW / 2);
-    const topPx = Math.max(0, sp.rim - (fr.centerBottom * s) + 6);
+    const topPx = Math.max(0, (sp.rim || 580) + 225 - (fr.centerBottom * s) + 6);
 
     return {
       top: `${((topPx / 1112) * 100).toFixed(2)}%`,
@@ -583,11 +882,78 @@ export default function CustomizePage({
     };
   };
 
-  // Should we show chocolate 2-tier assembled cake? (Step 5+ and Chocolate Sponge)
-  const showChocolateTopLayer = currentStep >= 5 && isChocolateSponge;
+  // Style calculations for the assembled cake sandwich (Step >= 5 for other sponge bases)
+  // Ensures top layer is lifted so the cream layer is prominently visible (like chocolate cake),
+  // and multi-layer sponges (Rainbow, Vanilla Chocolate, Blue & White, Colorful Vanilla) are balanced
+  const getAssembledCakeStyles = () => {
+    const sp = spongeMeta[selectedSponge] || { width: 1550, center: 884, rim: 580, bottom: 840 };
+    const fr = (selectedFilling && frostingLayerMeta[selectedFilling]) || { swirlWidth: 1700, centerBottom: 865 };
 
-  // Should we show gourmet frosting layer placed on top of other bases? (Step >= 4, Not Chocolate, Any Filling selected)
-  const showFrostingLayerOnOtherBase = currentStep >= 4 && !isChocolateSponge && !!selectedFrostingLayer;
+    const spScale = 0.91;
+    const yBotPx = 230; // Positions bottom base on pedestal with full vertical wall visible
+
+    // Base & Top layer dimensions (both use matching width and horizontal centering)
+    const baseWidthPct = `${(spScale * 100).toFixed(2)}%`; // 91.00%
+    const baseHeightPct = `${(spScale * (887 / 1112) * 100).toFixed(2)}%`; // 72.59%
+    const baseLeftPct = `${(((1 - spScale) / 2) * 100).toFixed(2)}%`; // 4.50%
+
+    // Target the bottom edge of the top layer to land at y = 680px for all cakes.
+    // This lifts the top layer up to reveal a generous 87px thick cream ribbon (just like the chocolate cake).
+    // For taller multi-layer sponges (Rainbow, Vanilla Chocolate, Blue & White, Colorful Vanilla),
+    // it automatically compensates for their extra height so the top layer is never oversized.
+    const spBottomInImg = sp.bottom || 840;
+    const yTopPx = 680 - (spBottomInImg * spScale);
+
+    const topLayerStyle = {
+      top: `${((yTopPx / 1112) * 100).toFixed(2)}%`,
+      left: baseLeftPct,
+      width: baseWidthPct,
+      height: baseHeightPct,
+    };
+
+    const bottomBaseStyle = {
+      top: `${((yBotPx / 1112) * 100).toFixed(2)}%`, // 20.68%
+      left: baseLeftPct,
+      width: baseWidthPct,
+      height: baseHeightPct,
+    };
+
+    // Frosting layer scaled so its swirl width matches the sponge width precisely
+    const frScale = (sp.width * spScale) / fr.swirlWidth;
+    const frWidthPct = `${(frScale * 100).toFixed(2)}%`;
+    const frHeightPct = `${(frScale * (887 / 1112) * 100).toFixed(2)}%`;
+    const frLeftPct = `${(((1 - frScale) / 2) * 100).toFixed(2)}%`;
+    const yRimPx = yBotPx + ((sp.rim || 580) * spScale);
+    const yFrPx = yRimPx - (fr.centerBottom * frScale) + 6;
+    const frTopPct = `${((yFrPx / 1112) * 100).toFixed(2)}%`;
+
+    const frostingStyle = {
+      top: frTopPct,
+      left: frLeftPct,
+      width: frWidthPct,
+      height: frHeightPct,
+    };
+
+    return { topLayerStyle, bottomBaseStyle, frostingStyle };
+  };
+
+  // Should we show superhero cake? (Step >= 6 only when a superhero design is explicitly selected)
+  const showSuperheroCake = currentStep >= 6 && selectedOccasion === 'superhero' && !!selectedSuperheroDesign;
+
+  // Should we show boys cake? (Step >= 6 only when a boys design is explicitly selected)
+  const showBoysCake = currentStep >= 6 && selectedOccasion === 'boys' && !!selectedBoysDesign;
+
+  // Should we show the final finished cake based on user selected filling flavor? (Step 6+)
+  const showFinalCake = currentStep >= 6 && !!selectedFinalCakeImg && !showSuperheroCake && !showBoysCake;
+
+  // Should we show chocolate 2-tier assembled cake? (Step 5 only and Chocolate Sponge)
+  const showChocolateTopLayer = currentStep === 5 && isChocolateSponge;
+
+  // Should we show other sponge 2-tier assembled cake? (Step 5 only and Other Sponges)
+  const showOtherSpongeTopLayer = currentStep === 5 && !isChocolateSponge;
+
+  // Should we show gourmet frosting layer on top of other bases in Step 4?
+  const showFrostingLayerOnOtherBase = currentStep === 4 && !isChocolateSponge && !!selectedFrostingLayer;
 
   // Determine current preview data based on step and selections
   const getPreviewData = () => {
@@ -648,53 +1014,87 @@ export default function CustomizePage({
         image: previewImg,
         stage: isAr ? 'نوع الكيك والمناسبة' : 'Cake Type and Occasion',
         title: `${occ.title}`,
-        badge: isChocolateSponge
-          ? (isAr ? 'الطبقة العلوية مثبتة' : 'Top Layer Placed')
-          : (selectedFrostingLayer ? (isAr ? 'حشوة الكريمة مثبتة' : 'Gourmet Layer Assembled') : (isAr ? 'تصميم مخصص' : 'Bespoke Theme'))
+        badge: isAr ? 'الطبقة العلوية مثبتة' : 'Top Layer Placed'
       };
     }
     if (currentStep === 6) {
-      let previewImg = spongeBaseMap[selectedSponge];
-      if (isChocolateSponge) {
-        previewImg = (selectedFilling && fillingFrostingMap[selectedFilling]) || spongeBaseMap[selectedSponge];
-      } else if (selectedFrostingLayer) {
-        previewImg = selectedFrostingLayer;
+      if (selectedOccasion === 'superhero') {
+        if (selectedSuperheroDesign && selectedSuperheroItem) {
+          return {
+            image: selectedSuperheroItem.image,
+            stage: isAr ? 'تصاميم كيك الأبطال الخارقين' : 'Superhero Cake Designs',
+            title: selectedSuperheroItem.name,
+            badge: isAr ? 'تصميم حصري' : 'Signature Design'
+          };
+        }
+        const fi = fillingOptions.find(f => f.id === selectedFilling);
+        return {
+          image: selectedFinalCakeImg || spongeBaseMap[selectedSponge],
+          stage: isAr ? 'تصاميم كيك الأبطال الخارقين' : 'Superhero Cake Designs',
+          title: fi ? (isAr ? `كعكة ${fi.name}` : `${fi.name} Cake`) : (isAr ? 'الكيك المكتمل' : 'Final Gourmet Cake'),
+          badge: isAr ? 'اختر تصميماً' : 'Choose Design'
+        };
       }
+      if (selectedOccasion === 'boys') {
+        if (selectedBoysDesign && selectedBoysItem) {
+          return {
+            image: selectedBoysItem.image,
+            stage: isAr ? 'تصاميم كيك الأولاد' : 'Boys Cake Designs',
+            title: selectedBoysItem.name,
+            badge: isAr ? 'تصميم حصري' : 'Signature Design'
+          };
+        }
+        const fi = fillingOptions.find(f => f.id === selectedFilling);
+        return {
+          image: selectedFinalCakeImg || spongeBaseMap[selectedSponge],
+          stage: isAr ? 'تصاميم كيك الأولاد' : 'Boys Cake Designs',
+          title: fi ? (isAr ? `كعكة ${fi.name}` : `${fi.name} Cake`) : (isAr ? 'الكيك المكتمل' : 'Final Gourmet Cake'),
+          badge: isAr ? 'اختر تصميماً' : 'Choose Design'
+        };
+      }
+      const fi = fillingOptions.find(f => f.id === selectedFilling);
+      const totalItemsCount = selectedToppings.length + selectedBirthdayItems.length;
+      const totalToppingsPrice = toppingsPrice + birthdayToppingsPrice;
 
       return {
-        image: previewImg,
-        stage: isAr ? 'التزيين واللمسات الفاخرة' : 'Gourmet Toppings & Accents',
-        title: isAr ? `${selectedToppings.length} إضافات تزيين` : `${selectedToppings.length} Accents Selected`,
-        badge: toppingsPrice > 0 ? `+AED ${toppingsPrice}` : (isAr ? 'مجاني' : 'Complimentary')
+        image: selectedFinalCakeImg || spongeBaseMap[selectedSponge],
+        stage: isAr ? 'التصميم وإضافات الكيك' : 'Design, Toppings & Accents',
+        title: fi ? (isAr ? `كعكة ${fi.name}` : `${fi.name} Cake`) : (isAr ? 'الكيك المكتمل' : 'Final Gourmet Cake'),
+        badge: totalToppingsPrice > 0 ? `+AED ${totalToppingsPrice}` : (isAr ? 'الكيك المكتمل' : 'Finished Cake')
       };
     }
     if (currentStep === 7) {
-      let previewImg = spongeBaseMap[selectedSponge];
-      if (isChocolateSponge) {
-        previewImg = (selectedFilling && fillingFrostingMap[selectedFilling]) || spongeBaseMap[selectedSponge];
-      } else if (selectedFrostingLayer) {
-        previewImg = selectedFrostingLayer;
+      let fallbackImg = selectedFinalCakeImg || spongeBaseMap[selectedSponge];
+      if (selectedOccasion === 'superhero' && selectedSuperheroDesign && selectedSuperheroItem) {
+        fallbackImg = selectedSuperheroItem.image;
+      } else if (selectedOccasion === 'boys' && selectedBoysDesign && selectedBoysItem) {
+        fallbackImg = selectedBoysItem.image;
       }
-
       return {
-        image: previewImg,
+        image: fallbackImg,
         stage: isAr ? 'معاينة رسالة الإهداء' : 'Live Inscription Plaque',
         title: cakeMessage ? `"${cakeMessage}"` : (isAr ? 'رسالتك هنا' : 'Your Inscription'),
         badge: messageStyle === 'acrylic-topper' ? '+AED 35' : (isAr ? 'مجاني' : 'Complimentary')
       };
     }
     // Step 8: Review
-    let reviewImg = spongeBaseMap[selectedSponge];
-    if (isChocolateSponge) {
-      reviewImg = (selectedFilling && fillingFrostingMap[selectedFilling]) || spongeBaseMap[selectedSponge];
-    } else if (selectedFrostingLayer) {
-      reviewImg = selectedFrostingLayer;
+    let finalReviewImg = selectedFinalCakeImg || spongeBaseMap[selectedSponge];
+    let customDesignName = null;
+    if (selectedOccasion === 'superhero' && selectedSuperheroDesign && selectedSuperheroItem) {
+      finalReviewImg = selectedSuperheroItem.image;
+      customDesignName = selectedSuperheroItem.name;
+    } else if (selectedOccasion === 'boys' && selectedBoysDesign && selectedBoysItem) {
+      finalReviewImg = selectedBoysItem.image;
+      customDesignName = selectedBoysItem.name;
     }
+    const finalReviewTitle = customDesignName
+      ? `${customDesignName} (${sizeOptions.find(s => s.id === selectedSize)?.title})`
+      : `${occasions.find(o => o.id === selectedOccasion)?.title} (${sizeOptions.find(s => s.id === selectedSize)?.title})`;
 
     return {
-      image: reviewImg,
+      image: finalReviewImg,
       stage: isAr ? 'التحفة النهائية المكتملة' : 'Masterpiece Preview',
-      title: `${occasions.find(o => o.id === selectedOccasion)?.title} (${sizeOptions.find(s => s.id === selectedSize)?.title})`,
+      title: finalReviewTitle,
       badge: `AED ${totalPrice}`
     };
   };
@@ -867,8 +1267,43 @@ export default function CustomizePage({
                 {/* Pedestal Ellipse Shadow */}
                 <div className="absolute bottom-4 w-3/4 h-7 bg-[#4A2116]/12 rounded-full blur-md -z-0" />
 
-                {/* 1. Chocolate Sponge: When Step >= 5, show frosted cake with top layer placed above */}
-                {showChocolateTopLayer ? (
+                {/* 0. Superhero Cake Design (Step >= 6 when a Superhero Design is chosen) */}
+                {showSuperheroCake && selectedSuperheroItem ? (
+                  <div 
+                    className="relative w-full h-full max-h-full max-w-full flex items-center justify-center group-hover:scale-105 transition-transform duration-500 z-10 animate-fadeIn"
+                    style={{ aspectRatio: '1774 / 1112' }}
+                  >
+                    <img
+                      src={encodeURI(selectedSuperheroItem.image)}
+                      alt={selectedSuperheroItem.name}
+                      className="max-h-full max-w-full object-contain drop-shadow-[0_16px_22px_rgba(74,33,22,0.22)] select-none z-10 pointer-events-none rounded-2xl"
+                    />
+                  </div>
+                ) : showBoysCake && selectedBoysItem ? (
+                  <div 
+                    className="relative w-full h-full max-h-full max-w-full flex items-center justify-center group-hover:scale-105 transition-transform duration-500 z-10 animate-fadeIn"
+                    style={{ aspectRatio: '1774 / 1112' }}
+                  >
+                    <img
+                      src={encodeURI(selectedBoysItem.image)}
+                      alt={selectedBoysItem.name}
+                      className="max-h-full max-w-full object-contain drop-shadow-[0_16px_22px_rgba(74,33,22,0.22)] select-none z-10 pointer-events-none rounded-2xl"
+                    />
+                  </div>
+                ) : showFinalCake ? (
+                  <div 
+                    className="relative w-full h-full max-h-full max-w-full flex items-center justify-center group-hover:scale-105 transition-transform duration-500 z-10 animate-fadeIn"
+                    style={{ aspectRatio: '1774 / 1112' }}
+                  >
+                    {/* Final Frosted Cake Image corresponding to selected filling flavor */}
+                    <img
+                      src={encodeURI(selectedFinalCakeImg)}
+                      alt="Final Frosted Cake based on selected filling flavor"
+                      className="w-full h-full object-contain drop-shadow-[0_16px_22px_rgba(74,33,22,0.22)] select-none z-10 pointer-events-none"
+                    />
+                  </div>
+                ) : showChocolateTopLayer ? (
+                  /* 2. Step 5 (Cake Type and Occasion) for Chocolate Sponge: Show frosted cake with top layer placed above */
                   <div 
                     className="relative w-full h-full max-h-full max-w-full flex items-center justify-center group-hover:scale-105 transition-transform duration-500 z-10 animate-fadeIn"
                     style={{ aspectRatio: '1774 / 1112' }}
@@ -897,8 +1332,45 @@ export default function CustomizePage({
                       }}
                     />
                   </div>
+                ) : showOtherSpongeTopLayer ? (
+                  /* 2. Other Sponge Bases: When Step >= 5, show authentic 2-tier assembled cake with matching widths */
+                  (() => {
+                    const { topLayerStyle, bottomBaseStyle, frostingStyle } = getAssembledCakeStyles();
+                    return (
+                      <div 
+                        className="relative w-full h-full max-h-full max-w-full flex items-center justify-center group-hover:scale-105 transition-transform duration-500 z-10 animate-fadeIn"
+                        style={{ aspectRatio: '1774 / 1112' }}
+                      >
+                        {/* Chosen Bottom Sponge Base (matches top layer width exactly) */}
+                        <img
+                          src={encodeURI(spongeBaseMap[selectedSponge])}
+                          alt="Bottom Sponge Base"
+                          className="absolute object-contain drop-shadow-[0_16px_22px_rgba(74,33,22,0.22)] select-none z-10"
+                          style={bottomBaseStyle}
+                        />
+
+                        {/* Middle Gourmet Filling Layer (flushed edge-to-edge between the two tiers) */}
+                        {selectedFrostingLayer && (
+                          <img
+                            src={encodeURI(selectedFrostingLayer)}
+                            alt="Gourmet Filling Layer"
+                            className="absolute object-contain drop-shadow-[0_14px_18px_rgba(74,33,22,0.25)] select-none z-20 pointer-events-none animate-fadeIn"
+                            style={frostingStyle}
+                          />
+                        )}
+
+                        {/* Top Sponge Layer (matches bottom base width exactly, aligned vertically) */}
+                        <img
+                          src={encodeURI(spongeBaseMap[selectedSponge])}
+                          alt="Top Cake Sponge Layer"
+                          className="absolute object-contain drop-shadow-[0_14px_18px_rgba(74,33,22,0.25)] select-none z-30 pointer-events-none animate-fadeIn"
+                          style={topLayerStyle}
+                        />
+                      </div>
+                    );
+                  })()
                 ) : showFrostingLayerOnOtherBase ? (
-                  /* 2. Other Sponge Bases: When any Gourmet filling chosen, place matching frosting layer correctly on the chosen base */
+                  /* 3. Step 4 (Choose Gourmet Filling) for Other Sponge Bases: Show bottom base + filling layer on top */
                   <div 
                     className="relative w-full h-full max-h-full max-w-full flex items-center justify-center group-hover:scale-105 transition-transform duration-500 z-10 animate-fadeIn"
                     style={{ aspectRatio: '1774 / 1112' }}
@@ -963,6 +1435,109 @@ export default function CustomizePage({
                 </h4>
               </div>
 
+              {/* Selected Birthday Decorations Pill List */}
+              {selectedOccasion === 'birthday' && selectedBirthdayItems.length > 0 && (
+                <div className="mt-2.5 p-2 rounded-xl bg-[#FFFBF5] border border-[#E5CFA8] animate-fadeIn text-start">
+                  <div className="flex items-center justify-between mb-1.5 px-0.5">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#C58A19] flex items-center gap-1">
+                      <span>🎂</span>
+                      <span>{isAr ? 'الزينة المحددة' : 'Selected Decorations'}</span>
+                    </span>
+                    <span className="text-[10px] font-semibold text-[#8C6D62]">
+                      {selectedBirthdayItems.length} {isAr ? 'عناصر' : 'items'}
+                    </span>
+                  </div>
+                  <div className="flex flex-wrap gap-1.5">
+                    {selectedBirthdayItems.map((bId) => {
+                      const item = birthdayToppingOptions.find(b => b.id === bId);
+                      if (!item) return null;
+                      return (
+                        <span 
+                          key={bId}
+                          className="inline-flex items-center gap-1.5 px-2 py-1 rounded-lg bg-white border border-[#E5CFA8] text-[11px] font-semibold text-[#4A2116] shadow-2xs"
+                        >
+                          <img src={encodeURI(item.image)} alt={item.name} className="w-4 h-4 object-contain shrink-0" />
+                          <span className="truncate max-w-[110px]">{item.name}</span>
+                          <span className="text-[#C58A19] font-bold text-[10px] shrink-0">+AED {item.price}</span>
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              toggleBirthdayItem(bId);
+                            }}
+                            className="text-[#8C6D62] hover:text-red-600 transition-colors cursor-pointer text-xs leading-none ml-0.5 rtl:mr-0.5 rtl:ml-0"
+                            title={isAr ? 'إزالة' : 'Remove'}
+                          >
+                            ×
+                          </button>
+                        </span>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {/* Selected Superhero Design Indicator under preview */}
+              {selectedOccasion === 'superhero' && selectedSuperheroItem && (
+                <div className="mt-2.5 p-2 rounded-xl bg-[#FFFBF5] border border-[#E5CFA8] animate-fadeIn text-start">
+                  <div className="flex items-center justify-between mb-1.5 px-0.5">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#C58A19] flex items-center gap-1">
+                      <span>🦸</span>
+                      <span>{isAr ? 'التصميم الخارق المختار' : 'Selected Superhero Design'}</span>
+                    </span>
+                    <span className="text-[10px] font-semibold text-[#8C6D62] bg-white px-2 py-0.5 rounded-full border border-[#E5CFA8]">
+                      {selectedSuperheroItem.category}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2 bg-white p-1.5 rounded-lg border border-[#F0E4D2]">
+                    <img 
+                      src={encodeURI(selectedSuperheroItem.image)} 
+                      alt={selectedSuperheroItem.name} 
+                      className="w-10 h-10 rounded-lg object-contain bg-[#FAF7F2] border border-[#E5CFA8] p-0.5 shrink-0" 
+                    />
+                    <div className="truncate">
+                      <span className="text-xs font-bold text-[#4A2116] block truncate">
+                        {selectedSuperheroItem.name}
+                      </span>
+                      <span className="text-[10px] text-[#8C6D62] line-clamp-1">
+                        {selectedSuperheroItem.desc}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Selected Boys Design Indicator under preview */}
+              {selectedOccasion === 'boys' && selectedBoysItem && (
+                <div className="mt-2.5 p-2 rounded-xl bg-[#FFFBF5] border border-[#E5CFA8] animate-fadeIn text-start">
+                  <div className="flex items-center justify-between mb-1.5 px-0.5">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#C58A19] flex items-center gap-1">
+                      <span>🏎️</span>
+                      <span>{isAr ? 'تصميم الأولاد المختار' : 'Selected Boys Cake Design'}</span>
+                    </span>
+                    <span className="text-[10px] font-semibold text-[#8C6D62] bg-white px-2 py-0.5 rounded-full border border-[#E5CFA8]">
+                      {selectedBoysItem.category}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2 bg-white p-1.5 rounded-lg border border-[#F0E4D2]">
+                    <img 
+                      src={encodeURI(selectedBoysItem.image)} 
+                      alt={selectedBoysItem.name} 
+                      className="w-10 h-10 rounded-lg object-contain bg-[#FAF7F2] border border-[#E5CFA8] p-0.5 shrink-0" 
+                    />
+                    <div className="truncate">
+                      <span className="text-xs font-bold text-[#4A2116] block truncate">
+                        {selectedBoysItem.name}
+                      </span>
+                      <span className="text-[10px] text-[#8C6D62] line-clamp-1">
+                        {selectedBoysItem.desc}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+
               {/* Quick Recipe Specs Pills */}
               <div className="grid grid-cols-2 gap-1.5 mt-2.5 text-[11px]">
                 <div className="bg-white/80 border border-[#EEDECB] rounded-xl p-2 flex items-center gap-1.5 truncate">
@@ -975,7 +1550,13 @@ export default function CustomizePage({
                 </div>
                 <div className="bg-white/80 border border-[#EEDECB] rounded-xl p-2 flex items-center gap-1.5 truncate">
                   <Cake className="w-3.5 h-3.5 text-[#C58A19] shrink-0" />
-                  <span className="text-[#4A2116] font-medium truncate">{spongeOptions.find(s => s.id === selectedSponge)?.name}</span>
+                  <span className="text-[#4A2116] font-medium truncate">
+                    {selectedOccasion === 'superhero' && selectedSuperheroItem
+                      ? selectedSuperheroItem.name 
+                      : selectedOccasion === 'boys' && selectedBoysItem
+                      ? selectedBoysItem.name
+                      : (spongeOptions.find(s => s.id === selectedSponge)?.name)}
+                  </span>
                 </div>
                 <div className="bg-white/80 border border-[#EEDECB] rounded-xl p-2 flex items-center gap-1.5 truncate">
                   <UtensilsCrossed className="w-3.5 h-3.5 text-[#C58A19] shrink-0" />
@@ -1091,7 +1672,7 @@ export default function CustomizePage({
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5 mb-8">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
                   {sizeOptions.map((sz) => {
                     const isSelected = selectedSize === sz.id;
                     return (
@@ -1291,13 +1872,15 @@ export default function CustomizePage({
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5 mb-8">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
                   {occasions.map((occ) => {
                     const isSelected = selectedOccasion === occ.id;
                     return (
                       <div
                         key={occ.id}
-                        onClick={() => setSelectedOccasion(occ.id)}
+                        onClick={() => {
+                          setSelectedOccasion(occ.id);
+                        }}
                         className={`bg-white rounded-3xl border-2 transition-all duration-300 cursor-pointer p-4 sm:p-5 flex flex-col justify-between relative group hover:-translate-y-1 hover:shadow-xl ${
                           isSelected 
                             ? 'border-[#C58A19] shadow-lg ring-4 ring-[#C58A19]/15 bg-[#FFFDF9]' 
@@ -1340,49 +1923,253 @@ export default function CustomizePage({
                   <div className="w-1.5 h-10 bg-[#C58A19] rounded-full shrink-0 mt-0.5" />
                   <div>
                     <h2 className="font-serif text-xl sm:text-2xl font-bold text-[#4A2116]">
-                      {isAr ? 'التصميم الخارجي واللمسات الفاخرة' : 'Finishing, Accents and Toppings'}
+                      {selectedOccasion === 'superhero'
+                        ? (isAr ? 'تصاميم كيك الأبطال الخارقين' : 'Superhero Cake Designs')
+                        : selectedOccasion === 'boys'
+                          ? (isAr ? 'تصاميم كيك الأولاد' : 'Boys Cake Designs')
+                          : selectedOccasion === 'birthday' 
+                            ? (isAr ? 'تصميم وزينة كيك عيد الميلاد' : 'Birthday Design, Toppers & Accents') 
+                            : (isAr ? 'التصميم الخارجي واللمسات الفاخرة' : 'Finishing, Accents and Toppings')}
                     </h2>
                     <p className="font-poppins text-xs sm:text-sm text-[#8C6D62] mt-0.5">
-                      {isAr ? 'اختر الإضافات الملكية لتزيين كعكتك (يمكنك اختيار أكثر من خيار).' : 'Select luxury handcrafted details to crown your celebration cake.'}
+                      {selectedOccasion === 'superhero'
+                        ? (isAr 
+                            ? 'اختر تصميم بطلك المفضل من تشكيلة الكيك المصنوعة يدوياً بمجسمات ثلاثية الأبعاد وتفاصيل الكوميكس المميزة.' 
+                            : 'Select your favorite custom superhero cake design featuring 3D handcrafted figurines and comic book art.')
+                        : selectedOccasion === 'boys'
+                          ? (isAr
+                              ? 'اختر تصميم الكيك المفضل للأولاد: سباقات سيارات، شاحنات مونستر تراك، كرة قدم، وعوالم الجيمينج وروبلوكس.'
+                              : 'Select your favorite custom boys cake design featuring racing supercars, monster trucks, football legends, and gamer themes.')
+                          : selectedOccasion === 'birthday'
+                            ? (isAr 
+                                ? `معاينة كعكة ${fillingOptions.find(f => f.id === selectedFilling)?.name || 'الفاخرة'} المكتملة. اختر التوبر، الشموع والإضافات لتزيين الكيك (يمكنك اختيار عدة عناصر معاً).` 
+                                : `Previewing your handcrafted ${fillingOptions.find(f => f.id === selectedFilling)?.name || 'Gourmet'} celebration cake. Select toppers, candles & festive garnishes to decorate your cake (you can select multiple items).`)
+                            : (isAr ? 'اختر الإضافات الملكية لتزيين كعكتك (يمكنك اختيار أكثر من خيار).' : 'Select luxury handcrafted details to crown your celebration cake.')}
                     </p>
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
-                  {toppingOptions.map((top) => {
-                    const isSelected = selectedToppings.includes(top.id);
-                    return (
-                      <div
-                        key={top.id}
-                        onClick={() => toggleTopping(top.id)}
-                        className={`bg-white rounded-2xl border p-4 sm:p-5 cursor-pointer transition-all flex flex-col justify-between hover:shadow-md relative ${
-                          isSelected
-                            ? 'border-2 border-[#C58A19] bg-[#FFFBF5] shadow-xs'
-                            : 'border-[#F0E4D2] hover:border-[#C58A19]/60'
-                        }`}
-                      >
-                        <div className="flex items-start justify-between gap-3 mb-3">
+                {selectedOccasion === 'superhero' ? (
+                  /* 11 Superhero Cake Designs Grid */
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+                    {superheroDesignOptions.map((item) => {
+                      const isSelected = selectedSuperheroDesign === item.id;
+                      return (
+                        <div
+                          key={item.id}
+                          onClick={() => setSelectedSuperheroDesign(prev => prev === item.id ? null : item.id)}
+                          className={`bg-white rounded-2xl border-2 p-4 cursor-pointer transition-all duration-300 flex flex-col justify-between hover:shadow-xl relative group hover:-translate-y-1 ${
+                            isSelected
+                              ? 'border-[#C58A19] bg-[#FFFBF5] ring-4 ring-[#C58A19]/20 shadow-md'
+                              : 'border-[#F0E4D2] hover:border-[#C58A19]/70 shadow-xs'
+                          }`}
+                        >
+                          {/* Selection Checkmark */}
+                          {isSelected && (
+                            <div className="absolute top-3 right-3 rtl:right-auto rtl:left-3 w-7 h-7 rounded-full bg-[#C58A19] text-white flex items-center justify-center shadow-md z-10 animate-scaleIn">
+                              <Check className="w-4 h-4 stroke-[2.5]" />
+                            </div>
+                          )}
+
+                          {/* Superhero Cake Image Thumbnail */}
+                          <div className="w-full h-48 sm:h-52 flex items-center justify-center overflow-hidden mb-3 p-2 bg-[#FAF7F2]/80 rounded-xl group-hover:bg-[#FAF7F2] transition-colors relative">
+                            <img 
+                              src={encodeURI(item.image)} 
+                              alt={item.name} 
+                              className="max-h-full max-w-full object-contain drop-shadow-md group-hover:scale-108 transition-transform duration-300 select-none rounded-lg" 
+                            />
+                            {/* Hero Category Badge */}
+                            <span className="absolute bottom-2 left-2 rtl:left-auto rtl:right-2 text-[10px] font-bold bg-[#4A2116]/85 backdrop-blur-xs text-[#FFFDF8] px-2.5 py-0.5 rounded-full shadow-xs">
+                              {item.category}
+                            </span>
+                          </div>
+
                           <div>
-                            <h3 className="font-semibold text-sm sm:text-base text-[#4A2116] mb-1">
-                              {top.name}
+                            <span className="text-[10px] font-semibold text-[#8C6D62] uppercase tracking-wider block mb-0.5">
+                              {item.hero}
+                            </span>
+                            <h3 className="font-serif font-bold text-sm sm:text-base text-[#4A2116] mb-1 leading-snug line-clamp-1 group-hover:text-[#C58A19] transition-colors">
+                              {item.name}
                             </h3>
-                            <p className="text-xs text-[#8C6D62] leading-relaxed">
-                              {top.desc}
+                            <p className="text-xs text-[#8C6D62] leading-relaxed line-clamp-2 mb-3">
+                              {item.desc}
                             </p>
                           </div>
-                          <div className={`w-5 h-5 rounded-md border shrink-0 flex items-center justify-center transition-colors ${
-                            isSelected ? 'border-[#C58A19] bg-[#C58A19] text-white' : 'border-[#D4C3A3] bg-white'
-                          }`}>
-                            {isSelected && <Check className="w-3.5 h-3.5 stroke-[2.5]" />}
+
+                          <div className="flex items-center justify-between pt-2.5 border-t border-[#F8F1E6]">
+                            <span className="text-xs font-bold text-[#C58A19]">
+                              {isAr ? 'تصميم مخصص' : 'Custom Design'}
+                            </span>
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setSelectedSuperheroDesign(prev => prev === item.id ? null : item.id);
+                              }}
+                              className={`text-[11px] font-semibold px-3 py-1.5 rounded-full transition-colors cursor-pointer flex items-center gap-1.5 ${
+                                isSelected 
+                                  ? 'bg-[#C58A19] text-white shadow-xs' 
+                                  : 'bg-[#FAF7F2] text-[#4A2116] hover:bg-[#C58A19] hover:text-white border border-[#E5CFA8]'
+                              }`}
+                            >
+                              {isSelected ? (
+                                <>
+                                  <Check className="w-3.5 h-3.5 stroke-[2.5]" />
+                                  <span>{isAr ? 'تم الاختيار' : 'Selected'}</span>
+                                </>
+                              ) : (
+                                <span>{isAr ? 'اختيار هذا التصميم' : 'Select Design'}</span>
+                              )}
+                            </button>
                           </div>
                         </div>
-                        <div className="text-xs font-bold text-[#C58A19] pt-2 border-t border-[#F8F1E6]">
-                          {top.price > 0 ? `+AED ${top.price}` : (isAr ? 'مجاني' : 'Complimentary')}
+                      );
+                    })}
+                  </div>
+                ) : selectedOccasion === 'boys' ? (
+                  /* 8 Boys Cake Designs Grid */
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+                    {boysDesignOptions.map((item) => {
+                      const isSelected = selectedBoysDesign === item.id;
+                      return (
+                        <div
+                          key={item.id}
+                          onClick={() => setSelectedBoysDesign(prev => prev === item.id ? null : item.id)}
+                          className={`bg-white rounded-2xl border-2 p-4 cursor-pointer transition-all duration-300 flex flex-col justify-between hover:shadow-xl relative group hover:-translate-y-1 ${
+                            isSelected
+                              ? 'border-[#C58A19] bg-[#FFFBF5] ring-4 ring-[#C58A19]/20 shadow-md'
+                              : 'border-[#F0E4D2] hover:border-[#C58A19]/70 shadow-xs'
+                          }`}
+                        >
+                          {/* Selection Checkmark */}
+                          {isSelected && (
+                            <div className="absolute top-3 right-3 rtl:right-auto rtl:left-3 w-7 h-7 rounded-full bg-[#C58A19] text-white flex items-center justify-center shadow-md z-10 animate-scaleIn">
+                              <Check className="w-4 h-4 stroke-[2.5]" />
+                            </div>
+                          )}
+
+                          {/* Boys Cake Image Thumbnail */}
+                          <div className="w-full h-48 sm:h-52 flex items-center justify-center overflow-hidden mb-3 p-2 bg-[#FAF7F2]/80 rounded-xl group-hover:bg-[#FAF7F2] transition-colors relative">
+                            <img 
+                              src={encodeURI(item.image)} 
+                              alt={item.name} 
+                              className="max-h-full max-w-full object-contain drop-shadow-md group-hover:scale-108 transition-transform duration-300 select-none rounded-lg" 
+                            />
+                            {/* Theme Category Badge */}
+                            <span className="absolute bottom-2 left-2 rtl:left-auto rtl:right-2 text-[10px] font-bold bg-[#4A2116]/85 backdrop-blur-xs text-[#FFFDF8] px-2.5 py-0.5 rounded-full shadow-xs">
+                              {item.category}
+                            </span>
+                          </div>
+
+                          <div>
+                            <span className="text-[10px] font-semibold text-[#8C6D62] uppercase tracking-wider block mb-0.5">
+                              {item.hero}
+                            </span>
+                            <h3 className="font-serif font-bold text-sm sm:text-base text-[#4A2116] mb-1 leading-snug line-clamp-1 group-hover:text-[#C58A19] transition-colors">
+                              {item.name}
+                            </h3>
+                            <p className="text-xs text-[#8C6D62] leading-relaxed line-clamp-2 mb-3">
+                              {item.desc}
+                            </p>
+                          </div>
+
+                          <div className="flex items-center justify-between pt-2.5 border-t border-[#F8F1E6]">
+                            <span className="text-xs font-bold text-[#C58A19]">
+                              {isAr ? 'تصميم مخصص' : 'Custom Design'}
+                            </span>
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setSelectedBoysDesign(prev => prev === item.id ? null : item.id);
+                              }}
+                              className={`text-[11px] font-semibold px-3 py-1.5 rounded-full transition-colors cursor-pointer flex items-center gap-1.5 ${
+                                isSelected 
+                                  ? 'bg-[#C58A19] text-white shadow-xs' 
+                                  : 'bg-[#FAF7F2] text-[#4A2116] hover:bg-[#C58A19] hover:text-white border border-[#E5CFA8]'
+                              }`}
+                            >
+                              {isSelected ? (
+                                <>
+                                  <Check className="w-3.5 h-3.5 stroke-[2.5]" />
+                                  <span>{isAr ? 'تم الاختيار' : 'Selected'}</span>
+                                </>
+                              ) : (
+                                <span>{isAr ? 'اختيار هذا التصميم' : 'Select Design'}</span>
+                              )}
+                            </button>
+                          </div>
                         </div>
-                      </div>
-                    );
-                  })}
-                </div>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  /* 7 Birthday Cards Grid */
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+                    {birthdayToppingOptions.map((item) => {
+                      const isSelected = selectedBirthdayItems.includes(item.id);
+                      return (
+                        <div
+                          key={item.id}
+                          onClick={() => toggleBirthdayItem(item.id)}
+                          className={`bg-white rounded-2xl border-2 p-4 cursor-pointer transition-all flex flex-col justify-between hover:shadow-lg relative group ${
+                            isSelected
+                              ? 'border-[#C58A19] bg-[#FFFBF5] ring-2 ring-[#C58A19]/20 shadow-sm'
+                              : 'border-[#F0E4D2] hover:border-[#C58A19]/60'
+                          }`}
+                        >
+                          {/* Selection Checkmark */}
+                          {isSelected && (
+                            <div className="absolute top-3 right-3 rtl:right-auto rtl:left-3 w-6 h-6 rounded-full bg-[#C58A19] text-white flex items-center justify-center shadow-xs z-10 animate-scaleIn">
+                              <Check className="w-3.5 h-3.5 stroke-[2.5]" />
+                            </div>
+                          )}
+
+                          {/* Thumbnail Image Container */}
+                          <div className="w-full h-36 flex items-center justify-center overflow-hidden mb-3 p-2 bg-[#FAF7F2]/80 rounded-xl group-hover:bg-[#FAF7F2] transition-colors relative">
+                            <img 
+                              src={encodeURI(item.image)} 
+                              alt={item.name} 
+                              className="max-h-full max-w-full object-contain drop-shadow-sm group-hover:scale-105 transition-transform duration-300 select-none" 
+                            />
+                          </div>
+
+                          <div>
+                            <span className="text-[10px] font-semibold text-[#8C6D62] uppercase tracking-wider block mb-0.5">
+                              {item.category}
+                            </span>
+                            <h3 className="font-semibold text-sm text-[#4A2116] mb-1 leading-snug line-clamp-1">
+                              {item.name}
+                            </h3>
+                            <p className="text-xs text-[#8C6D62] leading-relaxed line-clamp-2 mb-3">
+                              {item.desc}
+                            </p>
+                          </div>
+
+                          <div className="flex items-center justify-between pt-2.5 border-t border-[#F8F1E6]">
+                            <span className="text-xs font-bold text-[#C58A19]">
+                              +AED {item.price}
+                            </span>
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                toggleBirthdayItem(item.id);
+                              }}
+                              className={`text-[11px] font-semibold px-2.5 py-1 rounded-full transition-colors cursor-pointer ${
+                                isSelected 
+                                  ? 'bg-red-50 text-red-600 hover:bg-red-100 border border-red-200' 
+                                  : 'bg-[#C58A19] text-white hover:bg-[#A87413]'
+                              }`}
+                            >
+                              {isSelected ? (isAr ? 'إلغاء التحديد' : 'Remove') : (isAr ? 'إضافة للكيك' : 'Add to Cake')}
+                            </button>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
             )}
 
@@ -1560,9 +2347,45 @@ export default function CustomizePage({
                       )}
                     </div>
 
+                    {selectedOccasion === 'superhero' && selectedSuperheroItem && (
+                      <div className="sm:col-span-2 p-3 rounded-xl bg-[#FFFBF5] border border-[#F5EBDD] flex items-center justify-between">
+                        <div>
+                          <span className="text-[#8C6D62] block mb-0.5 font-medium">{isAr ? 'تصميم الأبطال الخارقين المختار' : 'Selected Superhero Cake Design'}</span>
+                          <span className="font-semibold text-[#4A2116] text-sm block">{selectedSuperheroItem.name}</span>
+                          <span className="text-xs text-[#C58A19] font-medium">{selectedSuperheroItem.category}</span>
+                        </div>
+                        <div className="w-14 h-14 rounded-xl bg-white border border-[#E5C583]/60 flex items-center justify-center shrink-0 p-1">
+                          <img src={encodeURI(selectedSuperheroItem.image)} alt={selectedSuperheroItem.name} className="w-full h-full object-contain select-none rounded-lg" />
+                        </div>
+                      </div>
+                    )}
+
+                    {selectedOccasion === 'boys' && selectedBoysItem && (
+                      <div className="sm:col-span-2 p-3 rounded-xl bg-[#FFFBF5] border border-[#F5EBDD] flex items-center justify-between">
+                        <div>
+                          <span className="text-[#8C6D62] block mb-0.5 font-medium">{isAr ? 'تصميم كيك الأولاد المختار' : 'Selected Boys Cake Design'}</span>
+                          <span className="font-semibold text-[#4A2116] text-sm block">{selectedBoysItem.name}</span>
+                          <span className="text-xs text-[#C58A19] font-medium">{selectedBoysItem.category}</span>
+                        </div>
+                        <div className="w-14 h-14 rounded-xl bg-white border border-[#E5C583]/60 flex items-center justify-center shrink-0 p-1">
+                          <img src={encodeURI(selectedBoysItem.image)} alt={selectedBoysItem.name} className="w-full h-full object-contain select-none rounded-lg" />
+                        </div>
+                      </div>
+                    )}
+
                     <div className="sm:col-span-2 p-3 rounded-xl bg-[#FFFBF5] border border-[#F5EBDD]">
-                      <span className="text-[#8C6D62] block mb-1 font-medium">{isAr ? 'الإضافات والتزيين' : 'Selected Accents'}</span>
+                      <span className="text-[#8C6D62] block mb-1 font-medium">{isAr ? 'الإضافات والتزيين' : 'Selected Accents & Toppings'}</span>
                       <div className="flex flex-wrap gap-1.5">
+                        {selectedBirthdayItems.map(bId => {
+                          const item = birthdayToppingOptions.find(t => t.id === bId);
+                          return (
+                            <span key={bId} className="px-2.5 py-0.5 rounded-full bg-[#FFF9EE] border border-[#C58A19] text-[#4A2116] text-[11px] font-semibold flex items-center gap-1">
+                              <span>🎂</span>
+                              <span>{item?.name}</span>
+                              <span className="text-[#C58A19] font-bold">+AED {item?.price}</span>
+                            </span>
+                          );
+                        })}
                         {selectedToppings.map(topId => {
                           const item = toppingOptions.find(t => t.id === topId);
                           return (
@@ -1593,9 +2416,15 @@ export default function CustomizePage({
                         <span className="font-semibold text-[#4A2116]">+AED {extraLayerPrice}</span>
                       </div>
                     )}
+                    {birthdayToppingsPrice > 0 && (
+                      <div className="flex justify-between">
+                        <span>{isAr ? 'زينة ومجسمات عيد الميلاد:' : 'Birthday Toppers & Decorations:'}</span>
+                        <span className="font-semibold text-[#4A2116]">+AED {birthdayToppingsPrice}</span>
+                      </div>
+                    )}
                     {toppingsPrice > 0 && (
                       <div className="flex justify-between">
-                        <span>{isAr ? 'الإضافات والتزيين:' : 'Luxury Toppings:'}</span>
+                        <span>{isAr ? 'الإضافات الكلاسيكية:' : 'Classic Luxury Accents:'}</span>
                         <span className="font-semibold text-[#4A2116]">+AED {toppingsPrice}</span>
                       </div>
                     )}
@@ -1623,11 +2452,12 @@ export default function CustomizePage({
                     <a
                       href={`https://wa.me/971506063631?text=${encodeURIComponent(
                         `Hello Lebanese Dream Bakery! I would like to order a custom cake:
-Occasion: ${occasions.find(o => o.id === selectedOccasion)?.title}
-Shape and Layers: ${selectedShapeLayerItem?.title}
+Occasion: ${occasions.find(o => o.id === selectedOccasion)?.title}${selectedOccasion === 'superhero' && selectedSuperheroItem ? ` (${selectedSuperheroItem.name})` : selectedOccasion === 'boys' && selectedBoysItem ? ` (${selectedBoysItem.name})` : ''}
+${selectedOccasion === 'superhero' && selectedSuperheroItem ? `Superhero Design: ${selectedSuperheroItem.name}\n` : selectedOccasion === 'boys' && selectedBoysItem ? `Boys Design: ${selectedBoysItem.name}\n` : ''}Shape and Layers: ${selectedShapeLayerItem?.title}
 Size: ${sizeOptions.find(s => s.id === selectedSize)?.title}
 Sponge: ${spongeOptions.find(s => s.id === selectedSponge)?.name}
 Filling: ${fillingOptions.find(f => f.id === selectedFilling)?.name || 'Signature Bakery Filling'}
+Birthday Toppers: ${selectedBirthdayItems.map(id => birthdayToppingOptions.find(b => b.id === id)?.name).filter(Boolean).join(', ') || 'None'}
 Message: "${cakeMessage}"
 Total: AED ${totalPrice}`
                       )}`}
