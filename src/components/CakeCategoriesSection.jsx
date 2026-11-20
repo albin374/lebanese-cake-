@@ -29,8 +29,13 @@ export default function CakeCategoriesSection({ currentLang = 'en', onSelectCate
               <div
                 key={category.id}
                 onClick={() => {
-                  if (onSelectCategory) onSelectCategory(category.id);
-                  if (onCustomizeClick) onCustomizeClick();
+                  const directPages = ['cookies-cat', 'cookies', 'cupcakes-cat', 'cupcakes', 'cake-pops-cat', 'cake-pops'];
+                  if (directPages.includes(category.id)) {
+                    if (onSelectCategory) onSelectCategory(category.id);
+                  } else {
+                    if (onSelectCategory) onSelectCategory(category.id);
+                    if (onCustomizeClick) onCustomizeClick();
+                  }
                 }}
                 className={`bg-white rounded-2xl border border-[#F5EBDD] shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 overflow-hidden flex flex-col group cursor-pointer ${
                   isSecondToLast ? 'lg:col-start-2' : ''

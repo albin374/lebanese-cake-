@@ -11,13 +11,24 @@ import ReviewsSection from './components/ReviewsSection';
 import FooterSection from './components/FooterSection';
 import CustomizeCakeModal from './components/CustomizeCakeModal';
 import CustomizePage from './components/CustomizePage';
+import CookiesPage from './components/CookiesPage';
+import CupcakesPage from './components/CupcakesPage';
+import CakePopsPage from './components/CakePopsPage';
+import CakesForKidsPage from './components/CakesForKidsPage';
 import { translations } from './translations';
 import { Phone, Mail, Clock, X, Check, ShoppingBag, UserRound } from 'lucide-react';
 
 export default function App() {
   const [currentLang, setCurrentLang] = useState('en');
   const [currentPage, setCurrentPage] = useState(() => {
-    return typeof window !== 'undefined' && window.location.hash === '#customize' ? 'customize' : 'home';
+    if (typeof window !== 'undefined') {
+      if (window.location.hash === '#customize') return 'customize';
+      if (window.location.hash === '#cookies') return 'cookies';
+      if (window.location.hash === '#cupcakes') return 'cupcakes';
+      if (window.location.hash === '#cake-pops') return 'cake-pops';
+      if (window.location.hash === '#cakes-for-kids') return 'cakes-for-kids';
+    }
+    return 'home';
   });
   const [activeCategory, setActiveCategory] = useState('all-cakes');
   const [cartCount, setCartCount] = useState(2);
@@ -42,6 +53,18 @@ export default function App() {
       if (window.location.hash === '#customize') {
         setCurrentPage('customize');
         window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else if (window.location.hash === '#cookies') {
+        setCurrentPage('cookies');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else if (window.location.hash === '#cupcakes') {
+        setCurrentPage('cupcakes');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else if (window.location.hash === '#cake-pops') {
+        setCurrentPage('cake-pops');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else if (window.location.hash === '#cakes-for-kids') {
+        setCurrentPage('cakes-for-kids');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       } else {
         setCurrentPage('home');
       }
@@ -54,6 +77,57 @@ export default function App() {
     window.location.hash = '#customize';
     setCurrentPage('customize');
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const openCookiesPage = () => {
+    window.location.hash = '#cookies';
+    setCurrentPage('cookies');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const openCupcakesPage = () => {
+    window.location.hash = '#cupcakes';
+    setCurrentPage('cupcakes');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const openCakePopsPage = () => {
+    window.location.hash = '#cake-pops';
+    setCurrentPage('cake-pops');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const openCakesForKidsPage = () => {
+    window.location.hash = '#cakes-for-kids';
+    setCurrentPage('cakes-for-kids');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleCategoryNavigation = (id) => {
+    if (id === 'cookies' || id === 'cookies-cat') {
+      openCookiesPage();
+      return;
+    }
+    if (id === 'cupcakes' || id === 'cupcakes-cat') {
+      openCupcakesPage();
+      return;
+    }
+    if (id === 'cake-pops' || id === 'cake-pops-cat') {
+      openCakePopsPage();
+      return;
+    }
+    if (id === 'cakes-for-kids' || id === 'kids-cat') {
+      openCakesForKidsPage();
+      return;
+    }
+    if (currentPage !== 'home') goToHome();
+    setActiveCategory(id);
+    const el = document.getElementById('cake-categories-section');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      window.scrollTo({ top: 400, behavior: 'smooth' });
+    }
   };
 
   const goToHome = () => {
@@ -106,19 +180,16 @@ export default function App() {
       {/* 3. Level 3: Category Navigation Bar (Height ~48-52px, #FFFFFF, border-y #F5EBDD, Poppins, 14-15px, Hover gold underline, Dropdowns, Customize Cake Button in #C58A19) */}
       <Navbar 
         currentLang={currentLang}
-        activeCategory={activeCategory}
-        onSelectCategory={(id) => {
-          if (currentPage !== 'home') goToHome();
-          setActiveCategory(id);
-          const el = document.getElementById('cake-categories-section');
-          if (el) {
-            el.scrollIntoView({ behavior: 'smooth' });
-          }
-        }}
+        activeCategory={
+          ['cookies', 'cupcakes', 'cake-pops', 'cakes-for-kids'].includes(currentPage)
+            ? currentPage
+            : activeCategory
+        }
+        onSelectCategory={handleCategoryNavigation}
         onCustomizeClick={openCustomizePage}
       />
 
-      {/* Page View: Either Dedicated Multi-Step Customize Page OR Homepage */}
+      {/* Page View: Either Dedicated Multi-Step Customize Page OR Dedicated Category Pages OR Homepage */}
       {currentPage === 'customize' ? (
         <main className="w-full flex-1">
           <CustomizePage
@@ -128,6 +199,22 @@ export default function App() {
             onOpenHelp={() => setIsHelpOpen(true)}
           />
         </main>
+      ) : currentPage === 'cookies' ? (
+        <main className="w-full flex-1">
+          <CookiesPage currentLang={currentLang} />
+        </main>
+      ) : currentPage === 'cupcakes' ? (
+        <main className="w-full flex-1">
+          <CupcakesPage currentLang={currentLang} />
+        </main>
+      ) : currentPage === 'cake-pops' ? (
+        <main className="w-full flex-1">
+          <CakePopsPage currentLang={currentLang} />
+        </main>
+      ) : currentPage === 'cakes-for-kids' ? (
+        <main className="w-full flex-1">
+          <CakesForKidsPage currentLang={currentLang} />
+        </main>
       ) : (
         <main className="w-full flex-1">
           {/* 4. Level 4: Homepage Hero Section (Height 380-450px on desktop, original photography, slider transition) */}
@@ -136,7 +223,7 @@ export default function App() {
           {/* 5. Cake Categories Section (Matching style of reference image with empty image slots) */}
           <CakeCategoriesSection 
             currentLang={currentLang}
-            onSelectCategory={(id) => setActiveCategory(id)}
+            onSelectCategory={handleCategoryNavigation}
             onCustomizeClick={openCustomizePage}
           />
 
@@ -168,16 +255,7 @@ export default function App() {
         onCustomizeClick={openCustomizePage}
         onOpenHelp={() => setIsHelpOpen(true)}
         onOpenAccount={() => setIsAccountOpen(true)}
-        onSelectCategory={(id) => {
-          if (currentPage !== 'home') goToHome();
-          setActiveCategory(id);
-          const el = document.getElementById('cake-categories-section');
-          if (el) {
-            el.scrollIntoView({ behavior: 'smooth' });
-          } else {
-            window.scrollTo({ top: 400, behavior: 'smooth' });
-          }
-        }}
+        onSelectCategory={handleCategoryNavigation}
       />
 
       {/* Cake Customization Modal (Preserved existing builder functionality) */}

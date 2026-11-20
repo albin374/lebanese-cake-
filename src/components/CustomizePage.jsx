@@ -1664,9 +1664,6 @@ export default function CustomizePage({
                       <span className="text-xs font-bold text-[#4A2116] block truncate">
                         {selectedSuperheroItem.name}
                       </span>
-                      <span className="text-[10px] text-[#8C6D62] line-clamp-1">
-                        {selectedSuperheroItem.desc}
-                      </span>
                     </div>
                   </div>
                 </div>
@@ -1694,9 +1691,6 @@ export default function CustomizePage({
                       <span className="text-xs font-bold text-[#4A2116] block truncate">
                         {selectedBoysItem.name}
                       </span>
-                      <span className="text-[10px] text-[#8C6D62] line-clamp-1">
-                        {selectedBoysItem.desc}
-                      </span>
                     </div>
                   </div>
                 </div>
@@ -1723,9 +1717,6 @@ export default function CustomizePage({
                     <div className="truncate">
                       <span className="text-xs font-bold text-[#4A2116] block truncate">
                         {selectedGirlsItem.name}
-                      </span>
-                      <span className="text-[10px] text-[#8C6D62] line-clamp-1">
-                        {selectedGirlsItem.desc}
                       </span>
                     </div>
                   </div>
@@ -1851,12 +1842,9 @@ export default function CustomizePage({
                         </div>
 
                         <div className="pt-3 border-t border-[#F2E7D5] text-center flex flex-col items-center">
-                          <h3 className="font-serif text-sm sm:text-base font-bold tracking-tight text-[#4A2116] mb-1">
+                          <h3 className="font-serif text-sm sm:text-base font-bold tracking-tight text-[#4A2116] mb-2">
                             {item.title}
                           </h3>
-                          <p className="font-poppins text-xs text-[#8C6D62] leading-relaxed line-clamp-2 mb-2.5">
-                            {item.desc}
-                          </p>
                           <span className="inline-block text-xs font-bold text-[#C58A19] bg-[#FFF8EE] px-3 py-0.5 rounded-full border border-[#EACD9B]/60 shadow-xs">
                             {item.extraPrice > 0 ? `+AED ${item.extraPrice}` : (isAr ? 'السعر الأساسي' : 'Included in Base')}
                           </span>
@@ -1932,12 +1920,9 @@ export default function CustomizePage({
                         </div>
 
                         <div className="pt-3 border-t border-[#F2E7D5] text-center flex flex-col items-center">
-                          <h3 className="font-serif text-sm sm:text-base font-bold tracking-tight text-[#4A2116] mb-1">
+                          <h3 className="font-serif text-sm sm:text-base font-bold tracking-tight text-[#4A2116] mb-2">
                             {sz.title}
                           </h3>
-                          <p className="font-poppins text-xs text-[#8C6D62] leading-relaxed line-clamp-2 mb-2.5">
-                            {sz.desc}
-                          </p>
                           <span className="inline-block text-xs font-bold text-[#C58A19] bg-[#FFF8EE] px-3.5 py-0.5 rounded-full border border-[#EACD9B]/60 shadow-xs lining-nums tabular-nums">
                             AED {sz.basePrice}
                           </span>
@@ -1998,12 +1983,9 @@ export default function CustomizePage({
                         </div>
 
                         <div className="pt-3 border-t border-[#F2E7D5] text-center flex flex-col items-center">
-                          <h3 className="font-serif text-sm sm:text-base font-bold tracking-tight text-[#4A2116] mb-1">
+                          <h3 className="font-serif text-sm sm:text-base font-bold tracking-tight text-[#4A2116]">
                             {sp.name}
                           </h3>
-                          <p className="font-poppins text-xs text-[#8C6D62] leading-relaxed line-clamp-2">
-                            {sp.desc}
-                          </p>
                         </div>
                       </div>
                     );
@@ -2209,16 +2191,13 @@ export default function CustomizePage({
                             </span>
                           </div>
 
-                          <div>
+                          <div className="mb-3">
                             <span className="text-[10px] font-semibold text-[#8C6D62] uppercase tracking-wider block mb-0.5">
                               {item.hero}
                             </span>
-                            <h3 className="font-serif font-bold text-sm sm:text-base text-[#4A2116] mb-1 leading-snug line-clamp-1 group-hover:text-[#C58A19] transition-colors">
+                            <h3 className="font-serif font-bold text-sm sm:text-base text-[#4A2116] leading-snug line-clamp-1 group-hover:text-[#C58A19] transition-colors">
                               {item.name}
                             </h3>
-                            <p className="text-xs text-[#8C6D62] leading-relaxed line-clamp-2 mb-3">
-                              {item.desc}
-                            </p>
                           </div>
 
                           <div className="flex items-center justify-between pt-2.5 border-t border-[#F8F1E6]">
@@ -2286,16 +2265,13 @@ export default function CustomizePage({
                             </span>
                           </div>
 
-                          <div>
+                          <div className="mb-3">
                             <span className="text-[10px] font-semibold text-[#8C6D62] uppercase tracking-wider block mb-0.5">
                               {item.hero}
                             </span>
-                            <h3 className="font-serif font-bold text-sm sm:text-base text-[#4A2116] mb-1 leading-snug line-clamp-1 group-hover:text-[#C58A19] transition-colors">
+                            <h3 className="font-serif font-bold text-sm sm:text-base text-[#4A2116] leading-snug line-clamp-1 group-hover:text-[#C58A19] transition-colors">
                               {item.name}
                             </h3>
-                            <p className="text-xs text-[#8C6D62] leading-relaxed line-clamp-2 mb-3">
-                              {item.desc}
-                            </p>
                           </div>
 
                           <div className="flex items-center justify-between pt-2.5 border-t border-[#F8F1E6]">
@@ -2363,16 +2339,13 @@ export default function CustomizePage({
                             </span>
                           </div>
 
-                          <div>
+                          <div className="mb-3">
                             <span className="text-[10px] font-semibold text-[#8C6D62] uppercase tracking-wider block mb-0.5">
                               {item.hero}
                             </span>
-                            <h3 className="font-serif font-bold text-sm sm:text-base text-[#4A2116] mb-1 leading-snug line-clamp-1 group-hover:text-[#C58A19] transition-colors">
+                            <h3 className="font-serif font-bold text-sm sm:text-base text-[#4A2116] leading-snug line-clamp-1 group-hover:text-[#C58A19] transition-colors">
                               {item.name}
                             </h3>
-                            <p className="text-xs text-[#8C6D62] leading-relaxed line-clamp-2 mb-3">
-                              {item.desc}
-                            </p>
                           </div>
 
                           <div className="flex items-center justify-between pt-2.5 border-t border-[#F8F1E6]">
@@ -2436,16 +2409,13 @@ export default function CustomizePage({
                             />
                           </div>
 
-                          <div>
+                          <div className="mb-3">
                             <span className="text-[10px] font-semibold text-[#8C6D62] uppercase tracking-wider block mb-0.5">
                               {item.category}
                             </span>
-                            <h3 className="font-semibold text-sm text-[#4A2116] mb-1 leading-snug line-clamp-1">
+                            <h3 className="font-semibold text-sm text-[#4A2116] leading-snug line-clamp-1">
                               {item.name}
                             </h3>
-                            <p className="text-xs text-[#8C6D62] leading-relaxed line-clamp-2 mb-3">
-                              {item.desc}
-                            </p>
                           </div>
 
                           <div className="flex items-center justify-between pt-2.5 border-t border-[#F8F1E6]">
