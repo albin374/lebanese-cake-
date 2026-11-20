@@ -16,6 +16,28 @@ export default function Navbar({ currentLang = 'en', onCustomizeClick, activeCat
     }));
   };
 
+  const weddingSubcategoryIds = [
+    'wedding-cakes',
+    'classic-wedding-cakes',
+    'novelty-wedding-cakes',
+    'bride-to-be-cakes',
+    'engagement-cakes',
+    'grooms-cakes'
+  ];
+
+  const corporateSubcategoryIds = [
+    'corporate-cakes',
+    'corporate-cookies',
+    'cupcakes-with-logo'
+  ];
+
+  const isItemActive = (itemId) => {
+    if (activeCategory === itemId) return true;
+    if (itemId === 'wedding-cakes' && weddingSubcategoryIds.includes(activeCategory)) return true;
+    if (itemId === 'corporate-cakes' && corporateSubcategoryIds.includes(activeCategory)) return true;
+    return false;
+  };
+
   const navCategories = [
     { id: 'all-cakes', label: t.allCakes, hasDropdown: false },
     { 
@@ -60,7 +82,7 @@ export default function Navbar({ currentLang = 'en', onCustomizeClick, activeCat
         {/* Desktop Navigation Links with Balanced Gap */}
         <div className="hidden lg:flex items-center gap-3.5 xl:gap-4.5 2xl:gap-6 h-full">
           {navCategories.map((item) => {
-            const isActive = activeCategory === item.id;
+            const isActive = isItemActive(item.id);
             return (
               <div
                 key={item.id}
@@ -88,19 +110,23 @@ export default function Navbar({ currentLang = 'en', onCustomizeClick, activeCat
                       isAr ? 'right-0' : 'left-0'
                     }`}
                   >
-                    {item.children.map((sub, idx) => (
-                      <button
-                        key={idx}
-                        type="button"
-                        onClick={() => {
-                          setOpenDropdown(null);
-                          if (onSelectCategory) onSelectCategory(item.id);
-                        }}
-                        className="w-full text-left rtl:text-right px-4 py-2.5 font-poppins text-[14px] font-medium text-[#4A2116] hover:bg-[#F8F1E6] hover:text-[#C58A19] transition-colors cursor-pointer"
-                      >
-                        {sub}
-                      </button>
-                    ))}
+                    {item.children.map((sub, idx) => {
+                      const subLabel = typeof sub === 'string' ? sub : sub.label;
+                      const subId = typeof sub === 'object' && sub?.id ? sub.id : item.id;
+                      return (
+                        <button
+                          key={idx}
+                          type="button"
+                          onClick={() => {
+                            setOpenDropdown(null);
+                            if (onSelectCategory) onSelectCategory(subId);
+                          }}
+                          className="w-full text-left rtl:text-right px-4 py-2.5 font-poppins text-[14px] font-medium text-[#4A2116] hover:bg-[#F8F1E6] hover:text-[#C58A19] transition-colors cursor-pointer"
+                        >
+                          {subLabel}
+                        </button>
+                      );
+                    })}
                   </div>
                 )}
               </div>
@@ -134,7 +160,7 @@ export default function Navbar({ currentLang = 'en', onCustomizeClick, activeCat
           <div className="lg:hidden absolute top-full left-0 right-0 bg-[#FFFDF8] border-b border-[#EADCC8] px-5 py-5 shadow-2xl z-50 animate-fadeIn max-h-[75vh] overflow-y-auto">
             <div className="space-y-1 mb-5">
               {navCategories.map((item) => {
-                const isActive = activeCategory === item.id;
+                const isActive = isItemActive(item.id);
                 const isExpanded = !!mobileExpanded[item.id];
 
                 return (
@@ -168,19 +194,23 @@ export default function Navbar({ currentLang = 'en', onCustomizeClick, activeCat
                     {/* Subcategories for items with dropdown */}
                     {item.hasDropdown && isExpanded && (
                       <div className="mt-2 pl-4 rtl:pl-0 rtl:pr-4 space-y-1.5 py-1 border-l-2 rtl:border-l-0 rtl:border-r-2 border-[#C58A19]/30">
-                        {item.children.map((sub, idx) => (
-                          <button
-                            key={idx}
-                            type="button"
-                            onClick={() => {
-                              if (onSelectCategory) onSelectCategory(item.id);
-                              setMobileMenuOpen(false);
-                            }}
-                            className="block w-full text-left rtl:text-right py-1.5 text-xs text-[#7D5B50] hover:text-[#C58A19] font-medium cursor-pointer"
-                          >
-                            {sub}
-                          </button>
-                        ))}
+                        {item.children.map((sub, idx) => {
+                          const subLabel = typeof sub === 'string' ? sub : sub.label;
+                          const subId = typeof sub === 'object' && sub?.id ? sub.id : item.id;
+                          return (
+                            <button
+                              key={idx}
+                              type="button"
+                              onClick={() => {
+                                if (onSelectCategory) onSelectCategory(subId);
+                                setMobileMenuOpen(false);
+                              }}
+                              className="block w-full text-left rtl:text-right py-1.5 text-xs text-[#7D5B50] hover:text-[#C58A19] font-medium cursor-pointer"
+                            >
+                              {subLabel}
+                            </button>
+                          );
+                        })}
                       </div>
                     )}
                   </div>

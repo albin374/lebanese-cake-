@@ -17,6 +17,27 @@ import CakePopsPage from './components/CakePopsPage';
 import CakesForKidsPage from './components/CakesForKidsPage';
 import CakesForGuysPage from './components/CakesForGuysPage';
 import CakesForLadiesPage from './components/CakesForLadiesPage';
+import ClassicWeddingCakesPage from './components/ClassicWeddingCakesPage';
+import NoveltyWeddingCakesPage from './components/NoveltyWeddingCakesPage';
+import BrideToBeCakesPage from './components/BrideToBeCakesPage';
+import EngagementCakesPage from './components/EngagementCakesPage';
+import GroomsCakesPage from './components/GroomsCakesPage';
+import CorporateCakesPage from './components/CorporateCakesPage';
+import CorporateCookiesPage from './components/CorporateCookiesPage';
+import CupcakesWithLogoPage from './components/CupcakesWithLogoPage';
+import GraduationCakesPage from './components/GraduationCakesPage';
+import VehiclesCakesPage from './components/VehiclesCakesPage';
+import SportingCakesPage from './components/SportingCakesPage';
+import CoutureCakesPage from './components/CoutureCakesPage';
+import ThreeDCakesPage from './components/ThreeDCakesPage';
+import IllusionCakesPage from './components/IllusionCakesPage';
+import DoughnutsCakesPage from './components/DoughnutsCakesPage';
+import PhotoOnCakePage from './components/PhotoOnCakePage';
+import PetAnimalsCakesPage from './components/PetAnimalsCakesPage';
+import SuperheroCakesPage from './components/SuperheroCakesPage';
+import LabubuCakesPage from './components/LabubuCakesPage';
+import BakingDecoratingPage from './components/BakingDecoratingPage';
+import AdminDashboard from './components/admin/AdminDashboard';
 import { translations } from './translations';
 import { Phone, Mail, Clock, X, Check, ShoppingBag, UserRound } from 'lucide-react';
 
@@ -31,6 +52,27 @@ export default function App() {
       if (window.location.hash === '#cakes-for-kids') return 'cakes-for-kids';
       if (window.location.hash === '#cakes-for-guys') return 'cakes-for-guys';
       if (window.location.hash === '#cakes-for-ladies') return 'cakes-for-ladies';
+      if (window.location.hash === '#classic-wedding-cakes' || window.location.hash === '#wedding-cakes') return 'classic-wedding-cakes';
+      if (window.location.hash === '#novelty-wedding-cakes') return 'novelty-wedding-cakes';
+      if (window.location.hash === '#bride-to-be-cakes') return 'bride-to-be-cakes';
+      if (window.location.hash === '#engagement-cakes') return 'engagement-cakes';
+      if (window.location.hash === '#grooms-cakes') return 'grooms-cakes';
+      if (window.location.hash === '#corporate-cakes') return 'corporate-cakes';
+      if (window.location.hash === '#corporate-cookies') return 'corporate-cookies';
+      if (window.location.hash === '#cupcakes-with-logo') return 'cupcakes-with-logo';
+      if (window.location.hash === '#graduation-cakes' || window.location.hash === '#graduation') return 'graduation-cakes';
+      if (window.location.hash === '#cars-ships-planes-cakes' || window.location.hash === '#vehicles') return 'cars-ships-planes-cakes';
+      if (window.location.hash === '#sporting-cakes' || window.location.hash === '#sporting') return 'sporting-cakes';
+      if (window.location.hash === '#couture-cakes' || window.location.hash === '#couture') return 'couture-cakes';
+      if (window.location.hash === '#3d-cakes' || window.location.hash === '#3d-art') return '3d-cakes';
+      if (window.location.hash === '#food-drink-illusion-cakes' || window.location.hash === '#illusion') return 'food-drink-illusion-cakes';
+      if (window.location.hash === '#doughnuts-cakes' || window.location.hash === '#doughnuts') return 'doughnuts-cakes';
+      if (window.location.hash === '#photo-on-cake' || window.location.hash === '#photo') return 'photo-on-cake';
+      if (window.location.hash === '#pet-animals-cakes' || window.location.hash === '#pets') return 'pet-animals-cakes';
+      if (window.location.hash === '#superhero-cakes' || window.location.hash === '#superheroes') return 'superhero-cakes';
+      if (window.location.hash === '#labubu-cakes' || window.location.hash === '#labubu') return 'labubu-cakes';
+      if (window.location.hash === '#cake-baking-decorating' || window.location.hash === '#classes') return 'cake-baking-decorating';
+      if (window.location.hash === '#admin' || window.location.hash === '#admin-dashboard') return 'admin';
     }
     return 'home';
   });
@@ -74,6 +116,69 @@ export default function App() {
         window.scrollTo({ top: 0, behavior: 'smooth' });
       } else if (window.location.hash === '#cakes-for-ladies') {
         setCurrentPage('cakes-for-ladies');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else if (window.location.hash === '#classic-wedding-cakes' || window.location.hash === '#wedding-cakes') {
+        setCurrentPage('classic-wedding-cakes');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else if (window.location.hash === '#novelty-wedding-cakes') {
+        setCurrentPage('novelty-wedding-cakes');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else if (window.location.hash === '#bride-to-be-cakes') {
+        setCurrentPage('bride-to-be-cakes');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else if (window.location.hash === '#engagement-cakes') {
+        setCurrentPage('engagement-cakes');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else if (window.location.hash === '#grooms-cakes') {
+        setCurrentPage('grooms-cakes');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else if (window.location.hash === '#corporate-cakes') {
+        setCurrentPage('corporate-cakes');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else if (window.location.hash === '#corporate-cookies') {
+        setCurrentPage('corporate-cookies');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else if (window.location.hash === '#cupcakes-with-logo') {
+        setCurrentPage('cupcakes-with-logo');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else if (window.location.hash === '#graduation-cakes' || window.location.hash === '#graduation') {
+        setCurrentPage('graduation-cakes');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else if (window.location.hash === '#cars-ships-planes-cakes' || window.location.hash === '#vehicles') {
+        setCurrentPage('cars-ships-planes-cakes');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else if (window.location.hash === '#sporting-cakes' || window.location.hash === '#sporting') {
+        setCurrentPage('sporting-cakes');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else if (window.location.hash === '#couture-cakes' || window.location.hash === '#couture') {
+        setCurrentPage('couture-cakes');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else if (window.location.hash === '#3d-cakes' || window.location.hash === '#3d-art') {
+        setCurrentPage('3d-cakes');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else if (window.location.hash === '#food-drink-illusion-cakes' || window.location.hash === '#illusion') {
+        setCurrentPage('food-drink-illusion-cakes');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else if (window.location.hash === '#doughnuts-cakes' || window.location.hash === '#doughnuts') {
+        setCurrentPage('doughnuts-cakes');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else if (window.location.hash === '#photo-on-cake' || window.location.hash === '#photo') {
+        setCurrentPage('photo-on-cake');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else if (window.location.hash === '#pet-animals-cakes' || window.location.hash === '#pets') {
+        setCurrentPage('pet-animals-cakes');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else if (window.location.hash === '#superhero-cakes' || window.location.hash === '#superheroes') {
+        setCurrentPage('superhero-cakes');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else if (window.location.hash === '#labubu-cakes' || window.location.hash === '#labubu') {
+        setCurrentPage('labubu-cakes');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else if (window.location.hash === '#cake-baking-decorating' || window.location.hash === '#classes') {
+        setCurrentPage('cake-baking-decorating');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else if (window.location.hash === '#admin' || window.location.hash === '#admin-dashboard') {
+        setCurrentPage('admin');
         window.scrollTo({ top: 0, behavior: 'smooth' });
       } else {
         setCurrentPage('home');
@@ -125,6 +230,126 @@ export default function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const openClassicWeddingCakesPage = () => {
+    window.location.hash = '#classic-wedding-cakes';
+    setCurrentPage('classic-wedding-cakes');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const openNoveltyWeddingCakesPage = () => {
+    window.location.hash = '#novelty-wedding-cakes';
+    setCurrentPage('novelty-wedding-cakes');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const openBrideToBeCakesPage = () => {
+    window.location.hash = '#bride-to-be-cakes';
+    setCurrentPage('bride-to-be-cakes');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const openEngagementCakesPage = () => {
+    window.location.hash = '#engagement-cakes';
+    setCurrentPage('engagement-cakes');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const openGroomsCakesPage = () => {
+    window.location.hash = '#grooms-cakes';
+    setCurrentPage('grooms-cakes');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const openCorporateCakesPage = () => {
+    window.location.hash = '#corporate-cakes';
+    setCurrentPage('corporate-cakes');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const openCorporateCookiesPage = () => {
+    window.location.hash = '#corporate-cookies';
+    setCurrentPage('corporate-cookies');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const openCupcakesWithLogoPage = () => {
+    window.location.hash = '#cupcakes-with-logo';
+    setCurrentPage('cupcakes-with-logo');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const openGraduationCakesPage = () => {
+    window.location.hash = '#graduation-cakes';
+    setCurrentPage('graduation-cakes');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const openVehiclesCakesPage = () => {
+    window.location.hash = '#cars-ships-planes-cakes';
+    setCurrentPage('cars-ships-planes-cakes');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const openSportingCakesPage = () => {
+    window.location.hash = '#sporting-cakes';
+    setCurrentPage('sporting-cakes');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const openCoutureCakesPage = () => {
+    window.location.hash = '#couture-cakes';
+    setCurrentPage('couture-cakes');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const openThreeDCakesPage = () => {
+    window.location.hash = '#3d-cakes';
+    setCurrentPage('3d-cakes');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const openIllusionCakesPage = () => {
+    window.location.hash = '#food-drink-illusion-cakes';
+    setCurrentPage('food-drink-illusion-cakes');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const openDoughnutsCakesPage = () => {
+    window.location.hash = '#doughnuts-cakes';
+    setCurrentPage('doughnuts-cakes');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const openPhotoOnCakePage = () => {
+    window.location.hash = '#photo-on-cake';
+    setCurrentPage('photo-on-cake');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const openPetAnimalsCakesPage = () => {
+    window.location.hash = '#pet-animals-cakes';
+    setCurrentPage('pet-animals-cakes');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const openSuperheroCakesPage = () => {
+    window.location.hash = '#superhero-cakes';
+    setCurrentPage('superhero-cakes');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const openLabubuCakesPage = () => {
+    window.location.hash = '#labubu-cakes';
+    setCurrentPage('labubu-cakes');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const openBakingDecoratingPage = () => {
+    window.location.hash = '#cake-baking-decorating';
+    setCurrentPage('cake-baking-decorating');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   const handleCategoryNavigation = (id) => {
     if (id === 'cookies' || id === 'cookies-cat') {
       openCookiesPage();
@@ -148,6 +373,86 @@ export default function App() {
     }
     if (id === 'cakes-for-ladies' || id === 'ladies' || id === 'girls') {
       openCakesForLadiesPage();
+      return;
+    }
+    if (id === 'classic-wedding-cakes' || id === 'wedding-cakes' || id === 'wedding') {
+      openClassicWeddingCakesPage();
+      return;
+    }
+    if (id === 'novelty-wedding-cakes') {
+      openNoveltyWeddingCakesPage();
+      return;
+    }
+    if (id === 'bride-to-be-cakes') {
+      openBrideToBeCakesPage();
+      return;
+    }
+    if (id === 'engagement-cakes') {
+      openEngagementCakesPage();
+      return;
+    }
+    if (id === 'grooms-cakes') {
+      openGroomsCakesPage();
+      return;
+    }
+    if (id === 'corporate-cakes') {
+      openCorporateCakesPage();
+      return;
+    }
+    if (id === 'corporate-cookies') {
+      openCorporateCookiesPage();
+      return;
+    }
+    if (id === 'cupcakes-with-logo') {
+      openCupcakesWithLogoPage();
+      return;
+    }
+    if (id === 'graduation' || id === 'graduation-cakes') {
+      openGraduationCakesPage();
+      return;
+    }
+    if (id === 'vehicles' || id === 'cars-ships-planes-cakes') {
+      openVehiclesCakesPage();
+      return;
+    }
+    if (id === 'sporting' || id === 'sporting-cakes') {
+      openSportingCakesPage();
+      return;
+    }
+    if (id === 'couture' || id === 'couture-cakes') {
+      openCoutureCakesPage();
+      return;
+    }
+    if (id === '3d-art' || id === '3d-cakes') {
+      openThreeDCakesPage();
+      return;
+    }
+    if (id === 'illusion' || id === 'food-drink-illusion-cakes') {
+      openIllusionCakesPage();
+      return;
+    }
+    if (id === 'doughnuts' || id === 'doughnuts-cakes') {
+      openDoughnutsCakesPage();
+      return;
+    }
+    if (id === 'photo' || id === 'photo-on-cake') {
+      openPhotoOnCakePage();
+      return;
+    }
+    if (id === 'pets' || id === 'pet-animals-cakes') {
+      openPetAnimalsCakesPage();
+      return;
+    }
+    if (id === 'superheroes' || id === 'superhero-cakes') {
+      openSuperheroCakesPage();
+      return;
+    }
+    if (id === 'labubu' || id === 'labubu-cakes') {
+      openLabubuCakesPage();
+      return;
+    }
+    if (id === 'classes' || id === 'cake-baking-decorating') {
+      openBakingDecoratingPage();
       return;
     }
     if (currentPage !== 'home') goToHome();
@@ -177,6 +482,10 @@ export default function App() {
     );
     setTimeout(() => setToastMessage(null), 4000);
   };
+
+  if (currentPage === 'admin') {
+    return <AdminDashboard onBackToStore={goToHome} />;
+  }
 
   return (
     <div className={`min-h-screen bg-[#FFF9F0] text-[#4A2116] flex flex-col font-sans selection:bg-[#C58A19] selection:text-white w-full max-w-full overflow-x-hidden relative ${isAr ? 'font-arabic' : 'font-poppins'}`}>
@@ -211,7 +520,22 @@ export default function App() {
       <Navbar 
         currentLang={currentLang}
         activeCategory={
-          ['cookies', 'cupcakes', 'cake-pops', 'cakes-for-kids', 'cakes-for-guys', 'cakes-for-ladies'].includes(currentPage)
+          [
+            'cookies',
+            'cupcakes',
+            'cake-pops',
+            'cakes-for-kids',
+            'cakes-for-guys',
+            'cakes-for-ladies',
+            'classic-wedding-cakes',
+            'novelty-wedding-cakes',
+            'bride-to-be-cakes',
+            'engagement-cakes',
+            'grooms-cakes',
+            'corporate-cakes',
+            'corporate-cookies',
+            'cupcakes-with-logo'
+          ].includes(currentPage)
             ? currentPage
             : activeCategory
         }
@@ -252,6 +576,86 @@ export default function App() {
       ) : currentPage === 'cakes-for-ladies' ? (
         <main className="w-full flex-1">
           <CakesForLadiesPage currentLang={currentLang} />
+        </main>
+      ) : currentPage === 'classic-wedding-cakes' ? (
+        <main className="w-full flex-1">
+          <ClassicWeddingCakesPage currentLang={currentLang} />
+        </main>
+      ) : currentPage === 'novelty-wedding-cakes' ? (
+        <main className="w-full flex-1">
+          <NoveltyWeddingCakesPage currentLang={currentLang} />
+        </main>
+      ) : currentPage === 'bride-to-be-cakes' ? (
+        <main className="w-full flex-1">
+          <BrideToBeCakesPage currentLang={currentLang} />
+        </main>
+      ) : currentPage === 'engagement-cakes' ? (
+        <main className="w-full flex-1">
+          <EngagementCakesPage currentLang={currentLang} />
+        </main>
+      ) : currentPage === 'grooms-cakes' ? (
+        <main className="w-full flex-1">
+          <GroomsCakesPage currentLang={currentLang} />
+        </main>
+      ) : currentPage === 'corporate-cakes' ? (
+        <main className="w-full flex-1">
+          <CorporateCakesPage currentLang={currentLang} />
+        </main>
+      ) : currentPage === 'corporate-cookies' ? (
+        <main className="w-full flex-1">
+          <CorporateCookiesPage currentLang={currentLang} />
+        </main>
+      ) : currentPage === 'cupcakes-with-logo' ? (
+        <main className="w-full flex-1">
+          <CupcakesWithLogoPage currentLang={currentLang} />
+        </main>
+      ) : currentPage === 'graduation-cakes' ? (
+        <main className="w-full flex-1">
+          <GraduationCakesPage currentLang={currentLang} />
+        </main>
+      ) : currentPage === 'cars-ships-planes-cakes' ? (
+        <main className="w-full flex-1">
+          <VehiclesCakesPage currentLang={currentLang} />
+        </main>
+      ) : currentPage === 'sporting-cakes' ? (
+        <main className="w-full flex-1">
+          <SportingCakesPage currentLang={currentLang} />
+        </main>
+      ) : currentPage === 'couture-cakes' ? (
+        <main className="w-full flex-1">
+          <CoutureCakesPage currentLang={currentLang} />
+        </main>
+      ) : currentPage === '3d-cakes' ? (
+        <main className="w-full flex-1">
+          <ThreeDCakesPage currentLang={currentLang} />
+        </main>
+      ) : currentPage === 'food-drink-illusion-cakes' ? (
+        <main className="w-full flex-1">
+          <IllusionCakesPage currentLang={currentLang} />
+        </main>
+      ) : currentPage === 'doughnuts-cakes' ? (
+        <main className="w-full flex-1">
+          <DoughnutsCakesPage currentLang={currentLang} />
+        </main>
+      ) : currentPage === 'photo-on-cake' ? (
+        <main className="w-full flex-1">
+          <PhotoOnCakePage currentLang={currentLang} />
+        </main>
+      ) : currentPage === 'pet-animals-cakes' ? (
+        <main className="w-full flex-1">
+          <PetAnimalsCakesPage currentLang={currentLang} />
+        </main>
+      ) : currentPage === 'superhero-cakes' ? (
+        <main className="w-full flex-1">
+          <SuperheroCakesPage currentLang={currentLang} />
+        </main>
+      ) : currentPage === 'labubu-cakes' ? (
+        <main className="w-full flex-1">
+          <LabubuCakesPage currentLang={currentLang} />
+        </main>
+      ) : currentPage === 'cake-baking-decorating' ? (
+        <main className="w-full flex-1">
+          <BakingDecoratingPage currentLang={currentLang} />
         </main>
       ) : (
         <main className="w-full flex-1">

@@ -17,16 +17,16 @@ export const translations = {
     customizeCake: 'Customize Cake',
     
     weddingDropdown: [
-      'Classic Wedding Cakes',
-      'Novelty Wedding Cakes',
-      'Bride To Be Cakes',
-      'Engagement Celebration Cakes',
-      'Grooms Cakes'
+      { id: 'classic-wedding-cakes', label: 'Classic Wedding Cakes' },
+      { id: 'novelty-wedding-cakes', label: 'Novelty Wedding Cakes' },
+      { id: 'bride-to-be-cakes', label: 'Bride To Be Cakes' },
+      { id: 'engagement-cakes', label: 'Engagement Celebration Cakes' },
+      { id: 'grooms-cakes', label: 'Grooms Cakes' }
     ],
     corporateDropdown: [
-      'Corporate cakes',
-      'Corporate Cookies',
-      'Cupcakes with logo'
+      { id: 'corporate-cakes', label: 'Corporate cakes' },
+      { id: 'corporate-cookies', label: 'Corporate Cookies' },
+      { id: 'cupcakes-with-logo', label: 'Cupcakes with logo' }
     ],
 
     slides: [
@@ -405,16 +405,16 @@ export const translations = {
     customizeCake: 'صمّم كيكتك',
     
     weddingDropdown: [
-      'كيك الأعراس الكلاسيكي',
-      'كيك الأعراس المبتكر والمميز',
-      'كيك حفلات توديع العزوبية (Bride to Be)',
-      'كيك حفلات الخطوبة',
-      'كيك العريس'
+      { id: 'classic-wedding-cakes', label: 'كيك الأعراس الكلاسيكي' },
+      { id: 'novelty-wedding-cakes', label: 'كيك الأعراس المبتكر والمميز' },
+      { id: 'bride-to-be-cakes', label: 'كيك حفلات توديع العزوبية (Bride to Be)' },
+      { id: 'engagement-cakes', label: 'كيك حفلات الخطوبة' },
+      { id: 'grooms-cakes', label: 'كيك العريس' }
     ],
     corporateDropdown: [
-      'كيك الشركات',
-      'كوكيز الشركات',
-      'كب كيك مع شعار الشركة'
+      { id: 'corporate-cakes', label: 'كيك الشركات' },
+      { id: 'corporate-cookies', label: 'كوكيز الشركات' },
+      { id: 'cupcakes-with-logo', label: 'كب كيك مع شعار الشركة' }
     ],
 
     slides: [

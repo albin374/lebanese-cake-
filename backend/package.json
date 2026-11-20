@@ -1,0 +1,30 @@
+{
+  "name": "lebanese-bakery-backend",
+  "version": "1.0.0",
+  "description": "Node.js and MySQL Backend for Lebanese Dream Bakery with Admin Dashboard API",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "init-db": "node database/init.js",
+    "clear-demo": "node database/clear-demo.js"
+  },
+  "keywords": [
+    "bakery",
+    "express",
+    "mysql",
+    "admin-dashboard",
+    "xampp"
+  ],
+  "author": "Lebanese Dream Bakery",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
+    "lebanese-cake-banner": "file:..",
+    "mysql2": "^3.12.0"
+  }
+}
