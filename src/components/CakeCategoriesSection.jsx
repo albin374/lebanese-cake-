@@ -29,7 +29,13 @@ export default function CakeCategoriesSection({ currentLang = 'en', onSelectCate
               <div
                 key={category.id}
                 onClick={() => {
-                  const directPages = ['cookies-cat', 'cookies', 'cupcakes-cat', 'cupcakes', 'cake-pops-cat', 'cake-pops'];
+                  const directPages = [
+                    'cookies-cat', 'cookies', 
+                    'cupcakes-cat', 'cupcakes', 
+                    'cake-pops-cat', 'cake-pops',
+                    'cakes-for-guys', 'boys',
+                    'cakes-for-ladies', 'girls'
+                  ];
                   if (directPages.includes(category.id)) {
                     if (onSelectCategory) onSelectCategory(category.id);
                   } else {

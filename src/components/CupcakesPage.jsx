@@ -5,11 +5,12 @@ export default function CupcakesPage({ currentLang = 'en' }) {
 
   const bannerImage = '/Colorful Cupcakes on a Wooden Table.png';
 
-  const title = isAr ? 'أفضل كب كيك في دبي' : 'Best Cupcakes in Dubai';
+  const titleLine1 = isAr ? 'أفضل كب كيك' : 'Best Cupcakes';
+  const titleLine2 = isAr ? 'في دبي' : 'in Dubai';
   
   const description = isAr
-    ? 'استمتع بتشكيلة الكب كيك الحرفية الفاخرة، المخبوزة طازجة يومياً بأفخر أنواع الشوكولاتة البلجيكية، كريمة الزبدة الفرنسية الحريرية وفانيليا مدغشقر. كل قطعة كب كيك هي تحفة فنية مصغرة مصممة خصيصاً لتناسب مناسباتك السعيدة وحفلاتك الخاصة بأشهى النكهات.'
-    : 'Delight in our handcrafted artisanal cupcakes, freshly baked daily using pure Belgian chocolate, silky French buttercream, and Madagascar vanilla. Each cupcake is a miniature work of art, custom designed to match your celebration themes, weddings, and joyful gatherings. Handcrafted with love to bring sweetness to every moment.';
+    ? 'قطع كب كيك حرفية تُحضر طازجة يومياً بكريمة الزبدة الفرنسية الفاخرة والشوكولاتة البلجيكية، مصممة لتزين كل مناسباتكم السعيدة.'
+    : 'Artisanal gourmet cupcakes baked fresh daily with silky French buttercream and Belgian chocolate, custom designed for every celebration.';
 
   return (
     <div className={`w-full flex flex-col ${isAr ? 'font-arabic' : 'font-poppins'}`}>
@@ -18,13 +19,13 @@ export default function CupcakesPage({ currentLang = 'en' }) {
       <section className="relative w-full overflow-hidden bg-[#24130A] select-none">
         
         {/* Banner Container matching exact natural image aspect ratio (2172 x 724) */}
-        <div className="relative w-full aspect-[2172/724] min-h-[260px] sm:min-h-[300px] md:min-h-[340px] flex items-center">
+        <div className="relative w-full aspect-[2172/724] min-h-[240px] sm:min-h-[280px] md:min-h-[320px] flex items-center">
           
           {/* Banner Photography Background */}
           <div className="absolute inset-0 z-0">
             <img 
               src={bannerImage} 
-              alt={title}
+              alt={`${titleLine1} ${titleLine2}`}
               className="w-full h-full object-cover object-center"
             />
 
@@ -39,17 +40,20 @@ export default function CupcakesPage({ currentLang = 'en' }) {
             <div className="absolute inset-0 bg-gradient-to-t from-[#201007]/85 via-transparent to-[#201007]/25 pointer-events-none" />
           </div>
 
-          {/* Foreground Text & Description Content Only */}
-          <div className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-10 lg:px-14 py-4 sm:py-6 md:py-8 lg:py-10">
-            <div className="w-full sm:w-[70%] md:w-[62%] lg:w-[56%] flex flex-col items-start text-left rtl:items-end rtl:text-right">
+          {/* Foreground Left-Aligned Typographic Overlay matching Homepage Hero */}
+          <div className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-10 lg:px-14 py-4 sm:py-6 md:py-8 lg:py-10 flex">
+            <div className="w-full sm:w-[65%] md:w-[58%] lg:w-[52%] flex flex-col items-start text-left rtl:items-end rtl:text-right">
               
-              {/* Banner Headline */}
-              <h1 className="font-serif not-italic font-bold text-2xl sm:text-3xl md:text-4xl lg:text-[44px] leading-[1.15] text-[#FFF9F0] tracking-tight drop-shadow-[0_3px_14px_rgba(0,0,0,0.85)] mb-2 sm:mb-3">
-                {title}
+              {/* Luxury Upright Headline in Playfair Display (One Line) */}
+              <h1 className={`font-serif not-italic font-semibold text-2xl sm:text-3xl md:text-4xl lg:text-[42px] leading-tight text-[#FFF9F0] tracking-tight drop-shadow-[0_2px_12px_rgba(0,0,0,0.85)] ${
+                isAr ? 'font-arabic font-bold text-2xl sm:text-3xl md:text-4xl' : ''
+              }`}>
+                <span>{titleLine1} </span>
+                <span className="text-[#E6C783]">{titleLine2}</span>
               </h1>
 
-              {/* Banner Description */}
-              <p className="font-poppins text-xs sm:text-[13px] md:text-sm lg:text-[15px] text-[#F5ECE0] leading-relaxed font-normal max-w-xl drop-shadow-[0_1px_4px_rgba(0,0,0,0.7)]">
+              {/* Reduced Elegant Description with Gold Left Border */}
+              <p className="font-poppins text-xs sm:text-[13px] md:text-sm lg:text-[14.5px] text-[#F5EBDD] font-light leading-relaxed max-w-md sm:max-w-lg tracking-wide mt-2 sm:mt-3 drop-shadow-[0_1px_8px_rgba(0,0,0,0.8)] border-l-2 border-[#C58A19]/80 pl-3.5 rtl:border-l-0 rtl:border-r-2 rtl:pr-3.5">
                 {description}
               </p>
 

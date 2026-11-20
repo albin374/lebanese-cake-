@@ -5,11 +5,12 @@ export default function CookiesPage({ currentLang = 'en' }) {
 
   const cookieBannerImage = '/Golden Chocolate Chip Cookie Stack.png';
 
-  const title = isAr ? 'أفضل كوكيز في دبي' : 'Best Cookies in Dubai';
+  const titleLine1 = isAr ? 'أفضل كوكيز' : 'Best Cookies';
+  const titleLine2 = isAr ? 'في دبي' : 'in Dubai';
   
   const description = isAr
-    ? 'أفضل كوكيز في دبي. نعم، لقد قرأت ذلك بشكل صحيح! كوكيزنا لا مثيل له، ويُخبز طازجاً حسب الطلب بأي نكهات وتصاميم يرغب بها قلبك. لذا ضع الطحين جانباً وأطفئ فرنك، واترك العمل الشاق لنا، واستمتع بالرائحة الشهية لدفعة كوكيز صُنعت يدوياً خصيصاً لك. أطلق العنان لعاشق الكوكيز بداخلك!'
-    : 'Best cookies in Dubai. Yes, you read that right. Our cookies are second to none, and freshly baked to order according to whichever flavours and designs your heart desires. So put that flour down and turn your oven off. Leave the hard work to us, and enjoy the sweet aroma of a batch of cookies made by hand, just for you. Unleash the Cookie Monster.';
+    ? 'كوكيز طازج يُخبز يومياً بأجود أنواع الشوكولاتة البلجيكية والزبدة الفرنسية الفاخرة، لتستمتع بقرمشة ذهبية وقلب دافئ غني يذوب في الفم.'
+    : 'Handcrafted and freshly baked to order with premium Belgian chocolate chunks and pure French butter. Enjoy warm, melt-in-your-mouth perfection in every single bite.';
 
   return (
     <div className={`w-full flex flex-col ${isAr ? 'font-arabic' : 'font-poppins'}`}>
@@ -18,13 +19,13 @@ export default function CookiesPage({ currentLang = 'en' }) {
       <section className="relative w-full overflow-hidden bg-[#24130A] select-none">
         
         {/* Banner Container matching exact natural image aspect ratio (2172 x 724) */}
-        <div className="relative w-full aspect-[2172/724] min-h-[260px] sm:min-h-[300px] md:min-h-[340px] flex items-center">
+        <div className="relative w-full aspect-[2172/724] min-h-[240px] sm:min-h-[280px] md:min-h-[320px] flex items-center">
           
           {/* Banner Photography Background */}
           <div className="absolute inset-0 z-0">
             <img 
               src={cookieBannerImage} 
-              alt={title}
+              alt={`${titleLine1} ${titleLine2}`}
               className="w-full h-full object-cover object-center"
             />
 
@@ -39,17 +40,20 @@ export default function CookiesPage({ currentLang = 'en' }) {
             <div className="absolute inset-0 bg-gradient-to-t from-[#201007]/85 via-transparent to-[#201007]/25 pointer-events-none" />
           </div>
 
-          {/* Foreground Text & Description Content Only */}
-          <div className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-10 lg:px-14 py-4 sm:py-6 md:py-8 lg:py-10">
-            <div className="w-full sm:w-[70%] md:w-[62%] lg:w-[56%] flex flex-col items-start text-left rtl:items-end rtl:text-right">
+          {/* Foreground Left-Aligned Typographic Overlay matching Homepage Hero */}
+          <div className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-10 lg:px-14 py-4 sm:py-6 md:py-8 lg:py-10 flex">
+            <div className="w-full sm:w-[65%] md:w-[58%] lg:w-[52%] flex flex-col items-start text-left rtl:items-end rtl:text-right">
               
-              {/* Banner Headline */}
-              <h1 className="font-serif not-italic font-bold text-2xl sm:text-3xl md:text-4xl lg:text-[44px] leading-[1.15] text-[#FFF9F0] tracking-tight drop-shadow-[0_3px_14px_rgba(0,0,0,0.85)] mb-2 sm:mb-3">
-                {title}
+              {/* Luxury Upright Headline in Playfair Display (One Line) */}
+              <h1 className={`font-serif not-italic font-semibold text-2xl sm:text-3xl md:text-4xl lg:text-[42px] leading-tight text-[#FFF9F0] tracking-tight drop-shadow-[0_2px_12px_rgba(0,0,0,0.85)] ${
+                isAr ? 'font-arabic font-bold text-2xl sm:text-3xl md:text-4xl' : ''
+              }`}>
+                <span>{titleLine1} </span>
+                <span className="text-[#E6C783]">{titleLine2}</span>
               </h1>
 
-              {/* Banner Description */}
-              <p className="font-poppins text-xs sm:text-[13px] md:text-sm lg:text-[15px] text-[#F5ECE0] leading-relaxed font-normal max-w-xl drop-shadow-[0_1px_4px_rgba(0,0,0,0.7)]">
+              {/* Reduced Elegant Description with Gold Left Border */}
+              <p className="font-poppins text-xs sm:text-[13px] md:text-sm lg:text-[14.5px] text-[#F5EBDD] font-light leading-relaxed max-w-md sm:max-w-lg tracking-wide mt-2 sm:mt-3 drop-shadow-[0_1px_8px_rgba(0,0,0,0.8)] border-l-2 border-[#C58A19]/80 pl-3.5 rtl:border-l-0 rtl:border-r-2 rtl:pr-3.5">
                 {description}
               </p>
 

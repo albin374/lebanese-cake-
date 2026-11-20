@@ -17,16 +17,16 @@ export const translations = {
     customizeCake: 'Customize Cake',
     
     weddingDropdown: [
-      'Royal 3-Tier Luxury',
-      'Floral Elegance Buttercream',
-      'Minimalist Modern Fondant',
-      'Custom Monogram Wedding Cakes'
+      'Classic Wedding Cakes',
+      'Novelty Wedding Cakes',
+      'Bride To Be Cakes',
+      'Engagement Celebration Cakes',
+      'Grooms Cakes'
     ],
     corporateDropdown: [
-      'Logo Printed Event Cakes',
-      'Executive Tiered Displays',
-      'Milestone Celebration Cakes',
-      'Corporate Cupcake Towers'
+      'Corporate cakes',
+      'Corporate Cookies',
+      'Cupcakes with logo'
     ],
 
     slides: [
@@ -64,9 +64,9 @@ export const translations = {
       { id: 'wedding', title: 'Wedding Cakes in Dubai', desc: 'Luxury tiered celebration masterpieces', image: '/categorycake imges/Wedding Cake.png' },
       { id: 'graduation', title: 'Graduation Cakes', desc: 'Celebrate milestones & academic achievements', image: '/categorycake imges/Graduation Cake Celebration.png' },
       { id: 'vehicles', title: 'Cars, Ships, Yachts & Planes Cakes', desc: 'Custom 3D sculpted luxury vehicle designs', image: '/categorycake imges/Bus Cake Celebration.png' },
-      { id: 'cupcakes-cat', title: 'Cupcakes', desc: 'Artisanal gourmet cupcakes for any gathering', image: '/Colorful Cupcakes on a Wooden Table.png' },
-      { id: 'cookies-cat', title: 'Best Cookies in Dubai', desc: 'Freshly baked cookies & Parisian macarons', image: '/Golden Chocolate Chip Cookie Stack.png' },
-      { id: 'cake-pops-cat', title: 'Cake Pops', desc: 'Delightful handheld dessert bites for parties', image: '/Colorful Cake Pops in a Ribbon Jar.png' },
+      { id: 'cupcakes-cat', title: 'Cupcakes', desc: 'Artisanal gourmet cupcakes for any gathering', image: '/categorycake imges/Gourmet Petit Cake Gift Box.png' },
+      { id: 'cookies-cat', title: 'Best Cookies in Dubai', desc: 'Freshly baked cookies & Parisian macarons', image: '/categorycake imges/Cookies .png' },
+      { id: 'cake-pops-cat', title: 'Cake Pops', desc: 'Delightful handheld dessert bites for parties', image: '/categorycake imges/Cute Sheep Cake Pop .png' },
       { id: 'boys', title: 'Cakes for boys', desc: 'Gaming, superheroes & adventure themes', image: '/categorycake imges/boys2Cake.png' },
       { id: 'girls', title: 'Cakes for girls', desc: 'Princess castles, floral dreams & fantasy art', image: '/categorycake imges/girls cake.png' },
       { id: 'sporting', title: 'Sporting Cakes', desc: 'Football, tennis, basketball & fitness themes', image: '/categorycake imges/sports cake.png' },
@@ -405,16 +405,16 @@ export const translations = {
     customizeCake: 'صمّم كيكتك',
     
     weddingDropdown: [
-      'كيك الأعراس الملكي 3 طبقات',
-      'كيك الورود الفاخر بكريمة الزبدة',
-      'فوندان عصري أنيق',
-      'كيك مخصص بالأحرف الذهبية'
+      'كيك الأعراس الكلاسيكي',
+      'كيك الأعراس المبتكر والمميز',
+      'كيك حفلات توديع العزوبية (Bride to Be)',
+      'كيك حفلات الخطوبة',
+      'كيك العريس'
     ],
     corporateDropdown: [
-      'كيك فعاليات بشعار الشركة',
-      'أبراج كب كيك للمؤتمرات',
-      'كيك احتفاليات الإنجاز السنوي',
-      'ضيافة تنفيذية فاخرة'
+      'كيك الشركات',
+      'كوكيز الشركات',
+      'كب كيك مع شعار الشركة'
     ],
 
     slides: [
@@ -452,9 +452,9 @@ export const translations = {
       { id: 'wedding', title: 'كيك الأعراس في دبي', desc: 'تحف احتفالية متعددة الطبقات بأعلى معايير الفخامة', image: '/categorycake imges/Wedding Cake.png' },
       { id: 'graduation', title: 'كيك حفلات التخرج', desc: 'احتفل بالنجاح والإنجازات الأكاديمية بتصاميم استثنائية', image: '/categorycake imges/Graduation Cake Celebration.png' },
       { id: 'vehicles', title: 'كيك السيارات واليخوت والطائرات', desc: 'تصاميم مجسمة ثلاثية الأبعاد للمركبات الفارهة', image: '/categorycake imges/Bus Cake Celebration.png' },
-      { id: 'cupcakes-cat', title: 'كب كيك فاخر', desc: 'قطع كب كيك حرفية بنكهات فرنسية وبلجيكية', image: '/Colorful Cupcakes on a Wooden Table.png' },
-      { id: 'cookies-cat', title: 'أفضل كوكيز في دبي', desc: 'كوكيز طازج وماكرون فرنسي بنكهات متنوعة', image: '/Golden Chocolate Chip Cookie Stack.png' },
-      { id: 'cake-pops-cat', title: 'كيك بوبس', desc: 'كرات كيك شهية على أعواد للحفلات والمناسبات', image: '/Colorful Cake Pops in a Ribbon Jar.png' },
+      { id: 'cupcakes-cat', title: 'كب كيك فاخر', desc: 'قطع كب كيك حرفية بنكهات فرنسية وبلجيكية', image: '/categorycake imges/Gourmet Petit Cake Gift Box.png' },
+      { id: 'cookies-cat', title: 'أفضل كوكيز في دبي', desc: 'كوكيز طازج وماكرون فرنسي بنكهات متنوعة', image: '/categorycake imges/Cookies .png' },
+      { id: 'cake-pops-cat', title: 'كيك بوبس', desc: 'كرات كيك شهية على أعواد للحفلات والمناسبات', image: '/categorycake imges/Cute Sheep Cake Pop .png' },
       { id: 'boys', title: 'كيك للأولاد', desc: 'ثيمات ألعاب الفيديو والأبطال الخارقين والمغامرات', image: '/categorycake imges/boys2Cake.png' },
       { id: 'girls', title: 'كيك للبنات', desc: 'قلاع الأميرات والورود واللمسات الخيالية الساحرة', image: '/categorycake imges/girls cake.png' },
       { id: 'sporting', title: 'كيك المناسبات الرياضية', desc: 'كرة القدم وكرة السلة واللياقة البدنية', image: '/categorycake imges/sports cake.png' },

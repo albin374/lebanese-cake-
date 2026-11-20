@@ -15,6 +15,8 @@ import CookiesPage from './components/CookiesPage';
 import CupcakesPage from './components/CupcakesPage';
 import CakePopsPage from './components/CakePopsPage';
 import CakesForKidsPage from './components/CakesForKidsPage';
+import CakesForGuysPage from './components/CakesForGuysPage';
+import CakesForLadiesPage from './components/CakesForLadiesPage';
 import { translations } from './translations';
 import { Phone, Mail, Clock, X, Check, ShoppingBag, UserRound } from 'lucide-react';
 
@@ -27,6 +29,8 @@ export default function App() {
       if (window.location.hash === '#cupcakes') return 'cupcakes';
       if (window.location.hash === '#cake-pops') return 'cake-pops';
       if (window.location.hash === '#cakes-for-kids') return 'cakes-for-kids';
+      if (window.location.hash === '#cakes-for-guys') return 'cakes-for-guys';
+      if (window.location.hash === '#cakes-for-ladies') return 'cakes-for-ladies';
     }
     return 'home';
   });
@@ -64,6 +68,12 @@ export default function App() {
         window.scrollTo({ top: 0, behavior: 'smooth' });
       } else if (window.location.hash === '#cakes-for-kids') {
         setCurrentPage('cakes-for-kids');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else if (window.location.hash === '#cakes-for-guys') {
+        setCurrentPage('cakes-for-guys');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else if (window.location.hash === '#cakes-for-ladies') {
+        setCurrentPage('cakes-for-ladies');
         window.scrollTo({ top: 0, behavior: 'smooth' });
       } else {
         setCurrentPage('home');
@@ -103,6 +113,18 @@ export default function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const openCakesForGuysPage = () => {
+    window.location.hash = '#cakes-for-guys';
+    setCurrentPage('cakes-for-guys');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const openCakesForLadiesPage = () => {
+    window.location.hash = '#cakes-for-ladies';
+    setCurrentPage('cakes-for-ladies');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   const handleCategoryNavigation = (id) => {
     if (id === 'cookies' || id === 'cookies-cat') {
       openCookiesPage();
@@ -118,6 +140,14 @@ export default function App() {
     }
     if (id === 'cakes-for-kids' || id === 'kids-cat') {
       openCakesForKidsPage();
+      return;
+    }
+    if (id === 'cakes-for-guys' || id === 'guys' || id === 'boys') {
+      openCakesForGuysPage();
+      return;
+    }
+    if (id === 'cakes-for-ladies' || id === 'ladies' || id === 'girls') {
+      openCakesForLadiesPage();
       return;
     }
     if (currentPage !== 'home') goToHome();
@@ -181,7 +211,7 @@ export default function App() {
       <Navbar 
         currentLang={currentLang}
         activeCategory={
-          ['cookies', 'cupcakes', 'cake-pops', 'cakes-for-kids'].includes(currentPage)
+          ['cookies', 'cupcakes', 'cake-pops', 'cakes-for-kids', 'cakes-for-guys', 'cakes-for-ladies'].includes(currentPage)
             ? currentPage
             : activeCategory
         }
@@ -214,6 +244,14 @@ export default function App() {
       ) : currentPage === 'cakes-for-kids' ? (
         <main className="w-full flex-1">
           <CakesForKidsPage currentLang={currentLang} />
+        </main>
+      ) : currentPage === 'cakes-for-guys' ? (
+        <main className="w-full flex-1">
+          <CakesForGuysPage currentLang={currentLang} />
+        </main>
+      ) : currentPage === 'cakes-for-ladies' ? (
+        <main className="w-full flex-1">
+          <CakesForLadiesPage currentLang={currentLang} />
         </main>
       ) : (
         <main className="w-full flex-1">
