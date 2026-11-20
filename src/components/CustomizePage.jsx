@@ -12,7 +12,8 @@ import {
   Layers, 
   ShoppingBag, 
   MessageCircle, 
-  HelpCircle
+  HelpCircle,
+  AlertCircle
 } from 'lucide-react';
 import { translations } from '../translations';
 
@@ -40,6 +41,8 @@ export default function CustomizePage({
   const [selectedBirthdayItems, setSelectedBirthdayItems] = useState([]);
   const [selectedSuperheroDesign, setSelectedSuperheroDesign] = useState(null);
   const [selectedBoysDesign, setSelectedBoysDesign] = useState(null);
+  const [selectedGirlsDesign, setSelectedGirlsDesign] = useState(null);
+  const [stepValidationError, setStepValidationError] = useState('');
   const [cakeMessage, setCakeMessage] = useState('Happy Birthday!');
   const [messageStyle, setMessageStyle] = useState('piped-gold');
   const [specialInstructions, setSpecialInstructions] = useState('');
@@ -97,7 +100,7 @@ export default function CustomizePage({
     {
       id: 'girls',
       title: isAr ? 'كيك للبنات' : 'Girls Cake',
-      image: '/customize/Frozen-Style Elsa Birthday Cake Cutout.png',
+      image: '/customize/girsl cake/girls cake.png',
       icon: <Heart className="w-5 h-5" />
     }
   ];
@@ -706,6 +709,99 @@ export default function CustomizePage({
     ? (boysDesignOptions.find(d => d.id === selectedBoysDesign) || null)
     : null;
 
+  // 6 Girls Cake Designs (from public/customize/girsl cake)
+  const girlsDesignOptions = [
+    {
+      id: 'frozen-queen-elsa',
+      name: isAr ? 'كيك ملكة الثلج إلسا الفاخر' : 'Frozen Queen Elsa Ice Palace Cake',
+      category: isAr ? 'أميرات ديزني وفروزن' : 'Disney Frozen & Princesses',
+      hero: isAr ? 'ملكة الثلج إلسا' : 'Queen Elsa',
+      desc: isAr ? 'كيك ساحر من طبقتين بتمثال ملكة الثلج إلسا وفستانها التركوازي الملكي المزخرف برقاقات الثلج وأبراج الجليد الكريستالية' : 'Magnificent two-tier ice-blue cake featuring sculpted Queen Elsa in her snowflake turquoise gown and crystalline ice palace spires',
+      image: '/customize/girsl cake/girls cake.png'
+    },
+    {
+      id: 'golden-balloon-princess',
+      name: isAr ? 'كيك الأميرة الصغيرة وبالونات الذهب ودبدوب' : 'Golden Balloon Princess & Teddy Bear Cake',
+      category: isAr ? 'أميرات وفخامة كلاسيكية' : 'Royal Princess & Pastels',
+      hero: isAr ? 'الأميرة الصغيرة' : 'Little Princess',
+      desc: isAr ? 'كيك أبيض ملكي مزين بمجسم أميرة أنيقة ودبدوب صغير مع عنقود بالونات ذهبية ولؤلؤية وشمعة رقم 5 ذهبية براقة' : 'Elegant white cylinder cake with a golden dress princess figure, teddy bear, shimmering gold and ivory balloon sphere cascade, and metallic gold candle',
+      image: '/customize/girsl cake/images.jpg'
+    },
+    {
+      id: 'hello-kitty-rosette',
+      name: isAr ? 'كيك هالو كيتي بوردات الروزيت الوردية' : 'Hello Kitty Pink Rosette Buttercream Cake',
+      category: isAr ? 'شخصيات كرتونية محبوبة' : 'Hello Kitty & Kawaii',
+      hero: isAr ? 'هالو كيتي' : 'Hello Kitty',
+      desc: isAr ? 'كيك مغطى بالكامل بوردات كريمة الزبدة الوردية الناعمة تتوسطه شخصية هالو كيتي اللطيفة بفيونكتها الوردية' : 'Delicately piped pink buttercream rosettes covering the entire cake, centered with iconic Hello Kitty face and pastel bow',
+      image: '/customize/girsl cake/images (1).jpg'
+    },
+    {
+      id: 'floral-gown-princess',
+      name: isAr ? 'كيك فستان الورد الملكي للأميرة' : 'Floral Rosette Princess Gown Cake',
+      category: isAr ? 'أزياء وأميرات راقية' : 'Couture Princess',
+      hero: isAr ? 'فستان الأميرات' : 'Princess Gown',
+      desc: isAr ? 'كيك راقٍ مستوحى من فساتين السهرة الملكية مع ورود كريمة زهرية تتساقط كفستان فاخر وباقة زهور وحبيبات لؤلؤ' : 'Couture cake featuring an elegant princess silhouette whose lavish gown cascades down in handcrafted blushing pink buttercream roses with edible pearls',
+      image: '/customize/girsl cake/images (2).jpg'
+    },
+    {
+      id: 'magical-unicorn-rainbow',
+      name: isAr ? 'كيك اليونيكورن السحري وقوس قزح' : 'Magical Pastel Unicorn & Rainbow Cake',
+      category: isAr ? 'سحر وخيال' : 'Unicorns & Fantasy',
+      hero: isAr ? 'يونيكورن سحري' : 'Magical Unicorn',
+      desc: isAr ? 'كيك ساحر بطبقتين يضم مجسم يونيكورن بقرن ذهبي وشعر ملون وقوس قزح بألوان الباستيل ونجوم وغيوم بيضاء' : 'Dreamy two-tier pastel unicorn cake featuring a golden spiral horn, colorful pastel mane, 3D rainbow arch topper, and golden stars',
+      image: '/customize/girsl cake/images (3).jpg'
+    },
+    {
+      id: 'barbie-mermaid-ocean',
+      name: isAr ? 'كيك باربي حورية البحر وأعماق البحار' : 'Barbie Mermaid Under-the-Sea Cake',
+      category: isAr ? 'باربي وعالم البحار' : 'Barbie & Mermaids',
+      hero: isAr ? 'باربي حورية البحر' : 'Barbie Mermaid',
+      desc: isAr ? 'كيك فيروزي مستوحى من عالم المحيط مع دمية باربي حورية البحر بذيل أرجواني لامع وأحصنة بحر وأصداف ولآلئ بحرية' : 'Enchanting turquoise oceanic cake with a Barbie mermaid doll, shimmering sculpted purple tail, sea horses, starfish, pearls, and coral accents',
+      image: '/customize/girsl cake/images (4).jpg'
+    }
+  ];
+
+  const selectedGirlsItem = selectedGirlsDesign
+    ? (girlsDesignOptions.find(d => d.id === selectedGirlsDesign) || null)
+    : null;
+
+  // Step validation helper: Check if a given step is completed
+  const isStepCompleted = (stepNumber) => {
+    switch (stepNumber) {
+      case 1:
+        return !!selectedShapeLayer;
+      case 2:
+        return !!selectedSize;
+      case 3:
+        return !!selectedSponge;
+      case 4:
+        return !!selectedFilling; // Must select a gourmet filling
+      case 5:
+        return !!selectedOccasion;
+      case 6:
+        // Design and Toppings: There is no condition for this step as requested
+        return true;
+      case 7:
+        return true;
+      case 8:
+        return true;
+      default:
+        return true;
+    }
+  };
+
+  // Check if user is allowed to jump to a target step
+  const canJumpToStep = (targetStep) => {
+    if (targetStep <= currentStep) return true; // Can always revisit earlier completed steps
+    // Ensure every step before targetStep is completed
+    for (let s = 1; s < targetStep; s++) {
+      if (!isStepCompleted(s)) return false;
+    }
+    return true;
+  };
+
+  const isCurrentStepCompleted = isStepCompleted(currentStep);
+
   // Selected shape & layer object
   const selectedShapeLayerItem = shapeLayerOptions.find(item => item.id === selectedShapeLayer) || shapeLayerOptions[0];
 
@@ -732,6 +828,7 @@ export default function CustomizePage({
     if (currentStep === 5) {
       if (selectedOccasion === 'superhero') return isAr ? 'التالي: تصاميم الأبطال الخارقين' : 'Next: Superhero Designs';
       if (selectedOccasion === 'boys') return isAr ? 'التالي: تصاميم كيك الأولاد' : 'Next: Boys Cake Designs';
+      if (selectedOccasion === 'girls') return isAr ? 'التالي: تصاميم كيك البنات' : 'Next: Girls Cake Designs';
       return isAr ? 'التالي: التصميم والإضافات' : 'Next: Design and Toppings';
     }
     if (currentStep === 6) return isAr ? 'التالي: كتابة الرسالة' : 'Next: Custom Message';
@@ -740,6 +837,17 @@ export default function CustomizePage({
   };
 
   const handleNext = () => {
+    if (!isStepCompleted(currentStep)) {
+      if (currentStep === 4 && !selectedFilling) {
+        setStepValidationError(isAr ? 'يرجى اختيار حشوة وتغليف الكيك للمتابعة' : 'Please select a gourmet filling to proceed');
+      } else {
+        setStepValidationError(isAr ? 'يرجى إكمال هذه الخطوة للمتابعة' : 'Please complete this step to proceed');
+      }
+      return;
+    }
+
+    setStepValidationError('');
+
     if (currentStep < 8) {
       setCurrentStep(prev => prev + 1);
       window.scrollTo({ top: 120, behavior: 'smooth' });
@@ -754,6 +862,7 @@ export default function CustomizePage({
         occasion: occasions.find(o => o.id === selectedOccasion)?.title,
         superheroDesign: selectedOccasion === 'superhero' ? selectedSuperheroItem?.name : null,
         boysDesign: selectedOccasion === 'boys' ? selectedBoysItem?.name : null,
+        girlsDesign: selectedOccasion === 'girls' ? selectedGirlsItem?.name : null,
         message: cakeMessage,
         layers: selectedShapeLayerItem?.title || selectedLayers,
         shape: selectedShapeLayerItem?.shape || selectedShape,
@@ -776,6 +885,7 @@ export default function CustomizePage({
   };
 
   const handlePrev = () => {
+    setStepValidationError('');
     if (currentStep > 1) {
       setCurrentStep(prev => prev - 1);
       window.scrollTo({ top: 120, behavior: 'smooth' });
@@ -943,8 +1053,11 @@ export default function CustomizePage({
   // Should we show boys cake? (Step >= 6 only when a boys design is explicitly selected)
   const showBoysCake = currentStep >= 6 && selectedOccasion === 'boys' && !!selectedBoysDesign;
 
+  // Should we show girls cake? (Step >= 6 only when a girls design is explicitly selected)
+  const showGirlsCake = currentStep >= 6 && selectedOccasion === 'girls' && !!selectedGirlsDesign;
+
   // Should we show the final finished cake based on user selected filling flavor? (Step 6+)
-  const showFinalCake = currentStep >= 6 && !!selectedFinalCakeImg && !showSuperheroCake && !showBoysCake;
+  const showFinalCake = currentStep >= 6 && !!selectedFinalCakeImg && !showSuperheroCake && !showBoysCake && !showGirlsCake;
 
   // Should we show chocolate 2-tier assembled cake? (Step 5 only and Chocolate Sponge)
   const showChocolateTopLayer = currentStep === 5 && isChocolateSponge;
@@ -1052,6 +1165,23 @@ export default function CustomizePage({
           badge: isAr ? 'اختر تصميماً' : 'Choose Design'
         };
       }
+      if (selectedOccasion === 'girls') {
+        if (selectedGirlsDesign && selectedGirlsItem) {
+          return {
+            image: selectedGirlsItem.image,
+            stage: isAr ? 'تصاميم كيك البنات' : 'Girls Cake Designs',
+            title: selectedGirlsItem.name,
+            badge: isAr ? 'تصميم حصري' : 'Signature Design'
+          };
+        }
+        const fi = fillingOptions.find(f => f.id === selectedFilling);
+        return {
+          image: selectedFinalCakeImg || spongeBaseMap[selectedSponge],
+          stage: isAr ? 'تصاميم كيك البنات' : 'Girls Cake Designs',
+          title: fi ? (isAr ? `كعكة ${fi.name}` : `${fi.name} Cake`) : (isAr ? 'الكيك المكتمل' : 'Final Gourmet Cake'),
+          badge: isAr ? 'اختر تصميماً' : 'Choose Design'
+        };
+      }
       const fi = fillingOptions.find(f => f.id === selectedFilling);
       const totalItemsCount = selectedToppings.length + selectedBirthdayItems.length;
       const totalToppingsPrice = toppingsPrice + birthdayToppingsPrice;
@@ -1069,6 +1199,8 @@ export default function CustomizePage({
         fallbackImg = selectedSuperheroItem.image;
       } else if (selectedOccasion === 'boys' && selectedBoysDesign && selectedBoysItem) {
         fallbackImg = selectedBoysItem.image;
+      } else if (selectedOccasion === 'girls' && selectedGirlsDesign && selectedGirlsItem) {
+        fallbackImg = selectedGirlsItem.image;
       }
       return {
         image: fallbackImg,
@@ -1086,6 +1218,9 @@ export default function CustomizePage({
     } else if (selectedOccasion === 'boys' && selectedBoysDesign && selectedBoysItem) {
       finalReviewImg = selectedBoysItem.image;
       customDesignName = selectedBoysItem.name;
+    } else if (selectedOccasion === 'girls' && selectedGirlsDesign && selectedGirlsItem) {
+      finalReviewImg = selectedGirlsItem.image;
+      customDesignName = selectedGirlsItem.name;
     }
     const finalReviewTitle = customDesignName
       ? `${customDesignName} (${sizeOptions.find(s => s.id === selectedSize)?.title})`
@@ -1182,7 +1317,12 @@ export default function CustomizePage({
             <button
               type="button"
               onClick={handleNext}
-              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#C58A19] hover:bg-[#A87413] text-white text-xs font-semibold shadow-xs transition-colors cursor-pointer"
+              disabled={!isCurrentStepCompleted}
+              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-white text-xs font-semibold shadow-xs transition-colors ${
+                isCurrentStepCompleted
+                  ? 'bg-[#C58A19] hover:bg-[#A87413] cursor-pointer'
+                  : 'bg-[#C58A19]/50 opacity-60 cursor-not-allowed'
+              }`}
             >
               <span className="hidden sm:inline">{currentStep === 8 ? (isAr ? 'إنهاء' : 'Finish') : (isAr ? 'التالي' : 'Next')}</span>
               <ArrowRight className="w-3.5 h-3.5 rtl:rotate-180" />
@@ -1203,18 +1343,32 @@ export default function CustomizePage({
             {steps.map((st) => {
               const isCurrent = currentStep === st.number;
               const isCompleted = currentStep > st.number;
+              const canJump = canJumpToStep(st.number);
 
               return (
                 <button
                   key={st.id}
                   type="button"
-                  onClick={() => setCurrentStep(st.number)}
-                  className={`flex items-center justify-center transition-all cursor-pointer ${
+                  onClick={() => {
+                    if (canJump) {
+                      setStepValidationError('');
+                      setCurrentStep(st.number);
+                    } else {
+                      if (currentStep === 4 && !selectedFilling) {
+                        setStepValidationError(isAr ? 'يرجى اختيار حشوة وتغليف الكيك للمتابعة' : 'Please select a gourmet filling to proceed');
+                      } else {
+                        setStepValidationError(isAr ? 'يرجى إكمال هذه الخطوة للمتابعة' : 'Please complete this step to proceed');
+                      }
+                    }
+                  }}
+                  className={`flex items-center justify-center transition-all ${
                     isCurrent
-                      ? 'w-6 h-6 rounded-full bg-[#C58A19] text-white font-bold text-xs shadow-xs ring-2 ring-[#C58A19]/30'
+                      ? 'w-6 h-6 rounded-full bg-[#C58A19] text-white font-bold text-xs shadow-xs ring-2 ring-[#C58A19]/30 cursor-pointer'
                       : isCompleted
-                      ? 'w-5 h-5 rounded-full bg-[#4A2116] text-[#E6C783] text-[10px] font-semibold'
-                      : 'w-5 h-5 rounded-full bg-[#FAF5EC] border border-[#E5D7C3] text-[#8C6D62] text-[10px] hover:border-[#C58A19]'
+                      ? 'w-5 h-5 rounded-full bg-[#4A2116] text-[#E6C783] text-[10px] font-semibold cursor-pointer'
+                      : canJump
+                      ? 'w-5 h-5 rounded-full bg-[#FAF5EC] border border-[#E5D7C3] text-[#8C6D62] text-[10px] hover:border-[#C58A19] cursor-pointer'
+                      : 'w-5 h-5 rounded-full bg-[#FAF5EC]/60 border border-[#E5D7C3]/60 text-[#8C6D62]/40 text-[10px] cursor-not-allowed'
                   }`}
                   title={st.label}
                 >
@@ -1287,6 +1441,17 @@ export default function CustomizePage({
                     <img
                       src={encodeURI(selectedBoysItem.image)}
                       alt={selectedBoysItem.name}
+                      className="max-h-full max-w-full object-contain drop-shadow-[0_16px_22px_rgba(74,33,22,0.22)] select-none z-10 pointer-events-none rounded-2xl"
+                    />
+                  </div>
+                ) : showGirlsCake && selectedGirlsItem ? (
+                  <div 
+                    className="relative w-full h-full max-h-full max-w-full flex items-center justify-center group-hover:scale-105 transition-transform duration-500 z-10 animate-fadeIn"
+                    style={{ aspectRatio: '1774 / 1112' }}
+                  >
+                    <img
+                      src={encodeURI(selectedGirlsItem.image)}
+                      alt={selectedGirlsItem.name}
                       className="max-h-full max-w-full object-contain drop-shadow-[0_16px_22px_rgba(74,33,22,0.22)] select-none z-10 pointer-events-none rounded-2xl"
                     />
                   </div>
@@ -1537,6 +1702,36 @@ export default function CustomizePage({
                 </div>
               )}
 
+              {/* Selected Girls Design Indicator under preview */}
+              {selectedOccasion === 'girls' && selectedGirlsItem && (
+                <div className="mt-2.5 p-2 rounded-xl bg-[#FFFBF5] border border-[#E5CFA8] animate-fadeIn text-start">
+                  <div className="flex items-center justify-between mb-1.5 px-0.5">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#C58A19] flex items-center gap-1">
+                      <span>👑</span>
+                      <span>{isAr ? 'تصميم البنات المختار' : 'Selected Girls Cake Design'}</span>
+                    </span>
+                    <span className="text-[10px] font-semibold text-[#8C6D62] bg-white px-2 py-0.5 rounded-full border border-[#E5CFA8]">
+                      {selectedGirlsItem.category}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2 bg-white p-1.5 rounded-lg border border-[#F0E4D2]">
+                    <img 
+                      src={encodeURI(selectedGirlsItem.image)} 
+                      alt={selectedGirlsItem.name} 
+                      className="w-10 h-10 rounded-lg object-contain bg-[#FAF7F2] border border-[#E5CFA8] p-0.5 shrink-0" 
+                    />
+                    <div className="truncate">
+                      <span className="text-xs font-bold text-[#4A2116] block truncate">
+                        {selectedGirlsItem.name}
+                      </span>
+                      <span className="text-[10px] text-[#8C6D62] line-clamp-1">
+                        {selectedGirlsItem.desc}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              )}
+
 
               {/* Quick Recipe Specs Pills */}
               <div className="grid grid-cols-2 gap-1.5 mt-2.5 text-[11px]">
@@ -1555,6 +1750,8 @@ export default function CustomizePage({
                       ? selectedSuperheroItem.name 
                       : selectedOccasion === 'boys' && selectedBoysItem
                       ? selectedBoysItem.name
+                      : selectedOccasion === 'girls' && selectedGirlsItem
+                      ? selectedGirlsItem.name
                       : (spongeOptions.find(s => s.id === selectedSponge)?.name)}
                   </span>
                 </div>
@@ -1580,7 +1777,12 @@ export default function CustomizePage({
                 <button
                   type="button"
                   onClick={handleNext}
-                  className="flex items-center gap-1.5 bg-[#C58A19] hover:bg-[#A87413] text-white text-xs font-semibold px-4 py-2 rounded-full shadow-md transition-all cursor-pointer group"
+                  disabled={!isCurrentStepCompleted}
+                  className={`flex items-center gap-1.5 text-white text-xs font-semibold px-4 py-2 rounded-full shadow-md transition-all group ${
+                    isCurrentStepCompleted
+                      ? 'bg-[#C58A19] hover:bg-[#A87413] cursor-pointer'
+                      : 'bg-[#C58A19]/50 opacity-60 cursor-not-allowed'
+                  }`}
                 >
                   <span>{currentStep === 8 ? (isAr ? 'تأكيد الطلب' : 'Confirm Order') : (isAr ? 'الخطوة التالية' : 'Next Step')}</span>
                   <ArrowRight className="w-3.5 h-3.5 rtl:rotate-180 group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5 transition-transform" />
@@ -1592,6 +1794,14 @@ export default function CustomizePage({
 
           {/* RIGHT COLUMN: Only the Selected Step Options */}
           <div className="lg:col-span-7 xl:col-span-8">
+
+            {/* Validation Notice Banner */}
+            {stepValidationError && (
+              <div className="mb-6 p-4 bg-amber-50/90 border border-amber-300 text-amber-950 rounded-2xl text-xs sm:text-sm font-medium flex items-center gap-3 shadow-xs animate-shake">
+                <AlertCircle className="w-5 h-5 text-amber-600 shrink-0" />
+                <span>{stepValidationError}</span>
+              </div>
+            )}
 
             {/* STEP 1: Shape and Layers */}
             {currentStep === 1 && (
@@ -1615,6 +1825,7 @@ export default function CustomizePage({
                       <div
                         key={item.id}
                         onClick={() => {
+                          setStepValidationError('');
                           setSelectedShapeLayer(item.id);
                           setSelectedShape(item.shape);
                           setSelectedLayers(item.layers);
@@ -1678,7 +1889,10 @@ export default function CustomizePage({
                     return (
                       <div
                         key={sz.id}
-                        onClick={() => setSelectedSize(sz.id)}
+                        onClick={() => {
+                          setStepValidationError('');
+                          setSelectedSize(sz.id);
+                        }}
                         className={`bg-white rounded-3xl border-2 transition-all duration-300 cursor-pointer p-4 sm:p-5 flex flex-col justify-between relative group hover:-translate-y-1 hover:shadow-xl ${
                           isSelected 
                             ? 'border-[#C58A19] shadow-lg ring-4 ring-[#C58A19]/15 bg-[#FFFDF9]' 
@@ -1759,6 +1973,7 @@ export default function CustomizePage({
                       <div
                         key={sp.id}
                         onClick={() => {
+                          setStepValidationError('');
                           setSelectedSponge(sp.id);
                           setSelectedFilling(null);
                         }}
@@ -1820,7 +2035,10 @@ export default function CustomizePage({
                     return (
                       <div
                         key={fi.id}
-                        onClick={() => setSelectedFilling(fi.id)}
+                        onClick={() => {
+                          setStepValidationError('');
+                          setSelectedFilling(fi.id);
+                        }}
                         className={`bg-white rounded-2xl sm:rounded-3xl border-2 transition-all duration-300 cursor-pointer p-3 sm:p-4 flex flex-col justify-between h-full relative group hover:-translate-y-1 hover:shadow-xl ${
                           isSelected 
                             ? 'border-[#C58A19] shadow-lg ring-4 ring-[#C58A19]/15 bg-[#FFFDF9]' 
@@ -1879,6 +2097,7 @@ export default function CustomizePage({
                       <div
                         key={occ.id}
                         onClick={() => {
+                          setStepValidationError('');
                           setSelectedOccasion(occ.id);
                         }}
                         className={`bg-white rounded-3xl border-2 transition-all duration-300 cursor-pointer p-4 sm:p-5 flex flex-col justify-between relative group hover:-translate-y-1 hover:shadow-xl ${
@@ -1927,9 +2146,11 @@ export default function CustomizePage({
                         ? (isAr ? 'تصاميم كيك الأبطال الخارقين' : 'Superhero Cake Designs')
                         : selectedOccasion === 'boys'
                           ? (isAr ? 'تصاميم كيك الأولاد' : 'Boys Cake Designs')
-                          : selectedOccasion === 'birthday' 
-                            ? (isAr ? 'تصميم وزينة كيك عيد الميلاد' : 'Birthday Design, Toppers & Accents') 
-                            : (isAr ? 'التصميم الخارجي واللمسات الفاخرة' : 'Finishing, Accents and Toppings')}
+                          : selectedOccasion === 'girls'
+                            ? (isAr ? 'تصاميم كيك البنات' : 'Girls Cake Designs')
+                            : selectedOccasion === 'birthday' 
+                              ? (isAr ? 'تصميم وزينة كيك عيد الميلاد' : 'Birthday Design, Toppers And  Accents') 
+                              : (isAr ? 'التصميم الخارجي واللمسات الفاخرة' : 'Finishing, Accents and Toppings')}
                     </h2>
                     <p className="font-poppins text-xs sm:text-sm text-[#8C6D62] mt-0.5">
                       {selectedOccasion === 'superhero'
@@ -1940,6 +2161,10 @@ export default function CustomizePage({
                           ? (isAr
                               ? 'اختر تصميم الكيك المفضل للأولاد: سباقات سيارات، شاحنات مونستر تراك، كرة قدم، وعوالم الجيمينج وروبلوكس.'
                               : 'Select your favorite custom boys cake design featuring racing supercars, monster trucks, football legends, and gamer themes.')
+                          : selectedOccasion === 'girls'
+                            ? (isAr
+                                ? 'اختر تصميم كيك البنات الساحر: ملكة الثلج إلسا، هالو كيتي، أميرات ديزني، يونيكورن وقوس قزح، أو باربي حورية البحر.'
+                                : 'Select your favorite enchanting girls cake design featuring Queen Elsa, Hello Kitty, royal princesses, magical unicorns, or Barbie mermaid.')
                           : selectedOccasion === 'birthday'
                             ? (isAr 
                                 ? `معاينة كعكة ${fillingOptions.find(f => f.id === selectedFilling)?.name || 'الفاخرة'} المكتملة. اختر التوبر، الشموع والإضافات لتزيين الكيك (يمكنك اختيار عدة عناصر معاً).` 
@@ -2082,6 +2307,83 @@ export default function CustomizePage({
                               onClick={(e) => {
                                 e.stopPropagation();
                                 setSelectedBoysDesign(prev => prev === item.id ? null : item.id);
+                              }}
+                              className={`text-[11px] font-semibold px-3 py-1.5 rounded-full transition-colors cursor-pointer flex items-center gap-1.5 ${
+                                isSelected 
+                                  ? 'bg-[#C58A19] text-white shadow-xs' 
+                                  : 'bg-[#FAF7F2] text-[#4A2116] hover:bg-[#C58A19] hover:text-white border border-[#E5CFA8]'
+                              }`}
+                            >
+                              {isSelected ? (
+                                <>
+                                  <Check className="w-3.5 h-3.5 stroke-[2.5]" />
+                                  <span>{isAr ? 'تم الاختيار' : 'Selected'}</span>
+                                </>
+                              ) : (
+                                <span>{isAr ? 'اختيار هذا التصميم' : 'Select Design'}</span>
+                              )}
+                            </button>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                ) : selectedOccasion === 'girls' ? (
+                  /* 6 Girls Cake Designs Grid */
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+                    {girlsDesignOptions.map((item) => {
+                      const isSelected = selectedGirlsDesign === item.id;
+                      return (
+                        <div
+                          key={item.id}
+                          onClick={() => setSelectedGirlsDesign(prev => prev === item.id ? null : item.id)}
+                          className={`bg-white rounded-2xl border-2 p-4 cursor-pointer transition-all duration-300 flex flex-col justify-between hover:shadow-xl relative group hover:-translate-y-1 ${
+                            isSelected
+                              ? 'border-[#C58A19] bg-[#FFFBF5] ring-4 ring-[#C58A19]/20 shadow-md'
+                              : 'border-[#F0E4D2] hover:border-[#C58A19]/70 shadow-xs'
+                          }`}
+                        >
+                          {/* Selection Checkmark */}
+                          {isSelected && (
+                            <div className="absolute top-3 right-3 rtl:right-auto rtl:left-3 w-7 h-7 rounded-full bg-[#C58A19] text-white flex items-center justify-center shadow-md z-10 animate-scaleIn">
+                              <Check className="w-4 h-4 stroke-[2.5]" />
+                            </div>
+                          )}
+
+                          {/* Girls Cake Image Thumbnail */}
+                          <div className="w-full h-48 sm:h-52 flex items-center justify-center overflow-hidden mb-3 p-2 bg-[#FAF7F2]/80 rounded-xl group-hover:bg-[#FAF7F2] transition-colors relative">
+                            <img 
+                              src={encodeURI(item.image)} 
+                              alt={item.name} 
+                              className="max-h-full max-w-full object-contain drop-shadow-md group-hover:scale-108 transition-transform duration-300 select-none rounded-lg" 
+                            />
+                            {/* Theme Category Badge */}
+                            <span className="absolute bottom-2 left-2 rtl:left-auto rtl:right-2 text-[10px] font-bold bg-[#4A2116]/85 backdrop-blur-xs text-[#FFFDF8] px-2.5 py-0.5 rounded-full shadow-xs">
+                              {item.category}
+                            </span>
+                          </div>
+
+                          <div>
+                            <span className="text-[10px] font-semibold text-[#8C6D62] uppercase tracking-wider block mb-0.5">
+                              {item.hero}
+                            </span>
+                            <h3 className="font-serif font-bold text-sm sm:text-base text-[#4A2116] mb-1 leading-snug line-clamp-1 group-hover:text-[#C58A19] transition-colors">
+                              {item.name}
+                            </h3>
+                            <p className="text-xs text-[#8C6D62] leading-relaxed line-clamp-2 mb-3">
+                              {item.desc}
+                            </p>
+                          </div>
+
+                          <div className="flex items-center justify-between pt-2.5 border-t border-[#F8F1E6]">
+                            <span className="text-xs font-bold text-[#C58A19]">
+                              {isAr ? 'تصميم مخصص' : 'Custom Design'}
+                            </span>
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setSelectedGirlsDesign(prev => prev === item.id ? null : item.id);
                               }}
                               className={`text-[11px] font-semibold px-3 py-1.5 rounded-full transition-colors cursor-pointer flex items-center gap-1.5 ${
                                 isSelected 
@@ -2373,6 +2675,19 @@ export default function CustomizePage({
                       </div>
                     )}
 
+                    {selectedOccasion === 'girls' && selectedGirlsItem && (
+                      <div className="sm:col-span-2 p-3 rounded-xl bg-[#FFFBF5] border border-[#F5EBDD] flex items-center justify-between">
+                        <div>
+                          <span className="text-[#8C6D62] block mb-0.5 font-medium">{isAr ? 'تصميم كيك البنات المختار' : 'Selected Girls Cake Design'}</span>
+                          <span className="font-semibold text-[#4A2116] text-sm block">{selectedGirlsItem.name}</span>
+                          <span className="text-xs text-[#C58A19] font-medium">{selectedGirlsItem.category}</span>
+                        </div>
+                        <div className="w-14 h-14 rounded-xl bg-white border border-[#E5C583]/60 flex items-center justify-center shrink-0 p-1">
+                          <img src={encodeURI(selectedGirlsItem.image)} alt={selectedGirlsItem.name} className="w-full h-full object-contain select-none rounded-lg" />
+                        </div>
+                      </div>
+                    )}
+
                     <div className="sm:col-span-2 p-3 rounded-xl bg-[#FFFBF5] border border-[#F5EBDD]">
                       <span className="text-[#8C6D62] block mb-1 font-medium">{isAr ? 'الإضافات والتزيين' : 'Selected Accents & Toppings'}</span>
                       <div className="flex flex-wrap gap-1.5">
@@ -2452,8 +2767,8 @@ export default function CustomizePage({
                     <a
                       href={`https://wa.me/971506063631?text=${encodeURIComponent(
                         `Hello Lebanese Dream Bakery! I would like to order a custom cake:
-Occasion: ${occasions.find(o => o.id === selectedOccasion)?.title}${selectedOccasion === 'superhero' && selectedSuperheroItem ? ` (${selectedSuperheroItem.name})` : selectedOccasion === 'boys' && selectedBoysItem ? ` (${selectedBoysItem.name})` : ''}
-${selectedOccasion === 'superhero' && selectedSuperheroItem ? `Superhero Design: ${selectedSuperheroItem.name}\n` : selectedOccasion === 'boys' && selectedBoysItem ? `Boys Design: ${selectedBoysItem.name}\n` : ''}Shape and Layers: ${selectedShapeLayerItem?.title}
+Occasion: ${occasions.find(o => o.id === selectedOccasion)?.title}${selectedOccasion === 'superhero' && selectedSuperheroItem ? ` (${selectedSuperheroItem.name})` : selectedOccasion === 'boys' && selectedBoysItem ? ` (${selectedBoysItem.name})` : selectedOccasion === 'girls' && selectedGirlsItem ? ` (${selectedGirlsItem.name})` : ''}
+${selectedOccasion === 'superhero' && selectedSuperheroItem ? `Superhero Design: ${selectedSuperheroItem.name}\n` : selectedOccasion === 'boys' && selectedBoysItem ? `Boys Design: ${selectedBoysItem.name}\n` : selectedOccasion === 'girls' && selectedGirlsItem ? `Girls Design: ${selectedGirlsItem.name}\n` : ''}Shape and Layers: ${selectedShapeLayerItem?.title}
 Size: ${sizeOptions.find(s => s.id === selectedSize)?.title}
 Sponge: ${spongeOptions.find(s => s.id === selectedSponge)?.name}
 Filling: ${fillingOptions.find(f => f.id === selectedFilling)?.name || 'Signature Bakery Filling'}
@@ -2470,6 +2785,14 @@ Total: AED ${totalPrice}`
                     </a>
                   </div>
                 </div>
+              </div>
+            )}
+
+            {/* Validation Notice Banner for Footer */}
+            {stepValidationError && (
+              <div className="mb-4 p-3.5 bg-amber-50/90 border border-amber-300 text-amber-950 rounded-2xl text-xs sm:text-sm font-medium flex items-center gap-2.5 shadow-xs">
+                <AlertCircle className="w-4 h-4 text-amber-600 shrink-0" />
+                <span>{stepValidationError}</span>
               </div>
             )}
 
@@ -2501,7 +2824,12 @@ Total: AED ${totalPrice}`
                 <button
                   type="button"
                   onClick={handleNext}
-                  className="flex items-center gap-2 bg-[#C58A19] hover:bg-[#A87413] text-white font-poppins font-semibold text-xs sm:text-sm px-6 py-2.5 sm:py-3 rounded-full shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer group"
+                  disabled={!isCurrentStepCompleted}
+                  className={`flex items-center gap-2 font-poppins font-semibold text-xs sm:text-sm px-6 py-2.5 sm:py-3 rounded-full shadow-md transition-all duration-200 group ${
+                    isCurrentStepCompleted
+                      ? 'bg-[#C58A19] hover:bg-[#A87413] text-white hover:shadow-lg cursor-pointer'
+                      : 'bg-[#C58A19]/50 text-white/80 opacity-60 cursor-not-allowed'
+                  }`}
                 >
                   <span>{getNextStepLabel()}</span>
                   <ArrowRight className="w-4 h-4 rtl:rotate-180 group-hover:translate-x-1 rtl:group-hover:-translate-x-1 transition-transform" />
