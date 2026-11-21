@@ -1,6 +1,7 @@
 import React from 'react';
+import CategoryProductsSection from './CategoryProductsSection';
 
-export default function CakesForGuysPage({ currentLang = 'en' }) {
+export default function CakesForGuysPage({ currentLang = 'en', onAddToCart, onCustomizeClick }) {
   const isAr = currentLang === 'ar';
 
   const bannerImage = '/Black SUV Cake on a Wooden Tabletop.png';
@@ -63,6 +64,15 @@ export default function CakesForGuysPage({ currentLang = 'en' }) {
         </div>
 
       </section>
+
+      {/* Dynamic Products Collection from Backend */}
+      <CategoryProductsSection
+        categorySlug={['cakes-for-guys', 'guys', 'boys']}
+        categoryName={titleLine1}
+        currentLang={currentLang}
+        onAddToCart={onAddToCart}
+        onCustomizeClick={onCustomizeClick}
+      />
 
     </div>
   );

@@ -1,6 +1,7 @@
 import React from 'react';
+import CategoryProductsSection from './CategoryProductsSection';
 
-export default function GraduationCakesPage({ currentLang = 'en' }) {
+export default function GraduationCakesPage({ currentLang = 'en', onAddToCart, onCustomizeClick }) {
   const isAr = currentLang === 'ar';
 
   const bannerImage = '/Elegant Graduation Cake with Diploma and Books.png';
@@ -63,6 +64,15 @@ export default function GraduationCakesPage({ currentLang = 'en' }) {
         </div>
 
       </section>
+
+      {/* Dynamic Products Collection from Backend */}
+      <CategoryProductsSection
+        categorySlug={['graduation-cakes', 'graduation']}
+        categoryName={titleLine1}
+        currentLang={currentLang}
+        onAddToCart={onAddToCart}
+        onCustomizeClick={onCustomizeClick}
+      />
 
     </div>
   );

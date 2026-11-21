@@ -1,6 +1,7 @@
 import React from 'react';
+import CategoryProductsSection from './CategoryProductsSection';
 
-export default function BakingDecoratingPage({ currentLang = 'en' }) {
+export default function BakingDecoratingPage({ currentLang = 'en', onAddToCart, onCustomizeClick }) {
   const isAr = currentLang === 'ar';
 
   const bannerImage = '/Pink Rosette Berry Cake Workshop.png';
@@ -63,6 +64,15 @@ export default function BakingDecoratingPage({ currentLang = 'en' }) {
         </div>
 
       </section>
+
+      {/* Dynamic Products Collection from Backend */}
+      <CategoryProductsSection
+        categorySlug={['cake-baking-decorating', 'classes', 'baking']}
+        categoryName={titleLine1}
+        currentLang={currentLang}
+        onAddToCart={onAddToCart}
+        onCustomizeClick={onCustomizeClick}
+      />
 
     </div>
   );

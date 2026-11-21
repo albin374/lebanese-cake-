@@ -83,6 +83,7 @@ export default function Navbar({ currentLang = 'en', onCustomizeClick, activeCat
         <div className="hidden lg:flex items-center gap-3.5 xl:gap-4.5 2xl:gap-6 h-full">
           {navCategories.map((item) => {
             const isActive = isItemActive(item.id);
+            const isMenuOpen = openDropdown === item.id;
             return (
               <div
                 key={item.id}
@@ -92,27 +93,37 @@ export default function Navbar({ currentLang = 'en', onCustomizeClick, activeCat
               >
                 <button
                   type="button"
-                  onClick={() => onSelectCategory && onSelectCategory(item.id)}
-                  className={`nav-link flex items-center gap-1.5 h-full font-poppins text-[14.5px] xl:text-[15.5px] font-medium text-[#4A2116] hover:text-[#C58A19] transition-colors duration-200 cursor-pointer whitespace-nowrap ${
-                    isActive ? 'active text-[#C58A19] font-semibold' : ''
+                  onClick={() => {
+                    if (item.hasDropdown) {
+                      setOpenDropdown(prev => prev === item.id ? null : item.id);
+                    }
+                    if (onSelectCategory) onSelectCategory(item.id);
+                  }}
+                  className={`nav-link flex items-center gap-1.5 h-full font-poppins text-[14.5px] xl:text-[15.5px] font-medium transition-colors duration-200 cursor-pointer whitespace-nowrap ${
+                    isActive || isMenuOpen
+                      ? 'active text-[#C58A19] font-semibold'
+                      : 'text-[#4A2116] hover:text-[#C58A19]'
                   }`}
                 >
                   <span>{item.label}</span>
                   {item.hasDropdown && (
-                    <ChevronDown className="w-3.5 h-3.5 text-[#C58A19] transition-transform duration-200 stroke-[2]" />
+                    <ChevronDown className={`w-3.5 h-3.5 text-[#C58A19] transition-transform duration-200 stroke-[2.2] ${
+                      isMenuOpen ? 'rotate-180' : ''
+                    }`} />
                   )}
                 </button>
 
                 {/* Dropdown Menu */}
-                {item.hasDropdown && openDropdown === item.id && (
+                {item.hasDropdown && isMenuOpen && (
                   <div 
-                    className={`absolute top-full mt-0 w-64 bg-white rounded-b-md shadow-lg border border-[#F5EBDD] py-2 z-50 animate-fadeIn ${
+                    className={`absolute top-full mt-0 w-72 bg-white rounded-b-2xl shadow-[0_12px_36px_rgba(74,33,22,0.14)] border border-[#F2E5D5] py-2.5 z-50 animate-fadeIn before:content-[''] before:absolute before:-top-3 before:left-0 before:right-0 before:h-3 ${
                       isAr ? 'right-0' : 'left-0'
                     }`}
                   >
                     {item.children.map((sub, idx) => {
                       const subLabel = typeof sub === 'string' ? sub : sub.label;
                       const subId = typeof sub === 'object' && sub?.id ? sub.id : item.id;
+                      const isSubActive = activeCategory === subId;
                       return (
                         <button
                           key={idx}
@@ -121,7 +132,11 @@ export default function Navbar({ currentLang = 'en', onCustomizeClick, activeCat
                             setOpenDropdown(null);
                             if (onSelectCategory) onSelectCategory(subId);
                           }}
-                          className="w-full text-left rtl:text-right px-4 py-2.5 font-poppins text-[14px] font-medium text-[#4A2116] hover:bg-[#F8F1E6] hover:text-[#C58A19] transition-colors cursor-pointer"
+                          className={`w-full text-left rtl:text-right px-5 py-3 font-poppins text-[15px] font-medium transition-colors cursor-pointer block leading-snug ${
+                            isSubActive
+                              ? 'bg-[#FAF5ED] text-[#C58A19] font-semibold'
+                              : 'text-[#381E14] hover:bg-[#FAF5ED] hover:text-[#C58A19]'
+                          }`}
                         >
                           {subLabel}
                         </button>

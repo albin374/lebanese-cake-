@@ -37,6 +37,7 @@ import PetAnimalsCakesPage from './components/PetAnimalsCakesPage';
 import SuperheroCakesPage from './components/SuperheroCakesPage';
 import LabubuCakesPage from './components/LabubuCakesPage';
 import BakingDecoratingPage from './components/BakingDecoratingPage';
+import ProductDetailsPage from './components/ProductDetailsPage';
 import AdminDashboard from './components/admin/AdminDashboard';
 import { translations } from './translations';
 import { Phone, Mail, Clock, X, Check, ShoppingBag, UserRound } from 'lucide-react';
@@ -72,9 +73,20 @@ export default function App() {
       if (window.location.hash === '#superhero-cakes' || window.location.hash === '#superheroes') return 'superhero-cakes';
       if (window.location.hash === '#labubu-cakes' || window.location.hash === '#labubu') return 'labubu-cakes';
       if (window.location.hash === '#cake-baking-decorating' || window.location.hash === '#classes') return 'cake-baking-decorating';
+      if (window.location.hash.startsWith('#product-')) return 'product-detail';
       if (window.location.hash === '#admin' || window.location.hash === '#admin-dashboard') return 'admin';
     }
     return 'home';
+  });
+  const [selectedProductId, setSelectedProductId] = useState(() => {
+    if (typeof window !== 'undefined' && window.location.hash.startsWith('#product-')) {
+      try {
+        return decodeURIComponent(window.location.hash.replace('#product-', ''));
+      } catch (_) {
+        return window.location.hash.replace('#product-', '');
+      }
+    }
+    return '';
   });
   const [activeCategory, setActiveCategory] = useState('all-cakes');
   const [cartCount, setCartCount] = useState(2);
@@ -96,7 +108,15 @@ export default function App() {
   // Synchronize URL hash with page state
   useEffect(() => {
     const handleHash = () => {
-      if (window.location.hash === '#customize') {
+      if (window.location.hash.startsWith('#product-')) {
+        try {
+          setSelectedProductId(decodeURIComponent(window.location.hash.replace('#product-', '')));
+        } catch (_) {
+          setSelectedProductId(window.location.hash.replace('#product-', ''));
+        }
+        setCurrentPage('product-detail');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else if (window.location.hash === '#customize') {
         setCurrentPage('customize');
         window.scrollTo({ top: 0, behavior: 'smooth' });
       } else if (window.location.hash === '#cookies') {
@@ -555,107 +575,117 @@ export default function App() {
         </main>
       ) : currentPage === 'cookies' ? (
         <main className="w-full flex-1">
-          <CookiesPage currentLang={currentLang} />
+          <CookiesPage currentLang={currentLang} onAddToCart={handleAddToCart} onCustomizeClick={openCustomizePage} />
         </main>
       ) : currentPage === 'cupcakes' ? (
         <main className="w-full flex-1">
-          <CupcakesPage currentLang={currentLang} />
+          <CupcakesPage currentLang={currentLang} onAddToCart={handleAddToCart} onCustomizeClick={openCustomizePage} />
         </main>
       ) : currentPage === 'cake-pops' ? (
         <main className="w-full flex-1">
-          <CakePopsPage currentLang={currentLang} />
+          <CakePopsPage currentLang={currentLang} onAddToCart={handleAddToCart} onCustomizeClick={openCustomizePage} />
         </main>
       ) : currentPage === 'cakes-for-kids' ? (
         <main className="w-full flex-1">
-          <CakesForKidsPage currentLang={currentLang} />
+          <CakesForKidsPage currentLang={currentLang} onAddToCart={handleAddToCart} onCustomizeClick={openCustomizePage} />
         </main>
       ) : currentPage === 'cakes-for-guys' ? (
         <main className="w-full flex-1">
-          <CakesForGuysPage currentLang={currentLang} />
+          <CakesForGuysPage currentLang={currentLang} onAddToCart={handleAddToCart} onCustomizeClick={openCustomizePage} />
         </main>
       ) : currentPage === 'cakes-for-ladies' ? (
         <main className="w-full flex-1">
-          <CakesForLadiesPage currentLang={currentLang} />
+          <CakesForLadiesPage currentLang={currentLang} onAddToCart={handleAddToCart} onCustomizeClick={openCustomizePage} />
         </main>
       ) : currentPage === 'classic-wedding-cakes' ? (
         <main className="w-full flex-1">
-          <ClassicWeddingCakesPage currentLang={currentLang} />
+          <ClassicWeddingCakesPage currentLang={currentLang} onAddToCart={handleAddToCart} onCustomizeClick={openCustomizePage} />
         </main>
       ) : currentPage === 'novelty-wedding-cakes' ? (
         <main className="w-full flex-1">
-          <NoveltyWeddingCakesPage currentLang={currentLang} />
+          <NoveltyWeddingCakesPage currentLang={currentLang} onAddToCart={handleAddToCart} onCustomizeClick={openCustomizePage} />
         </main>
       ) : currentPage === 'bride-to-be-cakes' ? (
         <main className="w-full flex-1">
-          <BrideToBeCakesPage currentLang={currentLang} />
+          <BrideToBeCakesPage currentLang={currentLang} onAddToCart={handleAddToCart} onCustomizeClick={openCustomizePage} />
         </main>
       ) : currentPage === 'engagement-cakes' ? (
         <main className="w-full flex-1">
-          <EngagementCakesPage currentLang={currentLang} />
+          <EngagementCakesPage currentLang={currentLang} onAddToCart={handleAddToCart} onCustomizeClick={openCustomizePage} />
         </main>
       ) : currentPage === 'grooms-cakes' ? (
         <main className="w-full flex-1">
-          <GroomsCakesPage currentLang={currentLang} />
+          <GroomsCakesPage currentLang={currentLang} onAddToCart={handleAddToCart} onCustomizeClick={openCustomizePage} />
         </main>
       ) : currentPage === 'corporate-cakes' ? (
         <main className="w-full flex-1">
-          <CorporateCakesPage currentLang={currentLang} />
+          <CorporateCakesPage currentLang={currentLang} onAddToCart={handleAddToCart} onCustomizeClick={openCustomizePage} />
         </main>
       ) : currentPage === 'corporate-cookies' ? (
         <main className="w-full flex-1">
-          <CorporateCookiesPage currentLang={currentLang} />
+          <CorporateCookiesPage currentLang={currentLang} onAddToCart={handleAddToCart} onCustomizeClick={openCustomizePage} />
         </main>
       ) : currentPage === 'cupcakes-with-logo' ? (
         <main className="w-full flex-1">
-          <CupcakesWithLogoPage currentLang={currentLang} />
+          <CupcakesWithLogoPage currentLang={currentLang} onAddToCart={handleAddToCart} onCustomizeClick={openCustomizePage} />
         </main>
       ) : currentPage === 'graduation-cakes' ? (
         <main className="w-full flex-1">
-          <GraduationCakesPage currentLang={currentLang} />
+          <GraduationCakesPage currentLang={currentLang} onAddToCart={handleAddToCart} onCustomizeClick={openCustomizePage} />
         </main>
       ) : currentPage === 'cars-ships-planes-cakes' ? (
         <main className="w-full flex-1">
-          <VehiclesCakesPage currentLang={currentLang} />
+          <VehiclesCakesPage currentLang={currentLang} onAddToCart={handleAddToCart} onCustomizeClick={openCustomizePage} />
         </main>
       ) : currentPage === 'sporting-cakes' ? (
         <main className="w-full flex-1">
-          <SportingCakesPage currentLang={currentLang} />
+          <SportingCakesPage currentLang={currentLang} onAddToCart={handleAddToCart} onCustomizeClick={openCustomizePage} />
         </main>
       ) : currentPage === 'couture-cakes' ? (
         <main className="w-full flex-1">
-          <CoutureCakesPage currentLang={currentLang} />
+          <CoutureCakesPage currentLang={currentLang} onAddToCart={handleAddToCart} onCustomizeClick={openCustomizePage} />
         </main>
       ) : currentPage === '3d-cakes' ? (
         <main className="w-full flex-1">
-          <ThreeDCakesPage currentLang={currentLang} />
+          <ThreeDCakesPage currentLang={currentLang} onAddToCart={handleAddToCart} onCustomizeClick={openCustomizePage} />
         </main>
       ) : currentPage === 'food-drink-illusion-cakes' ? (
         <main className="w-full flex-1">
-          <IllusionCakesPage currentLang={currentLang} />
+          <IllusionCakesPage currentLang={currentLang} onAddToCart={handleAddToCart} onCustomizeClick={openCustomizePage} />
         </main>
       ) : currentPage === 'doughnuts-cakes' ? (
         <main className="w-full flex-1">
-          <DoughnutsCakesPage currentLang={currentLang} />
+          <DoughnutsCakesPage currentLang={currentLang} onAddToCart={handleAddToCart} onCustomizeClick={openCustomizePage} />
         </main>
       ) : currentPage === 'photo-on-cake' ? (
         <main className="w-full flex-1">
-          <PhotoOnCakePage currentLang={currentLang} />
+          <PhotoOnCakePage currentLang={currentLang} onAddToCart={handleAddToCart} onCustomizeClick={openCustomizePage} />
         </main>
       ) : currentPage === 'pet-animals-cakes' ? (
         <main className="w-full flex-1">
-          <PetAnimalsCakesPage currentLang={currentLang} />
+          <PetAnimalsCakesPage currentLang={currentLang} onAddToCart={handleAddToCart} onCustomizeClick={openCustomizePage} />
         </main>
       ) : currentPage === 'superhero-cakes' ? (
         <main className="w-full flex-1">
-          <SuperheroCakesPage currentLang={currentLang} />
+          <SuperheroCakesPage currentLang={currentLang} onAddToCart={handleAddToCart} onCustomizeClick={openCustomizePage} />
         </main>
       ) : currentPage === 'labubu-cakes' ? (
         <main className="w-full flex-1">
-          <LabubuCakesPage currentLang={currentLang} />
+          <LabubuCakesPage currentLang={currentLang} onAddToCart={handleAddToCart} onCustomizeClick={openCustomizePage} />
         </main>
       ) : currentPage === 'cake-baking-decorating' ? (
         <main className="w-full flex-1">
-          <BakingDecoratingPage currentLang={currentLang} />
+          <BakingDecoratingPage currentLang={currentLang} onAddToCart={handleAddToCart} onCustomizeClick={openCustomizePage} />
+        </main>
+      ) : currentPage === 'product-detail' ? (
+        <main className="w-full flex-1">
+          <ProductDetailsPage
+            productId={selectedProductId}
+            currentLang={currentLang}
+            onAddToCart={handleAddToCart}
+            onCustomizeClick={openCustomizePage}
+            onNavigate={handleCategoryNavigation}
+          />
         </main>
       ) : (
         <main className="w-full flex-1">

@@ -13,38 +13,142 @@ import {
   RefreshCw, 
   Eye, 
   Trash2, 
+  Edit3,
   ExternalLink, 
   Menu,
   Layers,
   ArrowUpRight,
   FolderTree,
   Package,
-  FolderPlus
+  FolderPlus,
+  Upload,
+  Image as ImageIcon,
+  Camera
 } from 'lucide-react';
 
 const API_BASE = 'http://localhost:5000/api';
 
+export const formatImageUrl = (url) => {
+  if (!url) return '';
+  if (url.startsWith('/uploads/')) {
+    return `${API_BASE.replace('/api', '')}${url}`;
+  }
+  return url;
+};
+
+export const slugify = (text) => {
+  if (!text) return '';
+  return text
+    .toString()
+    .toLowerCase()
+    .trim()
+    .replace(/[^\w\s-]/g, '')
+    .replace(/[\s_-]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+};
+
+export const WEDDING_SUBCATEGORIES = [
+  { 
+    id: 'classic-wedding-cakes', 
+    slug: 'classic-wedding-cakes',
+    name: 'Classic Wedding Cakes', 
+    banner: '/Elegant Ivory Wedding Cake Banner.png', 
+    image_url: '/Elegant Ivory Wedding Cake Banner.png',
+    description: 'Timeless tiered white and ivory wedding cakes with royal icing and delicate sugar flora.',
+    parent: 'wedding'
+  },
+  { 
+    id: 'novelty-wedding-cakes', 
+    slug: 'novelty-wedding-cakes',
+    name: 'Novelty Wedding Cakes', 
+    banner: '/Tuxedo Wedding Cake with Embracing Couple.png', 
+    image_url: '/Tuxedo Wedding Cake with Embracing Couple.png',
+    description: 'Creative, whimsical, and personalized bespoke wedding cake designs.',
+    parent: 'wedding'
+  },
+  { 
+    id: 'bride-to-be-cakes', 
+    slug: 'bride-to-be-cakes',
+    name: 'Bride To Be Cakes', 
+    banner: '/Elegant Bride-to-Be Cake Display.png', 
+    image_url: '/Elegant Bride-to-Be Cake Display.png',
+    description: 'Chic bridal shower and bachelorette party cakes with pink florals and champagne accents.',
+    parent: 'wedding'
+  },
+  { 
+    id: 'engagement-cakes', 
+    slug: 'engagement-cakes',
+    name: 'Engagement Celebration Cakes', 
+    banner: '/Elegant Gold Ring Engagement Cake.png', 
+    image_url: '/Elegant Gold Ring Engagement Cake.png',
+    description: 'Romantic engagement cakes adorned with edible gold rings and floral wreaths.',
+    parent: 'wedding'
+  },
+  { 
+    id: 'grooms-cakes', 
+    slug: 'grooms-cakes',
+    name: 'Grooms Cakes', 
+    banner: '/Tuxedo Groom Cake with Top Hat.png', 
+    image_url: '/Tuxedo Groom Cake with Top Hat.png',
+    description: 'Tailored tuxedo, hobby, and masculine celebration cakes for the groom.',
+    parent: 'wedding'
+  }
+];
+
+export const CORPORATE_SUBCATEGORIES = [
+  { 
+    id: 'corporate-cakes', 
+    slug: 'corporate-cakes',
+    name: 'Corporate cakes', 
+    banner: '/Corporate Skyline Cake with Laptop topper.png', 
+    image_url: '/Corporate Skyline Cake with Laptop topper.png',
+    description: 'Executive event cakes & branded desserts',
+    parent: 'corporate-cakes'
+  },
+  { 
+    id: 'corporate-cookies', 
+    slug: 'corporate-cookies',
+    name: 'Corporate Cookies', 
+    banner: '/Corporate Cookie Collection on Gold-Rimmed Plate.png', 
+    image_url: '/Corporate Cookie Collection on Gold-Rimmed Plate.png',
+    description: 'Artisanal cookies with precision edible logo prints for PR and brand activations.',
+    parent: 'corporate-cakes'
+  },
+  { 
+    id: 'cupcakes-with-logo', 
+    slug: 'cupcakes-with-logo',
+    name: 'Cupcakes with logo', 
+    banner: '/Business Cupcake Icon Plate.png', 
+    image_url: '/Business Cupcake Icon Plate.png',
+    description: 'Gourmet French buttercream cupcakes crowned with customized corporate logos.',
+    parent: 'corporate-cakes'
+  }
+];
+
 const CATEGORIES = [
-  { id: 'wedding', name: 'Wedding Cakes', banner: '/Elegant Ivory Wedding Cake Banner.png', description: 'Luxury tiered celebration masterpieces' },
-  { id: 'corporate-cakes', name: 'Corporate Cakes', banner: '/Corporate Skyline Cake with Laptop topper.png', description: 'Executive event cakes & branded desserts' },
-  { id: 'cookies', name: 'Cookies', banner: '/Golden Chocolate Chip Cookie Stack.png', description: 'Freshly baked artisanal cookies & macarons' },
-  { id: 'cake-pops', name: 'Cake Pops', banner: '/Colorful Cake Pops in a Ribbon Jar.png', description: 'Delightful handheld dessert bites for parties' },
-  { id: 'cupcakes', name: 'Cupcakes', banner: '/Colorful Cupcakes on a Wooden Table.png', description: 'Gourmet artisanal cupcakes with French buttercream' },
-  { id: 'cakes-for-kids', name: 'Cakes for Kids', banner: '/Rainbow Bear Birthday Cake.png', description: 'Rainbow, fantasy and storybook cakes' },
-  { id: 'cakes-for-ladies', name: 'Cakes for Ladies', banner: '/Elegant Pink Floral Pearl Cake.png', description: 'Pink floral, pearls & haute couture cakes' },
-  { id: 'cakes-for-guys', name: 'Cakes for Guys', banner: '/Black SUV Cake on a Wooden Tabletop.png', description: 'Luxury cars, chronographs & bold themes' },
-  { id: 'graduation-cakes', name: 'Graduation Cakes', banner: '/Elegant Graduation Cake with Diploma and Books.png', description: 'Celebrate academic milestones and commencement ceremonies' },
-  { id: 'cars-ships-planes-cakes', name: 'Cars, Ships, Yachts & Planes Cakes', banner: '/Luxury Transportation Cake Showcase.png', description: 'Custom 3D sculpted luxury vehicles, ships, yachts & aviation cakes' },
-  { id: 'sporting-cakes', name: 'Sporting Cakes', banner: '/Sports Cake Trio Banner.png', description: 'Football, basketball, golf, tennis & championship celebration cakes' },
-  { id: 'couture-cakes', name: 'Couture Cakes', banner: '/Couture Cakes in Gold and Pink.png', description: 'Haute couture, fashion-forward & luxury designer cakes' },
-  { id: '3d-cakes', name: '3D Cakes', banner: '/Spiderman, Unicorn and Race Car Cakes.png', description: 'Spectacular sculpted 3-dimensional cake centerpieces' },
-  { id: 'food-drink-illusion-cakes', name: 'Food & Drink Illusion Cakes', banner: '/Realistic Fast-Food Illusion Cakes.png', description: 'Hyper-realistic trompe-l\'œil culinary and beverage illusion cakes' },
-  { id: 'doughnuts-cakes', name: 'Doughnuts Cakes', banner: '/Glossy Donut Cake Trio.png', description: 'Custom artisanal stacked doughnut cakes and dessert towers' },
-  { id: 'photo-on-cake', name: 'Photo on Cake', banner: '/Celebration Cakes with Edible Photos.png', description: 'High-definition edible printed memories and personalized photo cakes' },
-  { id: 'pet-animals-cakes', name: 'Pet & Animals Cakes', banner: '/Adorable Animal-Themed Fondant Cake Collection.png', description: 'Cute puppies, kittens, safari & wildlife celebration cakes' },
-  { id: 'superhero-cakes', name: 'Superhero Cakes', banner: '/Superhero Fondant Cake Trio.png', description: 'Action-packed Marvel, DC & comic book hero sculpted cakes' },
-  { id: 'labubu-cakes', name: 'Labubu Cakes', banner: '/Whimsical Labubu Cake Collection.png', description: 'Trendy Labubu monster & whimsical vinyl toy designer cakes' },
-  { id: 'cake-baking-decorating', name: 'Cake Baking & Decorating Cakes', banner: '/Pink Rosette Berry Cake Workshop.png', description: 'Baking enthusiast, confectionery master & sugarcraft themed cakes' }
+  { id: 'wedding', slug: 'wedding', name: 'Wedding Cakes', banner: '/Elegant Ivory Wedding Cake Banner.png', image_url: '/Elegant Ivory Wedding Cake Banner.png', description: 'Luxury tiered celebration masterpieces' },
+  ...WEDDING_SUBCATEGORIES,
+  { id: 'corporate-cakes', slug: 'corporate-cakes', name: 'Corporate Cakes', banner: '/Corporate Skyline Cake with Laptop topper.png', image_url: '/Corporate Skyline Cake with Laptop topper.png', description: 'Executive event cakes & branded desserts' },
+  { id: 'corporate-cookies', slug: 'corporate-cookies', name: 'Corporate Cookies', banner: '/Corporate Cookie Collection on Gold-Rimmed Plate.png', image_url: '/Corporate Cookie Collection on Gold-Rimmed Plate.png', description: 'Artisanal cookies with precision edible logo prints for PR and brand activations.', parent: 'corporate-cakes' },
+  { id: 'cupcakes-with-logo', slug: 'cupcakes-with-logo', name: 'Cupcakes with logo', banner: '/Business Cupcake Icon Plate.png', image_url: '/Business Cupcake Icon Plate.png', description: 'Gourmet French buttercream cupcakes crowned with customized corporate logos.', parent: 'corporate-cakes' },
+  { id: 'cookies', slug: 'cookies', name: 'Cookies', banner: '/Golden Chocolate Chip Cookie Stack.png', image_url: '/Golden Chocolate Chip Cookie Stack.png', description: 'Freshly baked artisanal cookies & macarons' },
+  { id: 'cake-pops', slug: 'cake-pops', name: 'Cake Pops', banner: '/Colorful Cake Pops in a Ribbon Jar.png', image_url: '/Colorful Cake Pops in a Ribbon Jar.png', description: 'Delightful handheld dessert bites for parties' },
+  { id: 'cupcakes', slug: 'cupcakes', name: 'Cupcakes', banner: '/Colorful Cupcakes on a Wooden Table.png', image_url: '/Colorful Cupcakes on a Wooden Table.png', description: 'Gourmet artisanal cupcakes with French buttercream' },
+  { id: 'cakes-for-kids', slug: 'cakes-for-kids', name: 'Cakes for Kids', banner: '/Rainbow Bear Birthday Cake.png', image_url: '/Rainbow Bear Birthday Cake.png', description: 'Rainbow, fantasy and storybook cakes' },
+  { id: 'cakes-for-ladies', slug: 'cakes-for-ladies', name: 'Cakes for Ladies', banner: '/Elegant Pink Floral Pearl Cake.png', image_url: '/Elegant Pink Floral Pearl Cake.png', description: 'Pink floral, pearls & haute couture cakes' },
+  { id: 'cakes-for-guys', slug: 'cakes-for-guys', name: 'Cakes for Guys', banner: '/Black SUV Cake on a Wooden Tabletop.png', image_url: '/Black SUV Cake on a Wooden Tabletop.png', description: 'Luxury cars, chronographs & bold themes' },
+  { id: 'graduation-cakes', slug: 'graduation-cakes', name: 'Graduation Cakes', banner: '/Elegant Graduation Cake with Diploma and Books.png', image_url: '/Elegant Graduation Cake with Diploma and Books.png', description: 'Celebrate academic milestones and commencement ceremonies' },
+  { id: 'cars-ships-planes-cakes', slug: 'cars-ships-planes-cakes', name: 'Cars, Ships, Yachts & Planes Cakes', banner: '/Luxury Transportation Cake Showcase.png', image_url: '/Luxury Transportation Cake Showcase.png', description: 'Custom 3D sculpted luxury vehicles, ships, yachts & aviation cakes' },
+  { id: 'sporting-cakes', slug: 'sporting-cakes', name: 'Sporting Cakes', banner: '/Sports Cake Trio Banner.png', image_url: '/Sports Cake Trio Banner.png', description: 'Football, basketball, golf, tennis & championship celebration cakes' },
+  { id: 'couture-cakes', slug: 'couture-cakes', name: 'Couture Cakes', banner: '/Couture Cakes in Gold and Pink.png', image_url: '/Couture Cakes in Gold and Pink.png', description: 'Haute couture, fashion-forward & luxury designer cakes' },
+  { id: '3d-cakes', slug: '3d-cakes', name: '3D Cakes', banner: '/Spiderman, Unicorn and Race Car Cakes.png', image_url: '/Spiderman, Unicorn and Race Car Cakes.png', description: 'Spectacular sculpted 3-dimensional cake centerpieces' },
+  { id: 'food-drink-illusion-cakes', slug: 'food-drink-illusion-cakes', name: 'Food & Drink Illusion Cakes', banner: '/Realistic Fast-Food Illusion Cakes.png', image_url: '/Realistic Fast-Food Illusion Cakes.png', description: 'Hyper-realistic trompe-l\'œil culinary and beverage illusion cakes' },
+  { id: 'doughnuts-cakes', slug: 'doughnuts-cakes', name: 'Doughnuts Cakes', banner: '/Glossy Donut Cake Trio.png', image_url: '/Glossy Donut Cake Trio.png', description: 'Custom artisanal stacked doughnut cakes and dessert towers' },
+  { id: 'photo-on-cake', slug: 'photo-on-cake', name: 'Photo on Cake', banner: '/Celebration Cakes with Edible Photos.png', image_url: '/Celebration Cakes with Edible Photos.png', description: 'High-definition edible printed memories and personalized photo cakes' },
+  { id: 'pet-animals-cakes', slug: 'pet-animals-cakes', name: 'Pet & Animals Cakes', banner: '/Adorable Animal-Themed Fondant Cake Collection.png', image_url: '/Adorable Animal-Themed Fondant Cake Collection.png', description: 'Cute puppies, kittens, safari & wildlife celebration cakes' },
+  { id: 'superhero-cakes', slug: 'superhero-cakes', name: 'Superhero Cakes', banner: '/Superhero Fondant Cake Trio.png', image_url: '/Superhero Fondant Cake Trio.png', description: 'Action-packed Marvel, DC & comic book hero sculpted cakes' },
+  { id: 'labubu-cakes', slug: 'labubu-cakes', name: 'Labubu Cakes', banner: '/Whimsical Labubu Cake Collection.png', image_url: '/Whimsical Labubu Cake Collection.png', description: 'Trendy Labubu monster & whimsical vinyl toy designer cakes' },
+  { id: 'cake-baking-decorating', slug: 'cake-baking-decorating', name: 'Cake Baking & Decorating Cakes', banner: '/Pink Rosette Berry Cake Workshop.png', image_url: '/Pink Rosette Berry Cake Workshop.png', description: 'Baking enthusiast, confectionery master & sugarcraft themed cakes' }
 ];
 
 export default function AdminDashboard({ onBackToStore }) {
@@ -61,7 +165,9 @@ export default function AdminDashboard({ onBackToStore }) {
   const [activeTab, setActiveTab] = useState('overview'); // 'overview' | 'orders' | 'categories' | 'category' | 'inquiries'
   const [categoriesList, setCategoriesList] = useState(CATEGORIES);
   const [selectedCategory, setSelectedCategory] = useState(CATEGORIES[0]);
-  const [categoryMenuOpen, setCategoryMenuOpen] = useState(false);
+  const [categoryMenuOpen, setCategoryMenuOpen] = useState(true);
+  const [weddingSubmenuOpen, setWeddingSubmenuOpen] = useState(true);
+  const [corporateSubmenuOpen, setCorporateSubmenuOpen] = useState(true);
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
 
   // Data state
@@ -79,17 +185,111 @@ export default function AdminDashboard({ onBackToStore }) {
   const [categorySearch, setCategorySearch] = useState('');
   const [selectedOrder, setSelectedOrder] = useState(null);
 
-  // Add Product Modal
+  // Add / Edit Product Modal
   const [showAddProduct, setShowAddProduct] = useState(false);
+  const [editingProduct, setEditingProduct] = useState(null);
+  const [modalLangTab, setModalLangTab] = useState('en');
   const [newProduct, setNewProduct] = useState({
     title: '',
+    title_ar: '',
     category_slug: 'wedding',
     price: '',
     flavor: 'Belgian Chocolate & French Vanilla',
+    flavor_ar: '',
     servings: '15-20 servings',
+    servings_ar: '',
     image_url: '/categorycake imges/Wedding Cake.png',
-    description: ''
+    secondary_image_url: '',
+    description: '',
+    description_ar: ''
   });
+
+  const [uploadingSlot1, setUploadingSlot1] = useState(false);
+  const [uploadingSlot2, setUploadingSlot2] = useState(false);
+
+  // Client-side image compression to guarantee lightweight payloads under 150KB
+  const compressImage = (file, maxWidth = 1200, maxHeight = 1200, quality = 0.82) => {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          let width = img.width;
+          let height = img.height;
+
+          if (width > maxWidth || height > maxHeight) {
+            if (width > height) {
+              height = Math.round((height * maxWidth) / width);
+              width = maxWidth;
+            } else {
+              width = Math.round((width * maxHeight) / height);
+              height = maxHeight;
+            }
+          }
+
+          const canvas = document.createElement('canvas');
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+
+          const dataUrl = canvas.toDataURL('image/jpeg', quality);
+          resolve(dataUrl);
+        };
+        img.onerror = () => resolve(e.target.result);
+        img.src = e.target.result;
+      };
+      reader.onerror = () => resolve('');
+      reader.readAsDataURL(file);
+    });
+  };
+
+  // Handle uploading 2 product images (Slot 1 and Slot 2)
+  const handleFileUpload = async (file, slot) => {
+    if (!file) return;
+    const isSlot1 = slot === 1;
+    if (isSlot1) setUploadingSlot1(true);
+    else setUploadingSlot2(true);
+
+    try {
+      // 1. Optimize image client-side to prevent 413 Payload Too Large
+      const compressedDataUrl = await compressImage(file);
+      if (isSlot1) {
+        setNewProduct(prev => ({ ...prev, image_url: compressedDataUrl }));
+      } else {
+        setNewProduct(prev => ({ ...prev, secondary_image_url: compressedDataUrl }));
+      }
+
+      // 2. Upload to server to get permanent /uploads/ path
+      if (token) {
+        try {
+          const res = await fetch(`${API_BASE}/upload`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ image: compressedDataUrl, filename: file.name })
+          });
+          const data = await res.json();
+          if (data.success && data.url) {
+            if (isSlot1) {
+              setNewProduct(prev => ({ ...prev, image_url: data.url }));
+            } else {
+              setNewProduct(prev => ({ ...prev, secondary_image_url: data.url }));
+            }
+          }
+        } catch (uploadErr) {
+          console.warn('Upload endpoint notice, retaining compressed image:', uploadErr);
+        }
+      }
+    } catch (err) {
+      console.error('File compression error:', err);
+    } finally {
+      if (isSlot1) setUploadingSlot1(false);
+      else setUploadingSlot2(false);
+    }
+  };
 
   // Add Category Modal
   const [showAddCategory, setShowAddCategory] = useState(false);
@@ -174,7 +374,12 @@ export default function AdminDashboard({ onBackToStore }) {
       }
       if (productsRes.ok) {
         const data = await productsRes.json();
-        setProducts(data.products || []);
+        const prods = data.products || [];
+        setProducts(prods);
+        try {
+          localStorage.setItem('ldb_cached_products', JSON.stringify(prods));
+          window.dispatchEvent(new CustomEvent('ldb_products_updated'));
+        } catch (_) {}
       }
       if (inqRes.ok) {
         const data = await inqRes.json();
@@ -183,16 +388,23 @@ export default function AdminDashboard({ onBackToStore }) {
       if (catRes && catRes.ok) {
         const catData = await catRes.json();
         if (catData.categories && catData.categories.length > 0) {
-          setCategoriesList(catData.categories.map(c => ({
-            id: c.slug,
-            dbId: c.id,
-            name: c.name,
-            slug: c.slug,
-            banner: c.image_url || '/Elegant Ivory Wedding Cake Banner.png',
-            image_url: c.image_url || '/Elegant Ivory Wedding Cake Banner.png',
-            description: c.description || '',
-            sort_order: c.sort_order || 50
-          })));
+          setCategoriesList(catData.categories.map(c => {
+            const matched = CATEGORIES.find(def => def.id === c.slug || def.slug === c.slug || def.id === c.id);
+            return {
+              id: c.slug || c.id,
+              dbId: c.id,
+              name: c.name,
+              slug: c.slug,
+              banner: c.image_url || matched?.banner || '/Elegant Ivory Wedding Cake Banner.png',
+              image_url: c.image_url || matched?.image_url || '/Elegant Ivory Wedding Cake Banner.png',
+              description: c.description || matched?.description || '',
+              sort_order: c.sort_order || 50,
+              parent: matched?.parent || (
+                ['classic-wedding-cakes', 'novelty-wedding-cakes', 'bride-to-be-cakes', 'engagement-cakes', 'grooms-cakes'].includes(c.slug) ? 'wedding' :
+                ['corporate-cookies', 'cupcakes-with-logo'].includes(c.slug) ? 'corporate-cakes' : null
+              )
+            };
+          }));
         }
       }
     } catch (err) {
@@ -291,37 +503,132 @@ export default function AdminDashboard({ onBackToStore }) {
     }
   };
 
-  // Add Product
-  const handleAddProduct = async (e) => {
+  // Open Add Product Modal
+  const handleOpenAdd = () => {
+    setEditingProduct(null);
+    setModalLangTab('en');
+    setNewProduct({
+      title: '',
+      title_ar: '',
+      category_slug: selectedCategory.slug || selectedCategory.id,
+      price: '',
+      flavor: 'Belgian Chocolate & French Vanilla',
+      flavor_ar: '',
+      servings: '15-20 servings',
+      servings_ar: '',
+      image_url: selectedCategory.banner || selectedCategory.image_url || '/Elegant Ivory Wedding Cake Banner.png',
+      secondary_image_url: '',
+      description: '',
+      description_ar: ''
+    });
+    setShowAddProduct(true);
+  };
+
+  // Open Edit Product Modal
+  const handleOpenEdit = (prod) => {
+    setEditingProduct(prod);
+    setModalLangTab('en');
+    setNewProduct({
+      title: prod.title || '',
+      title_ar: prod.title_ar || '',
+      category_slug: prod.category_slug || selectedCategory.slug || selectedCategory.id,
+      price: prod.price || '',
+      flavor: prod.flavor || '',
+      flavor_ar: prod.flavor_ar || '',
+      servings: prod.servings || '',
+      servings_ar: prod.servings_ar || '',
+      image_url: prod.image_url || '',
+      secondary_image_url: prod.secondary_image_url || '',
+      description: prod.description || '',
+      description_ar: prod.description_ar || ''
+    });
+    setShowAddProduct(true);
+  };
+
+  // Save Product (Add or Edit)
+  const handleSaveProduct = async (e) => {
     e.preventDefault();
     if (!newProduct.title || !newProduct.price) return;
 
-    try {
-      const res = await fetch(`${API_BASE}/products`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify(newProduct)
-      });
-      const data = await res.json();
-      if (data.product) {
-        setProducts(prev => [data.product, ...prev]);
+    if (editingProduct) {
+      // Edit existing product
+      try {
+        const res = await fetch(`${API_BASE}/products/${editingProduct.id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify(newProduct)
+        });
+        const data = await res.json();
+        const updatedItem = data.product 
+          ? { ...editingProduct, ...newProduct, ...data.product } 
+          : { ...editingProduct, ...newProduct };
+
+        setProducts(prev => {
+          const updated = prev.map(p => p.id === editingProduct.id ? updatedItem : p);
+          try {
+            localStorage.setItem('ldb_cached_products', JSON.stringify(updated));
+            window.dispatchEvent(new CustomEvent('ldb_products_updated', { detail: updatedItem }));
+          } catch (_) {}
+          return updated;
+        });
+
+        setShowAddProduct(false);
+        setEditingProduct(null);
+        notify('Product updated successfully');
+      } catch (err) {
+        setProducts(prev => {
+          const updated = prev.map(p => p.id === editingProduct.id ? { ...editingProduct, ...newProduct } : p);
+          try {
+            localStorage.setItem('ldb_cached_products', JSON.stringify(updated));
+            window.dispatchEvent(new CustomEvent('ldb_products_updated'));
+          } catch (_) {}
+          return updated;
+        });
+        setShowAddProduct(false);
+        setEditingProduct(null);
+        notify('Product updated');
       }
-      setShowAddProduct(false);
-      setNewProduct({
-        title: '',
-        category_slug: selectedCategory.id,
-        price: '',
-        flavor: 'Belgian Chocolate & French Vanilla',
-        servings: '15-20 servings',
-        image_url: selectedCategory.banner || '/categorycake imges/Wedding Cake.png',
-        description: ''
-      });
-      notify('Product added to catalog');
-    } catch (err) {
-      notify('Failed to add product');
+    } else {
+      // Add new product
+      try {
+        const res = await fetch(`${API_BASE}/products`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify(newProduct)
+        });
+        const data = await res.json();
+        const createdProduct = data.product || { ...newProduct, id: Date.now() };
+
+        setProducts(prev => {
+          const updated = [createdProduct, ...prev];
+          try {
+            localStorage.setItem('ldb_cached_products', JSON.stringify(updated));
+            window.dispatchEvent(new CustomEvent('ldb_products_updated', { detail: createdProduct }));
+          } catch (_) {}
+          return updated;
+        });
+
+        setShowAddProduct(false);
+        setNewProduct({
+          title: '',
+          category_slug: selectedCategory.slug || selectedCategory.id,
+          price: '',
+          flavor: 'Belgian Chocolate & French Vanilla',
+          servings: '15-20 servings',
+          image_url: selectedCategory.banner || selectedCategory.image_url || '/Elegant Ivory Wedding Cake Banner.png',
+          secondary_image_url: '',
+          description: ''
+        });
+        notify('Product added to catalog');
+      } catch (err) {
+        notify('Failed to add product');
+      }
     }
   };
 
@@ -333,10 +640,24 @@ export default function AdminDashboard({ onBackToStore }) {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       });
-      setProducts(prev => prev.filter(p => p.id !== id));
+      setProducts(prev => {
+        const updated = prev.filter(p => p.id !== id);
+        try {
+          localStorage.setItem('ldb_cached_products', JSON.stringify(updated));
+          window.dispatchEvent(new CustomEvent('ldb_products_updated'));
+        } catch (_) {}
+        return updated;
+      });
       notify('Product removed');
     } catch (e) {
-      setProducts(prev => prev.filter(p => p.id !== id));
+      setProducts(prev => {
+        const updated = prev.filter(p => p.id !== id);
+        try {
+          localStorage.setItem('ldb_cached_products', JSON.stringify(updated));
+          window.dispatchEvent(new CustomEvent('ldb_products_updated'));
+        } catch (_) {}
+        return updated;
+      });
       notify('Product removed');
     }
   };
@@ -358,6 +679,51 @@ export default function AdminDashboard({ onBackToStore }) {
     return matchesFilter && matchesSearch;
   });
 
+  // Universal Category Product Counter
+  const getCategoryProductCount = (catId, allProducts = products) => {
+    if (!allProducts || allProducts.length === 0) return 0;
+    return allProducts.filter(p => {
+      const pCat = p.category_slug;
+      if (catId === 'wedding' || catId === 'wedding-cakes') {
+        return pCat === 'wedding' || 
+               pCat === 'wedding-cakes' ||
+               pCat === 'classic-wedding-cakes' ||
+               pCat === 'novelty-wedding-cakes' ||
+               pCat === 'bride-to-be-cakes' ||
+               pCat === 'engagement-cakes' ||
+               pCat === 'grooms-cakes';
+      }
+      if (catId === 'corporate-cakes-all') {
+        return pCat === 'corporate-cakes' || 
+               pCat === 'corporate' ||
+               pCat === 'corporate-cookies' ||
+               pCat === 'cupcakes-with-logo';
+      }
+      if (catId === 'corporate-cakes') {
+        return pCat === 'corporate-cakes' || pCat === 'corporate';
+      }
+      if (catId === 'corporate-cookies') {
+        return pCat === 'corporate-cookies';
+      }
+      if (catId === 'cupcakes-with-logo') {
+        return pCat === 'cupcakes-with-logo';
+      }
+      if (catId === 'classic-wedding-cakes') return pCat === 'classic-wedding-cakes';
+      if (catId === 'novelty-wedding-cakes') return pCat === 'novelty-wedding-cakes';
+      if (catId === 'bride-to-be-cakes') return pCat === 'bride-to-be-cakes';
+      if (catId === 'engagement-cakes') return pCat === 'engagement-cakes';
+      if (catId === 'grooms-cakes') return pCat === 'grooms-cakes';
+
+      if (catId === 'cookies') return pCat === 'cookies' || pCat === 'cookies-cat';
+      if (catId === 'cake-pops') return pCat === 'cake-pops' || pCat === 'cake-pops-cat';
+      if (catId === 'cupcakes') return pCat === 'cupcakes' || pCat === 'cupcakes-cat';
+      if (catId === 'cakes-for-kids') return pCat === 'cakes-for-kids' || pCat === 'kids';
+      if (catId === 'cakes-for-ladies') return pCat === 'cakes-for-ladies' || pCat === 'ladies' || pCat === 'girls';
+      if (catId === 'cakes-for-guys') return pCat === 'cakes-for-guys' || pCat === 'guys' || pCat === 'boys';
+      return pCat === catId;
+    }).length;
+  };
+
   // Filtered Categories
   const filteredCategories = categoriesList.filter(c => {
     if (!categorySearch.trim()) return true;
@@ -370,9 +736,42 @@ export default function AdminDashboard({ onBackToStore }) {
   // Filtered Category Cakes
   const categoryCakes = products.filter(p => {
     const pCat = p.category_slug;
-    const sId = selectedCategory.id;
-    if (sId === 'wedding') return pCat === 'wedding';
-    if (sId === 'corporate-cakes') return pCat === 'corporate-cakes' || pCat === 'corporate';
+    const sId = selectedCategory.slug || selectedCategory.id;
+
+    // Specific wedding subcategories
+    if (sId === 'classic-wedding-cakes') return pCat === 'classic-wedding-cakes';
+    if (sId === 'novelty-wedding-cakes') return pCat === 'novelty-wedding-cakes';
+    if (sId === 'bride-to-be-cakes') return pCat === 'bride-to-be-cakes';
+    if (sId === 'engagement-cakes') return pCat === 'engagement-cakes';
+    if (sId === 'grooms-cakes') return pCat === 'grooms-cakes';
+
+    // Parent wedding category matches all wedding items
+    if (sId === 'wedding' || sId === 'wedding-cakes') {
+      return pCat === 'wedding' || 
+             pCat === 'wedding-cakes' ||
+             pCat === 'classic-wedding-cakes' ||
+             pCat === 'novelty-wedding-cakes' ||
+             pCat === 'bride-to-be-cakes' ||
+             pCat === 'engagement-cakes' ||
+             pCat === 'grooms-cakes';
+    }
+
+    // Specific corporate subcategories
+    if (sId === 'corporate-cookies') return pCat === 'corporate-cookies';
+    if (sId === 'cupcakes-with-logo') return pCat === 'cupcakes-with-logo';
+
+    // Corporate cakes
+    if (sId === 'corporate-cakes') {
+      return pCat === 'corporate-cakes' || pCat === 'corporate';
+    }
+    if (sId === 'corporate-cakes-all') {
+      return pCat === 'corporate-cakes' || 
+             pCat === 'corporate' || 
+             pCat === 'corporate-cookies' || 
+             pCat === 'cupcakes-with-logo';
+    }
+
+    // Other categories
     if (sId === 'cookies') return pCat === 'cookies' || pCat === 'cookies-cat';
     if (sId === 'cake-pops') return pCat === 'cake-pops' || pCat === 'cake-pops-cat';
     if (sId === 'cupcakes') return pCat === 'cupcakes' || pCat === 'cupcakes-cat';
@@ -385,6 +784,39 @@ export default function AdminDashboard({ onBackToStore }) {
     (p.title && p.title.toLowerCase().includes(productSearch.toLowerCase())) ||
     (p.flavor && p.flavor.toLowerCase().includes(productSearch.toLowerCase()))
   );
+
+  // Grouped taxonomy for Sidebar navigation
+  const weddingSubIds = ['classic-wedding-cakes', 'novelty-wedding-cakes', 'bride-to-be-cakes', 'engagement-cakes', 'grooms-cakes'];
+  const corporateSubIds = ['corporate-cookies', 'cupcakes-with-logo'];
+
+  const weddingCategory = categoriesList.find(c => c.slug === 'wedding' || c.id === 'wedding') || CATEGORIES[0];
+  const corporateCategory = categoriesList.find(c => c.slug === 'corporate-cakes' || c.id === 'corporate-cakes') || {
+    id: 'corporate-cakes',
+    slug: 'corporate-cakes',
+    name: 'Corporate Cakes',
+    banner: '/Corporate Skyline Cake with Laptop topper.png',
+    image_url: '/Corporate Skyline Cake with Laptop topper.png',
+    description: 'Executive event cakes & branded desserts'
+  };
+
+  const weddingSubs = WEDDING_SUBCATEGORIES.map(def => {
+    const found = categoriesList.find(c => c.slug === def.slug || c.id === def.id);
+    return found ? { ...def, ...found } : def;
+  });
+
+  const corporateSubs = CORPORATE_SUBCATEGORIES.map(def => {
+    const found = categoriesList.find(c => c.slug === def.slug || c.id === def.id);
+    return found ? { ...def, ...found } : def;
+  });
+
+  const otherCategories = categoriesList.filter(c => {
+    const s = c.slug || c.id;
+    if (s === 'wedding') return false;
+    if (s === 'corporate-cakes') return false;
+    if (weddingSubIds.includes(s)) return false;
+    if (corporateSubIds.includes(s)) return false;
+    return true;
+  });
 
   // =======================================================
   // LOGIN SCREEN
@@ -622,44 +1054,180 @@ export default function AdminDashboard({ onBackToStore }) {
 
               {/* Subcategories (Clean Text Only, Larger Font Size) */}
               {categoryMenuOpen && (
-                <div className="mt-1 pl-3.5 space-y-1 border-l-2 border-[#E2D2BD] ml-4">
-                  {categoriesList.map(cat => {
-                    const isSelected = activeTab === 'category' && selectedCategory.id === cat.id;
-                    const count = products.filter(p => {
-                      const pCat = p.category_slug;
-                      if (cat.id === 'wedding') return pCat === 'wedding';
-                      if (cat.id === 'corporate-cakes') return pCat === 'corporate-cakes' || pCat === 'corporate';
-                      if (cat.id === 'cookies') return pCat === 'cookies' || pCat === 'cookies-cat';
-                      if (cat.id === 'cake-pops') return pCat === 'cake-pops' || pCat === 'cake-pops-cat';
-                      if (cat.id === 'cupcakes') return pCat === 'cupcakes' || pCat === 'cupcakes-cat';
-                      if (cat.id === 'cakes-for-kids') return pCat === 'cakes-for-kids' || pCat === 'kids';
-                      if (cat.id === 'cakes-for-ladies') return pCat === 'cakes-for-ladies' || pCat === 'ladies' || pCat === 'girls';
-                      if (cat.id === 'cakes-for-guys') return pCat === 'cakes-for-guys' || pCat === 'guys' || pCat === 'boys';
-                      return pCat === cat.id;
-                    }).length;
-
-                    return (
+                <div className="mt-1 pl-2.5 space-y-1 border-l-2 border-[#E2D2BD] ml-4">
+                  
+                  {/* --- 1. Wedding Cakes with nested subcategories --- */}
+                  <div className="space-y-0.5">
+                    <div className="flex items-center justify-between rounded-lg hover:bg-[#F5EBDD] transition-colors pr-1">
                       <button
-                        key={cat.id}
                         type="button"
-                        onClick={() => handleSelectCategory(cat)}
-                        className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium transition-colors text-left cursor-pointer ${
-                          isSelected
+                        onClick={() => handleSelectCategory(weddingCategory)}
+                        className={`flex-1 flex items-center justify-between px-2.5 py-2 rounded-lg text-left cursor-pointer transition-colors ${
+                          activeTab === 'category' && (selectedCategory.id === 'wedding' || selectedCategory.slug === 'wedding')
                             ? 'bg-[#C58A19] text-white font-semibold shadow-xs'
-                            : 'text-[#6B4B3E] hover:bg-[#F5EBDD] hover:text-[#C58A19]'
+                            : 'text-[#4A2116] hover:text-[#C58A19]'
                         }`}
                       >
-                        <span className="truncate text-[13.5px] font-medium tracking-normal">{cat.name}</span>
-                        {count > 0 && (
+                        <span className="truncate text-[14px] font-semibold tracking-normal">Wedding Cakes</span>
+                        {getCategoryProductCount('wedding', products) > 0 && (
                           <span className={`text-[11px] px-2 py-0.5 rounded font-semibold ${
-                            isSelected ? 'bg-white/20 text-white' : 'bg-[#F2E5D5] text-[#7A5846]'
+                            activeTab === 'category' && (selectedCategory.id === 'wedding' || selectedCategory.slug === 'wedding')
+                              ? 'bg-white/20 text-white'
+                              : 'bg-[#F2E5D5] text-[#7A5846]'
                           }`}>
-                            {count}
+                            {getCategoryProductCount('wedding', products)}
                           </span>
                         )}
                       </button>
-                    );
-                  })}
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setWeddingSubmenuOpen(!weddingSubmenuOpen);
+                        }}
+                        className="p-1.5 text-[#8A6753] hover:text-[#C58A19] rounded-md hover:bg-black/5 cursor-pointer"
+                        title="Toggle Wedding Cakes Subcategories"
+                        aria-label="Toggle Wedding Cakes Subcategories"
+                      >
+                        <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 stroke-[2.2] ${
+                          weddingSubmenuOpen ? 'rotate-180 text-[#C58A19]' : ''
+                        }`} />
+                      </button>
+                    </div>
+
+                    {/* Wedding Subcategories Menu (Exact items matching user screenshot) */}
+                    {weddingSubmenuOpen && (
+                      <div className="mt-0.5 pl-3 space-y-0.5 border-l-2 border-[#E2D2BD]/80 ml-3 mb-1">
+                        {weddingSubs.map(sub => {
+                          const isSelected = activeTab === 'category' && (selectedCategory.id === sub.id || selectedCategory.slug === sub.slug);
+                          const subCount = getCategoryProductCount(sub.slug || sub.id, products);
+                          return (
+                            <button
+                              key={sub.id}
+                              type="button"
+                              onClick={() => handleSelectCategory(sub)}
+                              className={`w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg text-left cursor-pointer transition-colors ${
+                                isSelected
+                                  ? 'bg-[#C58A19] text-white font-semibold shadow-xs'
+                                  : 'text-[#6B4B3E] hover:bg-[#F5EBDD] hover:text-[#C58A19]'
+                              }`}
+                            >
+                              <span className="truncate text-[13.5px] font-medium tracking-normal">{sub.name}</span>
+                              {subCount > 0 && (
+                                <span className={`text-[10.5px] px-1.5 py-0.5 rounded font-semibold ${
+                                  isSelected ? 'bg-white/20 text-white' : 'bg-[#F2E5D5] text-[#7A5846]'
+                                }`}>
+                                  {subCount}
+                                </span>
+                              )}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* --- 2. Corporate Cakes with nested subcategories --- */}
+                  <div className="space-y-0.5 pt-0.5">
+                    <div className="flex items-center justify-between rounded-lg hover:bg-[#F5EBDD] transition-colors pr-1">
+                      <button
+                        type="button"
+                        onClick={() => handleSelectCategory(corporateCategory)}
+                        className={`flex-1 flex items-center justify-between px-2.5 py-2 rounded-lg text-left cursor-pointer transition-colors ${
+                          activeTab === 'category' && (selectedCategory.id === 'corporate-cakes' || selectedCategory.slug === 'corporate-cakes')
+                            ? 'bg-[#C58A19] text-white font-semibold shadow-xs'
+                            : 'text-[#4A2116] hover:text-[#C58A19]'
+                        }`}
+                      >
+                        <span className="truncate text-[14px] font-semibold tracking-normal">Corporate Cakes</span>
+                        {getCategoryProductCount('corporate-cakes-all', products) > 0 && (
+                          <span className={`text-[11px] px-2 py-0.5 rounded font-semibold ${
+                            activeTab === 'category' && (selectedCategory.id === 'corporate-cakes' || selectedCategory.slug === 'corporate-cakes')
+                              ? 'bg-white/20 text-white'
+                              : 'bg-[#F2E5D5] text-[#7A5846]'
+                          }`}>
+                            {getCategoryProductCount('corporate-cakes-all', products)}
+                          </span>
+                        )}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setCorporateSubmenuOpen(!corporateSubmenuOpen);
+                        }}
+                        className="p-1.5 text-[#8A6753] hover:text-[#C58A19] rounded-md hover:bg-black/5 cursor-pointer"
+                        title="Toggle Corporate Cakes Subcategories"
+                        aria-label="Toggle Corporate Cakes Subcategories"
+                      >
+                        <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 stroke-[2.2] ${
+                          corporateSubmenuOpen ? 'rotate-180 text-[#C58A19]' : ''
+                        }`} />
+                      </button>
+                    </div>
+
+                    {/* Corporate Subcategories Menu (Exact items matching user screenshot) */}
+                    {corporateSubmenuOpen && (
+                      <div className="mt-0.5 pl-3 space-y-0.5 border-l-2 border-[#E2D2BD]/80 ml-3 mb-1">
+                        {corporateSubs.map(sub => {
+                          const isSelected = activeTab === 'category' && (selectedCategory.id === sub.id || selectedCategory.slug === sub.slug);
+                          const subCount = getCategoryProductCount(sub.slug || sub.id, products);
+                          return (
+                            <button
+                              key={sub.id}
+                              type="button"
+                              onClick={() => handleSelectCategory(sub)}
+                              className={`w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg text-left cursor-pointer transition-colors ${
+                                isSelected
+                                  ? 'bg-[#C58A19] text-white font-semibold shadow-xs'
+                                  : 'text-[#6B4B3E] hover:bg-[#F5EBDD] hover:text-[#C58A19]'
+                              }`}
+                            >
+                              <span className="truncate text-[13.5px] font-medium tracking-normal">{sub.name}</span>
+                              {subCount > 0 && (
+                                <span className={`text-[10.5px] px-1.5 py-0.5 rounded font-semibold ${
+                                  isSelected ? 'bg-white/20 text-white' : 'bg-[#F2E5D5] text-[#7A5846]'
+                                }`}>
+                                  {subCount}
+                                </span>
+                              )}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* --- 3. Other Categories --- */}
+                  <div className="pt-0.5 space-y-0.5">
+                    {otherCategories.map(cat => {
+                      const isSelected = activeTab === 'category' && (selectedCategory.id === cat.id || selectedCategory.slug === cat.slug);
+                      const count = getCategoryProductCount(cat.slug || cat.id, products);
+
+                      return (
+                        <button
+                          key={cat.id || cat.slug}
+                          type="button"
+                          onClick={() => handleSelectCategory(cat)}
+                          className={`w-full flex items-center justify-between px-2.5 py-2 rounded-lg text-sm font-medium transition-colors text-left cursor-pointer ${
+                            isSelected
+                              ? 'bg-[#C58A19] text-white font-semibold shadow-xs'
+                              : 'text-[#6B4B3E] hover:bg-[#F5EBDD] hover:text-[#C58A19]'
+                          }`}
+                        >
+                          <span className="truncate text-[13.5px] font-medium tracking-normal">{cat.name}</span>
+                          {count > 0 && (
+                            <span className={`text-[11px] px-2 py-0.5 rounded font-semibold ${
+                              isSelected ? 'bg-white/20 text-white' : 'bg-[#F2E5D5] text-[#7A5846]'
+                            }`}>
+                              {count}
+                            </span>
+                          )}
+                        </button>
+                      );
+                    })}
+                  </div>
+
                 </div>
               )}
             </div>
@@ -1096,22 +1664,11 @@ export default function AdminDashboard({ onBackToStore }) {
               {/* Categories Grid */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
                 {filteredCategories.map(cat => {
-                  const productCount = products.filter(p => {
-                    const pCat = p.category_slug;
-                    if (cat.id === 'wedding') return pCat === 'wedding';
-                    if (cat.id === 'corporate-cakes') return pCat === 'corporate-cakes' || pCat === 'corporate';
-                    if (cat.id === 'cookies') return pCat === 'cookies' || pCat === 'cookies-cat';
-                    if (cat.id === 'cake-pops') return pCat === 'cake-pops' || pCat === 'cake-pops-cat';
-                    if (cat.id === 'cupcakes') return pCat === 'cupcakes' || pCat === 'cupcakes-cat';
-                    if (cat.id === 'cakes-for-kids') return pCat === 'cakes-for-kids' || pCat === 'kids';
-                    if (cat.id === 'cakes-for-ladies') return pCat === 'cakes-for-ladies' || pCat === 'ladies' || pCat === 'girls';
-                    if (cat.id === 'cakes-for-guys') return pCat === 'cakes-for-guys' || pCat === 'guys' || pCat === 'boys';
-                    return pCat === cat.id;
-                  }).length;
+                  const productCount = getCategoryProductCount(cat.slug || cat.id, products);
 
                   return (
                     <div 
-                      key={cat.id} 
+                      key={cat.id || cat.slug} 
                       className="bg-white border border-[#EBDCC8] rounded-2xl overflow-hidden shadow-xs hover:shadow-md transition-shadow flex flex-col justify-between group"
                     >
                       <div>
@@ -1123,10 +1680,20 @@ export default function AdminDashboard({ onBackToStore }) {
                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
-                          <div className="absolute bottom-2.5 left-3 right-3 text-white">
-                            <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-black/40 backdrop-blur-xs text-[#E6C783]">
+                          <div className="absolute bottom-2.5 left-3 right-3 flex items-center justify-between gap-1.5 flex-wrap">
+                            <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-black/50 backdrop-blur-xs text-[#E6C783]">
                               Slug: {cat.slug || cat.id}
                             </span>
+                            {cat.parent === 'wedding' && (
+                              <span className="text-[9.5px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded bg-[#C58A19]/80 backdrop-blur-xs text-white">
+                                Wedding Subcategory
+                              </span>
+                            )}
+                            {cat.parent === 'corporate-cakes' && (
+                              <span className="text-[9.5px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded bg-[#4A2116]/80 backdrop-blur-xs text-[#E6C783]">
+                                Corporate Subcategory
+                              </span>
+                            )}
                           </div>
                         </div>
 
@@ -1211,6 +1778,76 @@ export default function AdminDashboard({ onBackToStore }) {
                 </div>
               </div>
 
+              {/* Subcategories Quick Switcher (For Wedding & Corporate Collections) */}
+              {(() => {
+                const sId = selectedCategory.slug || selectedCategory.id;
+                const isWedding = ['wedding', 'wedding-cakes', ...weddingSubIds].includes(sId);
+                const isCorporate = ['corporate-cakes', 'corporate', 'corporate-cookies', 'cupcakes-with-logo'].includes(sId);
+                
+                if (isWedding) {
+                  return (
+                    <div className="flex items-center gap-2 overflow-x-auto pb-1 max-w-full">
+                      <button
+                        type="button"
+                        onClick={() => handleSelectCategory(weddingCategory)}
+                        className={`px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-colors cursor-pointer ${
+                          sId === 'wedding' || sId === 'wedding-cakes'
+                            ? 'bg-[#C58A19] text-white shadow-xs'
+                            : 'bg-white text-[#4A2116] border border-[#EBDCC8] hover:bg-[#FAF5ED]'
+                        }`}
+                      >
+                        All Wedding ({getCategoryProductCount('wedding', products)})
+                      </button>
+                      {weddingSubs.map(sub => {
+                        const isSubActive = sId === sub.slug || sId === sub.id;
+                        const subCount = getCategoryProductCount(sub.slug || sub.id, products);
+                        return (
+                          <button
+                            key={sub.id}
+                            type="button"
+                            onClick={() => handleSelectCategory(sub)}
+                            className={`px-3.5 py-2 rounded-xl text-xs font-medium whitespace-nowrap transition-colors cursor-pointer ${
+                              isSubActive
+                                ? 'bg-[#C58A19] text-white font-semibold shadow-xs'
+                                : 'bg-white text-[#4A2116] border border-[#EBDCC8] hover:bg-[#FAF5ED]'
+                            }`}
+                          >
+                            {sub.name} {subCount > 0 ? `(${subCount})` : ''}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  );
+                }
+
+                if (isCorporate) {
+                  return (
+                    <div className="flex items-center gap-2 overflow-x-auto pb-1 max-w-full">
+                      {corporateSubs.map(sub => {
+                        const isSubActive = sId === sub.slug || sId === sub.id;
+                        const subCount = getCategoryProductCount(sub.slug || sub.id, products);
+                        return (
+                          <button
+                            key={sub.id}
+                            type="button"
+                            onClick={() => handleSelectCategory(sub)}
+                            className={`px-3.5 py-2 rounded-xl text-xs font-medium whitespace-nowrap transition-colors cursor-pointer ${
+                              isSubActive
+                                ? 'bg-[#C58A19] text-white font-semibold shadow-xs'
+                                : 'bg-white text-[#4A2116] border border-[#EBDCC8] hover:bg-[#FAF5ED]'
+                            }`}
+                          >
+                            {sub.name} {subCount > 0 ? `(${subCount})` : ''}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  );
+                }
+
+                return null;
+              })()}
+
               {/* Action & Filter Bar */}
               <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-white border border-[#EBDCC8] rounded-2xl p-4 sm:p-5 shadow-xs">
                 
@@ -1232,18 +1869,7 @@ export default function AdminDashboard({ onBackToStore }) {
 
                   <button
                     type="button"
-                    onClick={() => {
-                      setNewProduct({
-                        title: '',
-                        category_slug: selectedCategory.id,
-                        price: '',
-                        flavor: 'Belgian Chocolate & French Vanilla',
-                        servings: '15-20 servings',
-                        image_url: selectedCategory.banner,
-                        description: ''
-                      });
-                      setShowAddProduct(true);
-                    }}
+                    onClick={handleOpenAdd}
                     className="w-full sm:w-auto bg-[#4A2116] hover:bg-[#C58A19] text-white font-semibold text-xs sm:text-sm px-5 py-2.5 rounded-xl shadow-xs transition-colors flex items-center justify-center gap-2 cursor-pointer"
                   >
                     <Plus className="w-4 h-4" />
@@ -1253,7 +1879,7 @@ export default function AdminDashboard({ onBackToStore }) {
 
               </div>
 
-              {/* Items Grid */}
+              {/* Items Table View */}
               {categoryCakes.length === 0 ? (
                 <div className="bg-white border border-[#EBDCC8] rounded-2xl p-12 text-center shadow-xs">
                   <h4 className="font-serif font-bold text-base text-[#4A2116]">No items found in {selectedCategory.name}</h4>
@@ -1262,18 +1888,7 @@ export default function AdminDashboard({ onBackToStore }) {
                   </p>
                   <button
                     type="button"
-                    onClick={() => {
-                      setNewProduct({
-                        title: '',
-                        category_slug: selectedCategory.id,
-                        price: '',
-                        flavor: 'Belgian Chocolate & French Vanilla',
-                        servings: '15-20 servings',
-                        image_url: selectedCategory.banner,
-                        description: ''
-                      });
-                      setShowAddProduct(true);
-                    }}
+                    onClick={handleOpenAdd}
                     className="mt-4 inline-flex items-center gap-2 bg-[#4A2116] hover:bg-[#C58A19] text-white text-xs font-semibold px-4 py-2.5 rounded-xl transition-colors cursor-pointer"
                   >
                     <Plus className="w-4 h-4" />
@@ -1281,49 +1896,137 @@ export default function AdminDashboard({ onBackToStore }) {
                   </button>
                 </div>
               ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-                  {categoryCakes.map(prod => (
-                    <div key={prod.id} className="bg-white border border-[#EBDCC8] rounded-2xl overflow-hidden shadow-xs flex flex-col group hover:shadow-md transition-shadow">
-                      <div className="h-44 bg-[#FAF5ED] overflow-hidden relative">
-                        <img 
-                          src={prod.image_url} 
-                          alt={prod.title} 
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                        />
-                        <div className="absolute top-2.5 right-2.5 bg-[#4A2116]/85 backdrop-blur-xs text-[#E6C783] text-xs font-bold font-poppins tabular-nums px-2.5 py-1 rounded-md">
-                          AED {prod.price}
-                        </div>
-                      </div>
+                <div className="bg-white border border-[#EBDCC8] rounded-2xl shadow-xs overflow-hidden">
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left border-collapse min-w-[700px]">
+                      <thead>
+                        <tr className="bg-[#FAF5ED] border-b border-[#EBDCC8] text-[11px] uppercase tracking-wider text-[#7A5846] font-semibold">
+                          <th className="py-3.5 px-4">Cake</th>
+                          <th className="py-3.5 px-4">Title & Description</th>
+                          <th className="py-3.5 px-4">Category</th>
+                          <th className="py-3.5 px-4">Price</th>
+                          <th className="py-3.5 px-4">Flavor</th>
+                          <th className="py-3.5 px-4">Servings</th>
+                          <th className="py-3.5 px-4 text-right">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-[#F2E5D5] text-xs">
+                        {categoryCakes.map((prod) => (
+                          <tr key={prod.id} className="hover:bg-[#FAF8F5] transition-colors group">
+                            {/* Image Thumbnail with 2-Photo Indicator */}
+                            <td className="py-3 px-4">
+                              <div className="relative w-14 h-14 rounded-xl overflow-hidden bg-[#FAF5ED] border border-[#EBDCC8] shrink-0 shadow-2xs">
+                                <img
+                                  src={formatImageUrl(prod.image_url)}
+                                  alt={prod.title}
+                                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                />
+                                {prod.secondary_image_url && (
+                                  <span 
+                                    className="absolute bottom-0.5 right-0.5 bg-black/75 text-[#E6C783] text-[9px] font-bold px-1 rounded"
+                                    title="Has 2 Photos"
+                                  >
+                                    2P
+                                  </span>
+                                )}
+                              </div>
+                            </td>
 
-                      <div className="p-4 flex-1 flex flex-col justify-between">
-                        <div>
-                          <div className="text-[10px] uppercase font-bold text-[#C58A19] tracking-wider">
-                            {selectedCategory.name}
-                          </div>
-                          <h4 className="font-serif font-bold text-sm text-[#4A2116] mt-0.5 line-clamp-1">
-                            {prod.title}
-                          </h4>
-                          <p className="text-xs text-[#7A5846] mt-1 line-clamp-2">
-                            {prod.flavor || prod.description}
-                          </p>
-                        </div>
+                            {/* Title, Arabic Title, Slug & Description */}
+                            <td className="py-3 px-4 max-w-xs">
+                              <div className="font-serif font-bold text-sm text-[#4A2116] line-clamp-1 flex items-center gap-2">
+                                <span>{prod.title}</span>
+                                {prod.title_ar && (
+                                  <span className="text-[10px] bg-emerald-50 text-emerald-800 border border-emerald-200 px-1.5 py-0.5 rounded font-medium truncate max-w-[120px]" title={prod.title_ar}>
+                                    {prod.title_ar}
+                                  </span>
+                                )}
+                              </div>
+                              <div className="text-[10.5px] text-[#A07A65] font-mono mt-0.5 flex items-center gap-1">
+                                <span>#product-{prod.slug || slugify(prod.title) || prod.id}</span>
+                              </div>
+                              {prod.description ? (
+                                <div className="text-[11px] text-[#8A6753] line-clamp-2 mt-0.5 leading-relaxed">
+                                  {prod.description}
+                                </div>
+                              ) : (
+                                <div className="text-[11px] text-[#A08070] italic mt-0.5">
+                                  No description added
+                                </div>
+                              )}
+                            </td>
 
-                        <div className="mt-4 pt-3 border-t border-[#F2E6D5] flex items-center justify-between text-xs">
-                          <span className="text-[11px] text-[#A07A65]">
-                            {prod.servings || '15-20 servings'}
-                          </span>
-                          <button
-                            type="button"
-                            onClick={() => handleDeleteProduct(prod.id)}
-                            className="text-red-500 hover:text-red-700 p-1 rounded hover:bg-red-50 transition-colors cursor-pointer"
-                            title="Delete"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
+                            {/* Category Pill */}
+                            <td className="py-3 px-4 whitespace-nowrap">
+                              <span className="inline-block text-[10.5px] font-semibold text-[#C58A19] bg-[#FAF5ED] px-2.5 py-1 rounded-md border border-[#EBDCC8]">
+                                {selectedCategory.name}
+                              </span>
+                            </td>
+
+                            {/* Price */}
+                            <td className="py-3 px-4 whitespace-nowrap">
+                              <span className="font-bold text-[#4A2116] bg-[#FAF3E8] px-2.5 py-1 rounded-lg border border-[#E5C583]/50 text-xs">
+                                AED {prod.price}
+                              </span>
+                            </td>
+
+                            {/* Flavor */}
+                            <td className="py-3 px-4 max-w-[180px]">
+                              <div className="text-[11.5px] text-[#4A2116] font-medium line-clamp-1">
+                                {prod.flavor || '—'}
+                              </div>
+                              {prod.flavor_ar && (
+                                <div className="text-[10.5px] text-[#8A6753] line-clamp-1 mt-0.5">
+                                  {prod.flavor_ar}
+                                </div>
+                              )}
+                            </td>
+
+                            {/* Servings */}
+                            <td className="py-3 px-4 whitespace-nowrap">
+                              <span className="text-[11px] text-[#7A5846] bg-[#FAF5ED] px-2 py-0.5 rounded border border-[#EBDCC8]">
+                                {prod.servings || '—'}
+                              </span>
+                            </td>
+
+                            {/* Actions (View, Edit & Delete) */}
+                            <td className="py-3 px-4 text-right whitespace-nowrap">
+                              <div className="inline-flex items-center gap-1.5">
+                                <a
+                                  href={`#product-${prod.slug || slugify(prod.title) || prod.id}`}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="inline-flex items-center gap-1 px-2 py-1.5 rounded-lg text-xs font-semibold text-[#4A2116] hover:text-[#C58A19] bg-[#FAF5ED] hover:bg-white border border-[#EBDCC8] transition-colors cursor-pointer shadow-2xs"
+                                  title="View on Website"
+                                >
+                                  <ExternalLink className="w-3.5 h-3.5 text-[#C58A19]" />
+                                  <span>View</span>
+                                </a>
+                                <button
+                                  type="button"
+                                  onClick={() => handleOpenEdit(prod)}
+                                  className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-semibold text-[#4A2116] hover:text-[#C58A19] bg-[#FAF5ED] hover:bg-white border border-[#EBDCC8] transition-colors cursor-pointer shadow-2xs"
+                                  title="Edit Cake"
+                                >
+                                  <Edit3 className="w-3.5 h-3.5 text-[#C58A19]" />
+                                  <span>Edit</span>
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() => handleDeleteProduct(prod.id)}
+                                  className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-semibold text-red-600 hover:text-white bg-red-50 hover:bg-red-600 border border-red-200 transition-colors cursor-pointer shadow-2xs"
+                                  title="Delete Cake"
+                                >
+                                  <Trash2 className="w-3.5 h-3.5" />
+                                  <span>Delete</span>
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               )}
 
@@ -1463,7 +2166,7 @@ export default function AdminDashboard({ onBackToStore }) {
       {/* ==================================================== */}
       {showAddProduct && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white border border-[#EBDCC8] rounded-2xl max-w-md w-full p-6 shadow-2xl relative animate-fadeIn">
+          <div className="bg-white border border-[#EBDCC8] rounded-2xl max-w-lg w-full p-6 shadow-2xl relative animate-fadeIn max-h-[92vh] overflow-y-auto">
             <button
               type="button"
               onClick={() => setShowAddProduct(false)}
@@ -1472,77 +2175,312 @@ export default function AdminDashboard({ onBackToStore }) {
               <X className="w-5 h-5" />
             </button>
 
-            <h3 className="font-serif font-bold text-lg text-[#4A2116] mb-4">
-              Add Item to {selectedCategory.name}
-            </h3>
+            <div className="mb-4 pr-6">
+              <div className="flex items-center gap-2 flex-wrap">
+                <h3 className="font-serif font-bold text-lg text-[#4A2116]">
+                  {editingProduct ? 'Edit Cake Details' : 'Add Cake to Catalog'}
+                </h3>
+                <span className="text-[11px] font-semibold bg-[#FAF5ED] text-[#C58A19] px-2.5 py-0.5 rounded-full border border-[#EBDCC8]">
+                  {selectedCategory.name}
+                </span>
+              </div>
+              <p className="text-[11px] text-[#8A6753] mt-0.5">
+                {editingProduct 
+                  ? `Update specifications and photos for "${editingProduct.title}"` 
+                  : 'Register a new cake with description, pricing, and 2 high-res photos'}
+              </p>
+            </div>
 
-            <form onSubmit={handleAddProduct} className="space-y-3.5 text-xs">
-              <div>
-                <label className="block font-semibold text-[#4A2116] mb-1">Title</label>
-                <input
-                  type="text"
-                  required
-                  value={newProduct.title}
-                  onChange={(e) => setNewProduct({ ...newProduct, title: e.target.value })}
-                  placeholder="e.g. Royal Pistachio Rose Cake"
-                  className="w-full bg-[#FAF5ED] border border-[#E2D2BD] rounded-xl px-3 py-2 text-sm text-[#4A2116] outline-none"
-                />
+            <form onSubmit={handleSaveProduct} className="space-y-3.5 text-xs">
+              
+              {/* Language Switcher Tabs: English & Arabic */}
+              <div className="flex items-center gap-2 border-b border-[#EBDCC8] pb-2.5">
+                <button
+                  type="button"
+                  onClick={() => setModalLangTab('en')}
+                  className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer ${
+                    modalLangTab === 'en'
+                      ? 'bg-[#4A2116] text-white shadow-xs'
+                      : 'bg-[#FAF5ED] text-[#7A5846] hover:bg-[#F2E5D5]'
+                  }`}
+                >
+                  <span>🇬🇧 English Details</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setModalLangTab('ar')}
+                  className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer ${
+                    modalLangTab === 'ar'
+                      ? 'bg-[#C58A19] text-white shadow-xs'
+                      : 'bg-[#FAF5ED] text-[#7A5846] hover:bg-[#F2E5D5]'
+                  }`}
+                >
+                  <span>🇦🇪 Arabic (الترجمة العربية)</span>
+                  {newProduct.title_ar ? (
+                    <span className="w-2 h-2 rounded-full bg-emerald-400 inline-block" title="Arabic added" />
+                  ) : (
+                    <span className="text-[10px] text-[#A08070] italic">(Optional)</span>
+                  )}
+                </button>
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block font-semibold text-[#4A2116] mb-1">Category</label>
-                  <select
-                    value={newProduct.category_slug}
-                    onChange={(e) => setNewProduct({ ...newProduct, category_slug: e.target.value })}
-                    className="w-full bg-[#FAF5ED] border border-[#E2D2BD] rounded-xl px-3 py-2 text-sm text-[#4A2116] outline-none cursor-pointer"
-                  >
-                    {categoriesList.map(c => (
-                      <option key={c.id} value={c.id}>{c.name}</option>
-                    ))}
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block font-semibold text-[#4A2116] mb-1">Price (AED)</label>
+              {/* Shared Price Field */}
+              <div className="bg-[#FAF5ED] p-2.5 rounded-xl border border-[#EBDCC8] flex items-center justify-between gap-3">
+                <div className="flex-1">
+                  <label className="block font-semibold text-[#4A2116] mb-1">Price (AED) *</label>
                   <input
                     type="number"
                     required
                     value={newProduct.price}
                     onChange={(e) => setNewProduct({ ...newProduct, price: e.target.value })}
                     placeholder="750"
-                    className="w-full bg-[#FAF5ED] border border-[#E2D2BD] rounded-xl px-3 py-2 text-sm text-[#4A2116] outline-none"
+                    className="w-full bg-white border border-[#E2D2BD] rounded-lg px-3 py-1.5 text-sm font-bold text-[#4A2116] outline-none focus:border-[#C58A19]"
                   />
+                </div>
+                <div className="text-[11px] text-[#8A6753] pt-4">
+                  Canonical URL: <span className="font-mono text-[#C58A19]">#product-{slugify(newProduct.title) || '...'}</span>
                 </div>
               </div>
 
-              <div>
-                <label className="block font-semibold text-[#4A2116] mb-1">Flavor</label>
-                <input
-                  type="text"
-                  value={newProduct.flavor}
-                  onChange={(e) => setNewProduct({ ...newProduct, flavor: e.target.value })}
-                  placeholder="e.g. Dark Chocolate & Raspberry"
-                  className="w-full bg-[#FAF5ED] border border-[#E2D2BD] rounded-xl px-3 py-2 text-sm text-[#4A2116] outline-none"
-                />
-              </div>
+              {/* ENGLISH TAB CONTENT */}
+              {modalLangTab === 'en' && (
+                <div className="space-y-3 animate-fadeIn">
+                  <div>
+                    <label className="block font-semibold text-[#4A2116] mb-1">Item Title (English) *</label>
+                    <input
+                      type="text"
+                      required
+                      value={newProduct.title}
+                      onChange={(e) => setNewProduct({ ...newProduct, title: e.target.value })}
+                      placeholder="e.g. Royal Golden Pistachio Cake"
+                      className="w-full bg-[#FAF5ED] border border-[#E2D2BD] rounded-xl px-3 py-2 text-sm text-[#4A2116] outline-none focus:border-[#C58A19]"
+                    />
+                  </div>
 
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="block font-semibold text-[#4A2116] mb-1">Servings (English)</label>
+                      <input
+                        type="text"
+                        value={newProduct.servings}
+                        onChange={(e) => setNewProduct({ ...newProduct, servings: e.target.value })}
+                        placeholder="e.g. 15-20 servings"
+                        className="w-full bg-[#FAF5ED] border border-[#E2D2BD] rounded-xl px-3 py-2 text-sm text-[#4A2116] outline-none focus:border-[#C58A19]"
+                      />
+                    </div>
+                    <div>
+                      <label className="block font-semibold text-[#4A2116] mb-1">Flavor (English)</label>
+                      <input
+                        type="text"
+                        value={newProduct.flavor}
+                        onChange={(e) => setNewProduct({ ...newProduct, flavor: e.target.value })}
+                        placeholder="e.g. Belgian Chocolate Ganache"
+                        className="w-full bg-[#FAF5ED] border border-[#E2D2BD] rounded-xl px-3 py-2 text-sm text-[#4A2116] outline-none focus:border-[#C58A19]"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block font-semibold text-[#4A2116] mb-1">Description (English)</label>
+                    <textarea
+                      rows="3"
+                      value={newProduct.description}
+                      onChange={(e) => setNewProduct({ ...newProduct, description: e.target.value })}
+                      placeholder="Detailed description of cake design, sponge layers, fillings, and custom handcrafted toppings..."
+                      className="w-full bg-[#FAF5ED] border border-[#E2D2BD] rounded-xl px-3 py-2 text-xs text-[#4A2116] outline-none focus:border-[#C58A19] resize-none"
+                    />
+                  </div>
+                </div>
+              )}
+
+              {/* ARABIC TAB CONTENT */}
+              {modalLangTab === 'ar' && (
+                <div className="space-y-3 animate-fadeIn text-right" dir="rtl">
+                  <div>
+                    <label className="block font-semibold text-[#4A2116] mb-1 font-arabic">اسم الكيك بالعربية (Arabic Title)</label>
+                    <input
+                      type="text"
+                      value={newProduct.title_ar}
+                      onChange={(e) => setNewProduct({ ...newProduct, title_ar: e.target.value })}
+                      placeholder="مثال: كيك الفستق الذهبي الملكي"
+                      className="w-full bg-[#FAF5ED] border border-[#E2D2BD] rounded-xl px-3 py-2 text-sm text-[#4A2116] outline-none focus:border-[#C58A19] font-arabic"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="block font-semibold text-[#4A2116] mb-1 font-arabic">عدد الحصص والضيوف (Arabic Servings)</label>
+                      <input
+                        type="text"
+                        value={newProduct.servings_ar}
+                        onChange={(e) => setNewProduct({ ...newProduct, servings_ar: e.target.value })}
+                        placeholder="مثال: 15 إلى 20 شخص"
+                        className="w-full bg-[#FAF5ED] border border-[#E2D2BD] rounded-xl px-3 py-2 text-sm text-[#4A2116] outline-none focus:border-[#C58A19] font-arabic"
+                      />
+                    </div>
+                    <div>
+                      <label className="block font-semibold text-[#4A2116] mb-1 font-arabic">النكهة والحشوة (Arabic Flavor)</label>
+                      <input
+                        type="text"
+                        value={newProduct.flavor_ar}
+                        onChange={(e) => setNewProduct({ ...newProduct, flavor_ar: e.target.value })}
+                        placeholder="مثال: شوكولاتة بلجيكية، كراميل مملح"
+                        className="w-full bg-[#FAF5ED] border border-[#E2D2BD] rounded-xl px-3 py-2 text-sm text-[#4A2116] outline-none focus:border-[#C58A19] font-arabic"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block font-semibold text-[#4A2116] mb-1 font-arabic">وصف الكيك وتفاصيل الصنع (Arabic Description)</label>
+                    <textarea
+                      rows="3"
+                      value={newProduct.description_ar}
+                      onChange={(e) => setNewProduct({ ...newProduct, description_ar: e.target.value })}
+                      placeholder="اكتب وصفاً مفصلاً لطبقات الكيك، نوع الإسفنج، الكريمة والحشوات، واللمسات التزيينية اليدوية..."
+                      className="w-full bg-[#FAF5ED] border border-[#E2D2BD] rounded-xl px-3 py-2 text-xs text-[#4A2116] outline-none focus:border-[#C58A19] resize-none font-arabic"
+                    />
+                  </div>
+                </div>
+              )}
+
+              {/* 2 Cake Images Upload Section */}
               <div>
-                <label className="block font-semibold text-[#4A2116] mb-1">Image URL</label>
-                <input
-                  type="text"
-                  value={newProduct.image_url}
-                  onChange={(e) => setNewProduct({ ...newProduct, image_url: e.target.value })}
-                  placeholder="/categorycake imges/Wedding Cake.png"
-                  className="w-full bg-[#FAF5ED] border border-[#E2D2BD] rounded-xl px-3 py-2 text-sm text-[#4A2116] outline-none"
-                />
+                <div className="flex items-center justify-between mb-1.5">
+                  <label className="font-semibold text-[#4A2116] flex items-center gap-1.5">
+                    <Camera className="w-4 h-4 text-[#C58A19]" />
+                    <span>Cake Images (Upload 2 Photos)</span>
+                  </label>
+                  <span className="text-[11px] text-[#8A6753]">Accepts 2 Images</span>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  {/* Photo 1: Primary View */}
+                  <div className="space-y-1">
+                    <div className="text-[10px] uppercase font-bold text-[#8A6753] tracking-wider">
+                      1. Primary Image *
+                    </div>
+                    {uploadingSlot1 ? (
+                      <div className="h-28 border border-[#EBDCC8] bg-[#FAF5ED] rounded-xl flex flex-col items-center justify-center p-2 text-center animate-pulse">
+                        <RefreshCw className="w-5 h-5 text-[#C58A19] animate-spin mb-1" />
+                        <span className="text-xs font-semibold text-[#4A2116]">Optimizing photo...</span>
+                        <span className="text-[10px] text-[#8A6753]">Compressing & uploading</span>
+                      </div>
+                    ) : newProduct.image_url ? (
+                      <div className="relative h-28 rounded-xl overflow-hidden border border-[#EBDCC8] bg-[#FAF5ED] group shadow-2xs">
+                        <img
+                          src={formatImageUrl(newProduct.image_url)}
+                          alt="Primary Cake Preview"
+                          className="w-full h-full object-cover"
+                        />
+                        <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                          <label className="px-2 py-1 bg-white text-[#4A2116] rounded-lg cursor-pointer hover:bg-[#FAF5ED] text-[11px] font-semibold flex items-center gap-1 shadow-xs">
+                            <Upload className="w-3 h-3" />
+                            <span>Change</span>
+                            <input
+                              type="file"
+                              accept="image/*"
+                              className="hidden"
+                              onChange={(e) => e.target.files?.[0] && handleFileUpload(e.target.files[0], 1)}
+                            />
+                          </label>
+                          <button
+                            type="button"
+                            onClick={() => setNewProduct(prev => ({ ...prev, image_url: '' }))}
+                            className="p-1 bg-red-600 text-white rounded-lg hover:bg-red-700 shadow-xs cursor-pointer"
+                            title="Remove"
+                          >
+                            <X className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <label className="h-28 border-2 border-dashed border-[#E2D2BD] hover:border-[#C58A19] bg-[#FAF5ED] hover:bg-[#F5EBDD] rounded-xl flex flex-col items-center justify-center cursor-pointer transition-colors p-2 text-center group">
+                        <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center mb-1 text-[#C58A19] group-hover:scale-110 transition-transform shadow-2xs">
+                          <Upload className="w-4 h-4" />
+                        </div>
+                        <span className="text-xs font-semibold text-[#4A2116]">Upload Image 1</span>
+                        <span className="text-[10px] text-[#8A6753]">Front / Main View</span>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          className="hidden"
+                          onChange={(e) => e.target.files?.[0] && handleFileUpload(e.target.files[0], 1)}
+                        />
+                      </label>
+                    )}
+                  </div>
+
+                  {/* Photo 2: Secondary / Detail View */}
+                  <div className="space-y-1">
+                    <div className="text-[10px] uppercase font-bold text-[#8A6753] tracking-wider">
+                      2. Secondary Image
+                    </div>
+                    {uploadingSlot2 ? (
+                      <div className="h-28 border border-[#EBDCC8] bg-[#FAF5ED] rounded-xl flex flex-col items-center justify-center p-2 text-center animate-pulse">
+                        <RefreshCw className="w-5 h-5 text-[#C58A19] animate-spin mb-1" />
+                        <span className="text-xs font-semibold text-[#4A2116]">Optimizing photo...</span>
+                        <span className="text-[10px] text-[#8A6753]">Compressing & uploading</span>
+                      </div>
+                    ) : newProduct.secondary_image_url ? (
+                      <div className="relative h-28 rounded-xl overflow-hidden border border-[#EBDCC8] bg-[#FAF5ED] group shadow-2xs">
+                        <img
+                          src={formatImageUrl(newProduct.secondary_image_url)}
+                          alt="Secondary Cake Preview"
+                          className="w-full h-full object-cover"
+                        />
+                        <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                          <label className="px-2 py-1 bg-white text-[#4A2116] rounded-lg cursor-pointer hover:bg-[#FAF5ED] text-[11px] font-semibold flex items-center gap-1 shadow-xs">
+                            <Upload className="w-3 h-3" />
+                            <span>Change</span>
+                            <input
+                              type="file"
+                              accept="image/*"
+                              className="hidden"
+                              onChange={(e) => e.target.files?.[0] && handleFileUpload(e.target.files[0], 2)}
+                            />
+                          </label>
+                          <button
+                            type="button"
+                            onClick={() => setNewProduct(prev => ({ ...prev, secondary_image_url: '' }))}
+                            className="p-1 bg-red-600 text-white rounded-lg hover:bg-red-700 shadow-xs cursor-pointer"
+                            title="Remove"
+                          >
+                            <X className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <label className="h-28 border-2 border-dashed border-[#E2D2BD] hover:border-[#C58A19] bg-[#FAF5ED] hover:bg-[#F5EBDD] rounded-xl flex flex-col items-center justify-center cursor-pointer transition-colors p-2 text-center group">
+                        <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center mb-1 text-[#A07A65] group-hover:scale-110 transition-transform shadow-2xs">
+                          <Upload className="w-4 h-4" />
+                        </div>
+                        <span className="text-xs font-semibold text-[#4A2116]">Upload Image 2</span>
+                        <span className="text-[10px] text-[#8A6753]">Side / Cut Detail</span>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          className="hidden"
+                          onChange={(e) => e.target.files?.[0] && handleFileUpload(e.target.files[0], 2)}
+                        />
+                      </label>
+                    )}
+                  </div>
+                </div>
               </div>
 
               <button
                 type="submit"
-                className="w-full mt-4 bg-[#4A2116] hover:bg-[#C58A19] text-white font-semibold py-2.5 rounded-xl transition-colors cursor-pointer text-sm"
+                disabled={uploadingSlot1 || uploadingSlot2}
+                className="w-full mt-4 bg-[#4A2116] hover:bg-[#C58A19] disabled:opacity-60 text-white font-semibold py-2.5 rounded-xl transition-colors cursor-pointer text-sm flex items-center justify-center gap-2"
               >
-                Save Item
+                {(uploadingSlot1 || uploadingSlot2) ? (
+                  <>
+                    <RefreshCw className="w-4 h-4 animate-spin" />
+                    <span>Processing Images...</span>
+                  </>
+                ) : (
+                  <span>{editingProduct ? 'Update Cake' : 'Save Item'}</span>
+                )}
               </button>
             </form>
           </div>
