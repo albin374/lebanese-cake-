@@ -5,68 +5,76 @@ import {
   ArrowLeft, 
   Check, 
   Users, 
+  Scale,
+  Layers,
   Phone, 
   MessageCircle, 
-  ShieldCheck, 
-  Award, 
-  Truck, 
   ChevronRight, 
   Image as ImageIcon,
   Share2
 } from 'lucide-react';
 import { formatImageUrl } from './CategoryProductsSection';
+import { 
+  translateTitleToArabic, 
+  translateFlavorToArabic, 
+  translateServingsToArabic, 
+  translateDescriptionToArabic,
+  translateTiersToArabic,
+  translateWeightToArabic
+} from '../utils/arabicTranslator';
+import { navigateTo } from '../utils/navigation';
 
 const API_BASE = 'http://localhost:5000/api';
 
 const CATEGORY_NAMES = {
-  'classic-wedding-cakes': { en: 'Classic Wedding Cakes', ar: 'كيك الأعراس الكلاسيكي', hash: '#classic-wedding-cakes' },
-  'novelty-wedding-cakes': { en: 'Novelty Wedding Cakes', ar: 'كيك الأعراس المبتكر', hash: '#novelty-wedding-cakes' },
-  'bride-to-be-cakes': { en: 'Bride To Be Cakes', ar: 'كيك توديع العزوبية', hash: '#bride-to-be-cakes' },
-  'engagement-cakes': { en: 'Engagement Celebration Cakes', ar: 'كيك الخطوبة', hash: '#engagement-cakes' },
-  'grooms-cakes': { en: 'Grooms Cakes', ar: 'كيك العريس', hash: '#grooms-cakes' },
-  'wedding': { en: 'Wedding Cakes', ar: 'كيك الأعراس', hash: '#classic-wedding-cakes' },
-  'wedding-cakes': { en: 'Wedding Cakes', ar: 'كيك الأعراس', hash: '#classic-wedding-cakes' },
-  'corporate-cakes': { en: 'Corporate Cakes', ar: 'كيك الشركات', hash: '#corporate-cakes' },
-  'corporate-cookies': { en: 'Corporate Cookies', ar: 'كوكيز الشركات', hash: '#corporate-cookies' },
-  'cupcakes-with-logo': { en: 'Cupcakes with Logo', ar: 'كب كيك مع شعار', hash: '#cupcakes-with-logo' },
-  'cookies': { en: 'Cookies & Macarons', ar: 'كوكيز وماكرون', hash: '#cookies' },
-  'cookies-cat': { en: 'Cookies & Macarons', ar: 'كوكيز وماكرون', hash: '#cookies' },
-  'cake-pops': { en: 'Cake Pops', ar: 'كيك بوبس', hash: '#cake-pops' },
-  'cake-pops-cat': { en: 'Cake Pops', ar: 'كيك بوبس', hash: '#cake-pops' },
-  'cupcakes': { en: 'Cupcakes', ar: 'كب كيك', hash: '#cupcakes' },
-  'cupcakes-cat': { en: 'Cupcakes', ar: 'كب كيك', hash: '#cupcakes' },
-  'cakes-for-kids': { en: 'Cakes for Kids', ar: 'كيك للأطفال', hash: '#cakes-for-kids' },
-  'kids': { en: 'Cakes for Kids', ar: 'كيك للأطفال', hash: '#cakes-for-kids' },
-  'cakes-for-ladies': { en: 'Cakes for Ladies', ar: 'كيك للسيدات', hash: '#cakes-for-ladies' },
-  'ladies': { en: 'Cakes for Ladies', ar: 'كيك للسيدات', hash: '#cakes-for-ladies' },
-  'girls': { en: 'Cakes for Ladies', ar: 'كيك للسيدات', hash: '#cakes-for-ladies' },
-  'cakes-for-guys': { en: 'Cakes for Guys', ar: 'كيك للرجال', hash: '#cakes-for-guys' },
-  'guys': { en: 'Cakes for Guys', ar: 'كيك للرجال', hash: '#cakes-for-guys' },
-  'boys': { en: 'Cakes for Guys', ar: 'كيك للرجال', hash: '#cakes-for-guys' },
-  'graduation-cakes': { en: 'Graduation Cakes', ar: 'كيك التخرج', hash: '#graduation-cakes' },
-  'graduation': { en: 'Graduation Cakes', ar: 'كيك التخرج', hash: '#graduation-cakes' },
-  'cars-ships-planes-cakes': { en: 'Cars, Ships & Planes Cakes', ar: 'كيك المركبات واليخوت', hash: '#cars-ships-planes-cakes' },
-  'vehicles': { en: 'Cars, Ships & Planes Cakes', ar: 'كيك المركبات واليخوت', hash: '#cars-ships-planes-cakes' },
-  'sporting-cakes': { en: 'Sporting Cakes', ar: 'كيك المناسبات الرياضية', hash: '#sporting-cakes' },
-  'sporting': { en: 'Sporting Cakes', ar: 'كيك المناسبات الرياضية', hash: '#sporting-cakes' },
-  'couture-cakes': { en: 'Couture Cakes', ar: 'كيك الأزياء الراقية', hash: '#couture-cakes' },
-  'couture': { en: 'Couture Cakes', ar: 'كيك الأزياء الراقية', hash: '#couture-cakes' },
-  '3d-cakes': { en: '3D Cakes', ar: 'كيك مجسم 3D', hash: '#3d-cakes' },
-  '3d-art': { en: '3D Cakes', ar: 'كيك مجسم 3D', hash: '#3d-cakes' },
-  'food-drink-illusion-cakes': { en: 'Food & Drink Illusion Cakes', ar: 'كيك الخداع البصري', hash: '#food-drink-illusion-cakes' },
-  'illusion': { en: 'Food & Drink Illusion Cakes', ar: 'كيك الخداع البصري', hash: '#food-drink-illusion-cakes' },
-  'doughnuts-cakes': { en: 'Doughnuts Cakes', ar: 'كيك الدونات المخصصة', hash: '#doughnuts-cakes' },
-  'doughnuts': { en: 'Doughnuts Cakes', ar: 'كيك الدونات المخصصة', hash: '#doughnuts-cakes' },
-  'photo-on-cake': { en: 'Photo on Cake', ar: 'كيك الصور المطبوعة', hash: '#photo-on-cake' },
-  'photo': { en: 'Photo on Cake', ar: 'كيك الصور المطبوعة', hash: '#photo-on-cake' },
-  'pet-animals-cakes': { en: 'Pet & Animals Cakes', ar: 'كيك الحيوانات الأليفة', hash: '#pet-animals-cakes' },
-  'pets': { en: 'Pet & Animals Cakes', ar: 'كيك الحيوانات الأليفة', hash: '#pet-animals-cakes' },
-  'superhero-cakes': { en: 'Superhero Cakes', ar: 'كيك الأبطال الخارقين', hash: '#superhero-cakes' },
-  'superheroes': { en: 'Superhero Cakes', ar: 'كيك الأبطال الخارقين', hash: '#superhero-cakes' },
-  'labubu-cakes': { en: 'Labubu Cakes', ar: 'كيك لابوبو العصري', hash: '#labubu-cakes' },
-  'labubu': { en: 'Labubu Cakes', ar: 'كيك لابوبو العصري', hash: '#labubu-cakes' },
-  'cake-baking-decorating': { en: 'Baking & Decorating Classes', ar: 'دورات الخبز والتزيين', hash: '#cake-baking-decorating' },
-  'classes': { en: 'Baking & Decorating Classes', ar: 'دورات الخبز والتزيين', hash: '#cake-baking-decorating' }
+  'classic-wedding-cakes': { en: 'Classic Wedding Cakes', ar: 'كيك الأعراس الكلاسيكي', path: '/classic-wedding-cakes', hash: '/classic-wedding-cakes' },
+  'novelty-wedding-cakes': { en: 'Novelty Wedding Cakes', ar: 'كيك الأعراس المبتكر', path: '/novelty-wedding-cakes', hash: '/novelty-wedding-cakes' },
+  'bride-to-be-cakes': { en: 'Bride To Be Cakes', ar: 'كيك توديع العزوبية', path: '/bride-to-be-cakes', hash: '/bride-to-be-cakes' },
+  'engagement-cakes': { en: 'Engagement Celebration Cakes', ar: 'كيك الخطوبة', path: '/engagement-cakes', hash: '/engagement-cakes' },
+  'grooms-cakes': { en: 'Grooms Cakes', ar: 'كيك العريس', path: '/grooms-cakes', hash: '/grooms-cakes' },
+  'wedding': { en: 'Wedding Cakes', ar: 'كيك الأعراس', path: '/classic-wedding-cakes', hash: '/classic-wedding-cakes' },
+  'wedding-cakes': { en: 'Wedding Cakes', ar: 'كيك الأعراس', path: '/classic-wedding-cakes', hash: '/classic-wedding-cakes' },
+  'corporate-cakes': { en: 'Corporate Cakes', ar: 'كيك الشركات', path: '/corporate-cakes', hash: '/corporate-cakes' },
+  'corporate-cookies': { en: 'Corporate Cookies', ar: 'كوكيز الشركات', path: '/corporate-cookies', hash: '/corporate-cookies' },
+  'cupcakes-with-logo': { en: 'Cupcakes with Logo', ar: 'كب كيك مع شعار', path: '/cupcakes-with-logo', hash: '/cupcakes-with-logo' },
+  'cookies': { en: 'Cookies and Macarons', ar: 'كوكيز وماكرون', path: '/cookies', hash: '/cookies' },
+  'cookies-cat': { en: 'Cookies and Macarons', ar: 'كوكيز وماكرون', path: '/cookies', hash: '/cookies' },
+  'cake-pops': { en: 'Cake Pops', ar: 'كيك بوبس', path: '/cake-pops', hash: '/cake-pops' },
+  'cake-pops-cat': { en: 'Cake Pops', ar: 'كيك بوبس', path: '/cake-pops', hash: '/cake-pops' },
+  'cupcakes': { en: 'Cupcakes', ar: 'كب كيك', path: '/cupcakes', hash: '/cupcakes' },
+  'cupcakes-cat': { en: 'Cupcakes', ar: 'كب كيك', path: '/cupcakes', hash: '/cupcakes' },
+  'cakes-for-kids': { en: 'Cakes for Kids', ar: 'كيك للأطفال', path: '/cakes-for-kids', hash: '/cakes-for-kids' },
+  'kids': { en: 'Cakes for Kids', ar: 'كيك للأطفال', path: '/cakes-for-kids', hash: '/cakes-for-kids' },
+  'cakes-for-ladies': { en: 'Cakes for Ladies', ar: 'كيك للسيدات', path: '/cakes-for-ladies', hash: '/cakes-for-ladies' },
+  'ladies': { en: 'Cakes for Ladies', ar: 'كيك للسيدات', path: '/cakes-for-ladies', hash: '/cakes-for-ladies' },
+  'girls': { en: 'Cakes for Ladies', ar: 'كيك للسيدات', path: '/cakes-for-ladies', hash: '/cakes-for-ladies' },
+  'cakes-for-guys': { en: 'Cakes for Guys', ar: 'كيك للرجال', path: '/cakes-for-guys', hash: '/cakes-for-guys' },
+  'guys': { en: 'Cakes for Guys', ar: 'كيك للرجال', path: '/cakes-for-guys', hash: '/cakes-for-guys' },
+  'boys': { en: 'Cakes for Guys', ar: 'كيك للرجال', path: '/cakes-for-guys', hash: '/cakes-for-guys' },
+  'graduation-cakes': { en: 'Graduation Cakes', ar: 'كيك التخرج', path: '/graduation-cakes', hash: '/graduation-cakes' },
+  'graduation': { en: 'Graduation Cakes', ar: 'كيك التخرج', path: '/graduation-cakes', hash: '/graduation-cakes' },
+  'cars-ships-planes-cakes': { en: 'Cars, Ships and Planes Cakes', ar: 'كيك المركبات واليخوت', path: '/cars-ships-planes-cakes', hash: '/cars-ships-planes-cakes' },
+  'vehicles': { en: 'Cars, Ships and Planes Cakes', ar: 'كيك المركبات واليخوت', path: '/cars-ships-planes-cakes', hash: '/cars-ships-planes-cakes' },
+  'sporting-cakes': { en: 'Sporting Cakes', ar: 'كيك المناسبات الرياضية', path: '/sporting-cakes', hash: '/sporting-cakes' },
+  'sporting': { en: 'Sporting Cakes', ar: 'كيك المناسبات الرياضية', path: '/sporting-cakes', hash: '/sporting-cakes' },
+  'couture-cakes': { en: 'Couture Cakes', ar: 'كيك الأزياء الراقية', path: '/couture-cakes', hash: '/couture-cakes' },
+  'couture': { en: 'Couture Cakes', ar: 'كيك الأزياء الراقية', path: '/couture-cakes', hash: '/couture-cakes' },
+  '3d-cakes': { en: '3D Cakes', ar: 'كيك مجسم 3D', path: '/3d-cakes', hash: '/3d-cakes' },
+  '3d-art': { en: '3D Cakes', ar: 'كيك مجسم 3D', path: '/3d-cakes', hash: '/3d-cakes' },
+  'food-drink-illusion-cakes': { en: 'Food and Drink Illusion Cakes', ar: 'كيك الخداع البصري', path: '/food-drink-illusion-cakes', hash: '/food-drink-illusion-cakes' },
+  'illusion': { en: 'Food and Drink Illusion Cakes', ar: 'كيك الخداع البصري', path: '/food-drink-illusion-cakes', hash: '/food-drink-illusion-cakes' },
+  'doughnuts-cakes': { en: 'Doughnuts Cakes', ar: 'كيك الدونات المخصصة', path: '/doughnuts-cakes', hash: '/doughnuts-cakes' },
+  'doughnuts': { en: 'Doughnuts Cakes', ar: 'كيك الدونات المخصصة', path: '/doughnuts-cakes', hash: '/doughnuts-cakes' },
+  'photo-on-cake': { en: 'Photo on Cake', ar: 'كيك الصور المطبوعة', path: '/photo-on-cake', hash: '/photo-on-cake' },
+  'photo': { en: 'Photo on Cake', ar: 'كيك الصور المطبوعة', path: '/photo-on-cake', hash: '/photo-on-cake' },
+  'pet-animals-cakes': { en: 'Pet and Animals Cakes', ar: 'كيك الحيوانات الأليفة', path: '/pet-animals-cakes', hash: '/pet-animals-cakes' },
+  'pets': { en: 'Pet and Animals Cakes', ar: 'كيك الحيوانات الأليفة', path: '/pet-animals-cakes', hash: '/pet-animals-cakes' },
+  'superhero-cakes': { en: 'Superhero Cakes', ar: 'كيك الأبطال الخارقين', path: '/superhero-cakes', hash: '/superhero-cakes' },
+  'superheroes': { en: 'Superhero Cakes', ar: 'كيك الأبطال الخارقين', path: '/superhero-cakes', hash: '/superhero-cakes' },
+  'labubu-cakes': { en: 'Labubu Cakes', ar: 'كيك لابوبو العصري', path: '/labubu-cakes', hash: '/labubu-cakes' },
+  'labubu': { en: 'Labubu Cakes', ar: 'كيك لابوبو العصري', path: '/labubu-cakes', hash: '/labubu-cakes' },
+  'cake-baking-decorating': { en: 'Baking and Decorating Classes', ar: 'دورات الخبز والتزيين', path: '/cake-baking-decorating', hash: '/cake-baking-decorating' },
+  'classes': { en: 'Baking and Decorating Classes', ar: 'دورات الخبز والتزيين', path: '/cake-baking-decorating', hash: '/cake-baking-decorating' }
 };
 
 export const slugify = (text) => {
@@ -139,10 +147,10 @@ export default function ProductDetailsPage({
             if (match && isMounted) {
               setProduct(match);
 
-              // Seamlessly upgrade URL from #product-4 to #product-name
+              // Seamlessly upgrade URL from /product/4 to /product/slug
               const canonical = match.slug || slugify(match.title);
-              if (canonical && window.location.hash !== `#product-${canonical}`) {
-                window.history.replaceState(null, '', `#product-${canonical}`);
+              if (canonical && window.location.pathname !== `/product/${canonical}`) {
+                window.history.replaceState(null, '', `/product/${canonical}`);
               }
 
               // Find related items from same category
@@ -167,10 +175,10 @@ export default function ProductDetailsPage({
             if (match) {
               setProduct(match);
 
-              // Seamlessly upgrade URL from #product-4 to #product-name
+              // Seamlessly upgrade URL from /product/4 to /product/slug
               const canonical = match.slug || slugify(match.title);
-              if (canonical && window.location.hash !== `#product-${canonical}`) {
-                window.history.replaceState(null, '', `#product-${canonical}`);
+              if (canonical && window.location.pathname !== `/product/${canonical}`) {
+                window.history.replaceState(null, '', `/product/${canonical}`);
               }
 
               const related = list
@@ -200,21 +208,24 @@ export default function ProductDetailsPage({
 
   const categoryMeta = product?.category_slug ? CATEGORY_NAMES[product.category_slug] : null;
   const categoryTitle = categoryMeta ? (isAr ? categoryMeta.ar : categoryMeta.en) : (isAr ? 'التشكيلة الحصرية' : 'Exclusive Collection');
-  const categoryHash = categoryMeta?.hash || '#home';
+  const categoryPath = categoryMeta?.path || '/';
 
   const handleBackToCategory = () => {
-    if (categoryHash) {
-      window.location.hash = categoryHash;
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (onNavigate && product?.category_slug) {
+      onNavigate(product.category_slug);
+    } else if (categoryPath) {
+      navigateTo(categoryPath);
     } else {
       window.history.back();
     }
   };
 
-  const displayTitle = isAr ? (product?.title_ar || product?.title) : product?.title;
-  const displayFlavor = isAr ? (product?.flavor_ar || product?.flavor) : product?.flavor;
-  const displayServings = isAr ? (product?.servings_ar || product?.servings) : product?.servings;
-  const displayDescription = isAr ? (product?.description_ar || product?.description) : product?.description;
+  const displayTitle = isAr ? (product?.title_ar || translateTitleToArabic(product?.title)) : product?.title;
+  const displayFlavor = isAr ? (product?.flavor_ar || translateFlavorToArabic(product?.flavor)) : product?.flavor;
+  const displayServings = isAr ? (product?.servings_ar || translateServingsToArabic(product?.servings)) : product?.servings;
+  const displayDescription = isAr ? (product?.description_ar || translateDescriptionToArabic(product?.description)) : product?.description;
+  const displayWeight = isAr ? (product?.weight_ar || translateWeightToArabic(product?.weight)) : product?.weight;
+  const displayTiers = isAr ? (product?.tiers_ar || translateTiersToArabic(product?.tiers)) : product?.tiers;
 
   const handleAddToCartClick = () => {
     if (!product) return;
@@ -273,10 +284,7 @@ export default function ProductDetailsPage({
         </p>
         <button
           type="button"
-          onClick={() => {
-            window.location.hash = '#home';
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-          }}
+          onClick={() => navigateTo('/')}
           className="bg-[#4A2116] hover:bg-[#C58A19] text-white font-semibold text-xs sm:text-sm px-6 py-3 rounded-full transition-colors cursor-pointer shadow-sm"
         >
           {isAr ? 'العودة للرئيسية' : 'Return to Home'}
@@ -312,10 +320,7 @@ export default function ProductDetailsPage({
           <div className="flex items-center gap-2 flex-wrap">
             <button
               type="button"
-              onClick={() => {
-                window.location.hash = '#home';
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-              }}
+              onClick={() => navigateTo('/')}
               className="hover:text-[#C58A19] transition-colors cursor-pointer"
             >
               {isAr ? 'الرئيسية' : 'Home'}
@@ -422,45 +427,8 @@ export default function ProductDetailsPage({
                     #2
                   </span>
                 </button>
-
-                <p className="text-xs text-[#8C6D62] font-medium ml-2 rtl:ml-0 rtl:mr-2">
-                  {isAr ? 'اضغط للتبديل بين الزوايا' : 'Click thumbnail to inspect details'}
-                </p>
               </div>
             )}
-
-            {/* Bakery Quality Promises */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-4">
-              <div className="bg-white rounded-2xl p-4 border border-[#F2E5D5] flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-[#FAF5ED] flex items-center justify-center text-[#C58A19] shrink-0">
-                  <Award className="w-5 h-5" />
-                </div>
-                <div>
-                  <h4 className="text-xs font-bold text-[#4A2116]">{isAr ? 'صنع يدوي طازج' : 'Artisanal Fresh'}</h4>
-                  <p className="text-[11px] text-[#8C6D62]">{isAr ? 'حسب الطلب يومياً' : 'Baked to order'}</p>
-                </div>
-              </div>
-
-              <div className="bg-white rounded-2xl p-4 border border-[#F2E5D5] flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-[#FAF5ED] flex items-center justify-center text-[#C58A19] shrink-0">
-                  <ShieldCheck className="w-5 h-5" />
-                </div>
-                <div>
-                  <h4 className="text-xs font-bold text-[#4A2116]">{isAr ? 'مكونات فاخرة 100%' : '100% Pure Butter'}</h4>
-                  <p className="text-[11px] text-[#8C6D62]">{isAr ? 'شوكولاتة بلجيكية' : 'Belgian Chocolate'}</p>
-                </div>
-              </div>
-
-              <div className="bg-white rounded-2xl p-4 border border-[#F2E5D5] flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-[#FAF5ED] flex items-center justify-center text-[#C58A19] shrink-0">
-                  <Truck className="w-5 h-5" />
-                </div>
-                <div>
-                  <h4 className="text-xs font-bold text-[#4A2116]">{isAr ? 'توصيل مبرد بدبي' : 'Chilled Delivery'}</h4>
-                  <p className="text-[11px] text-[#8C6D62]">{isAr ? 'سيارات خاصة مجهزة' : 'Across Dubai & UAE'}</p>
-                </div>
-              </div>
-            </div>
 
           </div>
 
@@ -497,7 +465,7 @@ export default function ProductDetailsPage({
                 </span>
               </div>
 
-              {/* Product Attributes (Flavor & Servings) */}
+              {/* Product Attributes (Flavor, Servings, Weight & Tiers) */}
               <div className="space-y-2.5">
                 {displayFlavor && (
                   <div className="bg-white p-3.5 rounded-2xl border border-[#F2E5D5] flex items-start gap-3">
@@ -522,6 +490,34 @@ export default function ProductDetailsPage({
                       </span>
                       <span className="text-xs sm:text-sm font-semibold text-[#4A2116]">
                         {displayServings}
+                      </span>
+                    </div>
+                  </div>
+                )}
+
+                {displayWeight && (
+                  <div className="bg-white p-3.5 rounded-2xl border border-[#F2E5D5] flex items-start gap-3">
+                    <Scale className="w-4 h-4 text-[#C58A19] shrink-0 mt-0.5" />
+                    <div>
+                      <span className="block text-[11px] font-bold uppercase tracking-wider text-[#8A6753]">
+                        {isAr ? 'الوزن التقريبي' : 'Weight (kg)'}
+                      </span>
+                      <span className="text-xs sm:text-sm font-semibold text-[#4A2116]">
+                        {displayWeight}
+                      </span>
+                    </div>
+                  </div>
+                )}
+
+                {displayTiers && (
+                  <div className="bg-white p-3.5 rounded-2xl border border-[#F2E5D5] flex items-start gap-3">
+                    <Layers className="w-4 h-4 text-[#C58A19] shrink-0 mt-0.5" />
+                    <div>
+                      <span className="block text-[11px] font-bold uppercase tracking-wider text-[#8A6753]">
+                        {isAr ? 'عدد الأدوار / الطبقات' : 'Cake Tiers'}
+                      </span>
+                      <span className="text-xs sm:text-sm font-semibold text-[#4A2116]">
+                        {displayTiers}
                       </span>
                     </div>
                   </div>
@@ -583,7 +579,7 @@ export default function ProductDetailsPage({
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                 <button
                   type="button"
-                  onClick={() => onCustomizeClick ? onCustomizeClick(product) : (window.location.hash = '#customize')}
+                  onClick={() => onCustomizeClick ? onCustomizeClick(product) : navigateTo('/customize')}
                   className="bg-[#FAF5ED] hover:bg-[#F2E6D5] text-[#4A2116] border border-[#E2D2BD] font-semibold text-xs sm:text-sm py-3 px-4 rounded-xl transition-colors flex items-center justify-center gap-2 cursor-pointer shadow-2xs"
                 >
                   <Sparkles className="w-4 h-4 text-[#C58A19]" />
@@ -654,16 +650,13 @@ export default function ProductDetailsPage({
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {relatedProducts.map(rel => {
                 const relSlug = rel.slug || slugify(rel.title) || rel.id;
-                const relTitle = isAr ? (rel.title_ar || rel.title) : rel.title;
-                const relFlavor = isAr ? (rel.flavor_ar || rel.flavor) : rel.flavor;
+                const relTitle = isAr ? (rel.title_ar || translateTitleToArabic(rel.title)) : rel.title;
+                const relFlavor = isAr ? (rel.flavor_ar || translateFlavorToArabic(rel.flavor)) : rel.flavor;
 
                 return (
                   <div
                     key={rel.id}
-                    onClick={() => {
-                      window.location.hash = `#product-${relSlug}`;
-                      window.scrollTo({ top: 0, behavior: 'smooth' });
-                    }}
+                    onClick={() => navigateTo(`/product/${relSlug}`)}
                     className="group bg-white rounded-2xl overflow-hidden border border-[#F2E5D5] shadow-xs hover:shadow-md transition-all cursor-pointer flex flex-col"
                   >
                     <div className="aspect-square overflow-hidden bg-[#FAF5ED] relative">

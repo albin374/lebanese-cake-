@@ -38,58 +38,62 @@ import SuperheroCakesPage from './components/SuperheroCakesPage';
 import LabubuCakesPage from './components/LabubuCakesPage';
 import BakingDecoratingPage from './components/BakingDecoratingPage';
 import ProductDetailsPage from './components/ProductDetailsPage';
+import CartPage from './components/CartPage';
+import MyOrdersPage from './components/MyOrdersPage';
 import AdminDashboard from './components/admin/AdminDashboard';
+import { parseCurrentRoute, navigateTo } from './utils/navigation';
 import { translations } from './translations';
-import { Phone, Mail, Clock, X, Check, ShoppingBag, UserRound } from 'lucide-react';
+import { Phone, Mail, Clock, X, Check, ShoppingBag, UserRound, ArrowRight, Package } from 'lucide-react';
 
 export default function App() {
   const [currentLang, setCurrentLang] = useState('en');
-  const [currentPage, setCurrentPage] = useState(() => {
-    if (typeof window !== 'undefined') {
-      if (window.location.hash === '#customize') return 'customize';
-      if (window.location.hash === '#cookies') return 'cookies';
-      if (window.location.hash === '#cupcakes') return 'cupcakes';
-      if (window.location.hash === '#cake-pops') return 'cake-pops';
-      if (window.location.hash === '#cakes-for-kids') return 'cakes-for-kids';
-      if (window.location.hash === '#cakes-for-guys') return 'cakes-for-guys';
-      if (window.location.hash === '#cakes-for-ladies') return 'cakes-for-ladies';
-      if (window.location.hash === '#classic-wedding-cakes' || window.location.hash === '#wedding-cakes') return 'classic-wedding-cakes';
-      if (window.location.hash === '#novelty-wedding-cakes') return 'novelty-wedding-cakes';
-      if (window.location.hash === '#bride-to-be-cakes') return 'bride-to-be-cakes';
-      if (window.location.hash === '#engagement-cakes') return 'engagement-cakes';
-      if (window.location.hash === '#grooms-cakes') return 'grooms-cakes';
-      if (window.location.hash === '#corporate-cakes') return 'corporate-cakes';
-      if (window.location.hash === '#corporate-cookies') return 'corporate-cookies';
-      if (window.location.hash === '#cupcakes-with-logo') return 'cupcakes-with-logo';
-      if (window.location.hash === '#graduation-cakes' || window.location.hash === '#graduation') return 'graduation-cakes';
-      if (window.location.hash === '#cars-ships-planes-cakes' || window.location.hash === '#vehicles') return 'cars-ships-planes-cakes';
-      if (window.location.hash === '#sporting-cakes' || window.location.hash === '#sporting') return 'sporting-cakes';
-      if (window.location.hash === '#couture-cakes' || window.location.hash === '#couture') return 'couture-cakes';
-      if (window.location.hash === '#3d-cakes' || window.location.hash === '#3d-art') return '3d-cakes';
-      if (window.location.hash === '#food-drink-illusion-cakes' || window.location.hash === '#illusion') return 'food-drink-illusion-cakes';
-      if (window.location.hash === '#doughnuts-cakes' || window.location.hash === '#doughnuts') return 'doughnuts-cakes';
-      if (window.location.hash === '#photo-on-cake' || window.location.hash === '#photo') return 'photo-on-cake';
-      if (window.location.hash === '#pet-animals-cakes' || window.location.hash === '#pets') return 'pet-animals-cakes';
-      if (window.location.hash === '#superhero-cakes' || window.location.hash === '#superheroes') return 'superhero-cakes';
-      if (window.location.hash === '#labubu-cakes' || window.location.hash === '#labubu') return 'labubu-cakes';
-      if (window.location.hash === '#cake-baking-decorating' || window.location.hash === '#classes') return 'cake-baking-decorating';
-      if (window.location.hash.startsWith('#product-')) return 'product-detail';
-      if (window.location.hash === '#admin' || window.location.hash === '#admin-dashboard') return 'admin';
-    }
-    return 'home';
-  });
-  const [selectedProductId, setSelectedProductId] = useState(() => {
-    if (typeof window !== 'undefined' && window.location.hash.startsWith('#product-')) {
-      try {
-        return decodeURIComponent(window.location.hash.replace('#product-', ''));
-      } catch (_) {
-        return window.location.hash.replace('#product-', '');
-      }
-    }
-    return '';
-  });
+  const initialRoute = parseCurrentRoute();
+  const [currentPage, setCurrentPage] = useState(initialRoute.page);
+  const [selectedProductId, setSelectedProductId] = useState(initialRoute.productId);
   const [activeCategory, setActiveCategory] = useState('all-cakes');
-  const [cartCount, setCartCount] = useState(2);
+  const [cartItems, setCartItems] = useState(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const saved = localStorage.getItem('ldb_cart_items');
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (Array.isArray(parsed)) {
+            // Filter out any old static placeholder items so user starts clean
+            return parsed.filter(item => !item.id?.toString().startsWith('cart-init-'));
+          }
+        }
+      } catch (_) {}
+    }
+    return [];
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('ldb_cart_items', JSON.stringify(cartItems));
+    } catch (_) {}
+  }, [cartItems]);
+
+  const cartCount = cartItems.reduce((acc, item) => acc + (item.quantity || 1), 0);
+
+  const handleUpdateQuantity = (itemId, newQty) => {
+    if (newQty <= 0) {
+      handleRemoveItem(itemId);
+      return;
+    }
+    setCartItems(prev => prev.map(item => item.id === itemId ? { ...item, quantity: newQty } : item));
+  };
+
+  const handleRemoveItem = (itemId) => {
+    setCartItems(prev => prev.filter(item => item.id !== itemId));
+  };
+
+  const handleClearCart = () => {
+    setCartItems([]);
+    try {
+      localStorage.removeItem('ldb_cart_items');
+    } catch (_) {}
+  };
+
   const [isCustomizeOpen, setIsCustomizeOpen] = useState(false);
   const [isHelpOpen, setIsHelpOpen] = useState(false);
   const [isAccountOpen, setIsAccountOpen] = useState(false);
@@ -105,270 +109,52 @@ export default function App() {
     document.documentElement.lang = currentLang;
   }, [currentLang, isAr]);
 
-  // Synchronize URL hash with page state
+  // Synchronize clean URL path and popstate with page state
   useEffect(() => {
-    const handleHash = () => {
-      if (window.location.hash.startsWith('#product-')) {
-        try {
-          setSelectedProductId(decodeURIComponent(window.location.hash.replace('#product-', '')));
-        } catch (_) {
-          setSelectedProductId(window.location.hash.replace('#product-', ''));
-        }
-        setCurrentPage('product-detail');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      } else if (window.location.hash === '#customize') {
-        setCurrentPage('customize');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      } else if (window.location.hash === '#cookies') {
-        setCurrentPage('cookies');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      } else if (window.location.hash === '#cupcakes') {
-        setCurrentPage('cupcakes');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      } else if (window.location.hash === '#cake-pops') {
-        setCurrentPage('cake-pops');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      } else if (window.location.hash === '#cakes-for-kids') {
-        setCurrentPage('cakes-for-kids');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      } else if (window.location.hash === '#cakes-for-guys') {
-        setCurrentPage('cakes-for-guys');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      } else if (window.location.hash === '#cakes-for-ladies') {
-        setCurrentPage('cakes-for-ladies');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      } else if (window.location.hash === '#classic-wedding-cakes' || window.location.hash === '#wedding-cakes') {
-        setCurrentPage('classic-wedding-cakes');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      } else if (window.location.hash === '#novelty-wedding-cakes') {
-        setCurrentPage('novelty-wedding-cakes');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      } else if (window.location.hash === '#bride-to-be-cakes') {
-        setCurrentPage('bride-to-be-cakes');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      } else if (window.location.hash === '#engagement-cakes') {
-        setCurrentPage('engagement-cakes');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      } else if (window.location.hash === '#grooms-cakes') {
-        setCurrentPage('grooms-cakes');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      } else if (window.location.hash === '#corporate-cakes') {
-        setCurrentPage('corporate-cakes');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      } else if (window.location.hash === '#corporate-cookies') {
-        setCurrentPage('corporate-cookies');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      } else if (window.location.hash === '#cupcakes-with-logo') {
-        setCurrentPage('cupcakes-with-logo');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      } else if (window.location.hash === '#graduation-cakes' || window.location.hash === '#graduation') {
-        setCurrentPage('graduation-cakes');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      } else if (window.location.hash === '#cars-ships-planes-cakes' || window.location.hash === '#vehicles') {
-        setCurrentPage('cars-ships-planes-cakes');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      } else if (window.location.hash === '#sporting-cakes' || window.location.hash === '#sporting') {
-        setCurrentPage('sporting-cakes');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      } else if (window.location.hash === '#couture-cakes' || window.location.hash === '#couture') {
-        setCurrentPage('couture-cakes');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      } else if (window.location.hash === '#3d-cakes' || window.location.hash === '#3d-art') {
-        setCurrentPage('3d-cakes');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      } else if (window.location.hash === '#food-drink-illusion-cakes' || window.location.hash === '#illusion') {
-        setCurrentPage('food-drink-illusion-cakes');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      } else if (window.location.hash === '#doughnuts-cakes' || window.location.hash === '#doughnuts') {
-        setCurrentPage('doughnuts-cakes');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      } else if (window.location.hash === '#photo-on-cake' || window.location.hash === '#photo') {
-        setCurrentPage('photo-on-cake');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      } else if (window.location.hash === '#pet-animals-cakes' || window.location.hash === '#pets') {
-        setCurrentPage('pet-animals-cakes');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      } else if (window.location.hash === '#superhero-cakes' || window.location.hash === '#superheroes') {
-        setCurrentPage('superhero-cakes');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      } else if (window.location.hash === '#labubu-cakes' || window.location.hash === '#labubu') {
-        setCurrentPage('labubu-cakes');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      } else if (window.location.hash === '#cake-baking-decorating' || window.location.hash === '#classes') {
-        setCurrentPage('cake-baking-decorating');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      } else if (window.location.hash === '#admin' || window.location.hash === '#admin-dashboard') {
-        setCurrentPage('admin');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      } else {
-        setCurrentPage('home');
-      }
+    const handleLocationChange = () => {
+      const route = parseCurrentRoute();
+      setCurrentPage(route.page);
+      setSelectedProductId(route.productId);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     };
-    window.addEventListener('hashchange', handleHash);
-    return () => window.removeEventListener('hashchange', handleHash);
+
+    window.addEventListener('popstate', handleLocationChange);
+    window.addEventListener('hashchange', handleLocationChange);
+    return () => {
+      window.removeEventListener('popstate', handleLocationChange);
+      window.removeEventListener('hashchange', handleLocationChange);
+    };
   }, []);
 
-  const openCustomizePage = () => {
-    window.location.hash = '#customize';
-    setCurrentPage('customize');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  const openCookiesPage = () => {
-    window.location.hash = '#cookies';
-    setCurrentPage('cookies');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  const openCupcakesPage = () => {
-    window.location.hash = '#cupcakes';
-    setCurrentPage('cupcakes');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  const openCakePopsPage = () => {
-    window.location.hash = '#cake-pops';
-    setCurrentPage('cake-pops');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  const openCakesForKidsPage = () => {
-    window.location.hash = '#cakes-for-kids';
-    setCurrentPage('cakes-for-kids');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  const openCakesForGuysPage = () => {
-    window.location.hash = '#cakes-for-guys';
-    setCurrentPage('cakes-for-guys');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  const openCakesForLadiesPage = () => {
-    window.location.hash = '#cakes-for-ladies';
-    setCurrentPage('cakes-for-ladies');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  const openClassicWeddingCakesPage = () => {
-    window.location.hash = '#classic-wedding-cakes';
-    setCurrentPage('classic-wedding-cakes');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  const openNoveltyWeddingCakesPage = () => {
-    window.location.hash = '#novelty-wedding-cakes';
-    setCurrentPage('novelty-wedding-cakes');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  const openBrideToBeCakesPage = () => {
-    window.location.hash = '#bride-to-be-cakes';
-    setCurrentPage('bride-to-be-cakes');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  const openEngagementCakesPage = () => {
-    window.location.hash = '#engagement-cakes';
-    setCurrentPage('engagement-cakes');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  const openGroomsCakesPage = () => {
-    window.location.hash = '#grooms-cakes';
-    setCurrentPage('grooms-cakes');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  const openCorporateCakesPage = () => {
-    window.location.hash = '#corporate-cakes';
-    setCurrentPage('corporate-cakes');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  const openCorporateCookiesPage = () => {
-    window.location.hash = '#corporate-cookies';
-    setCurrentPage('corporate-cookies');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  const openCupcakesWithLogoPage = () => {
-    window.location.hash = '#cupcakes-with-logo';
-    setCurrentPage('cupcakes-with-logo');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  const openGraduationCakesPage = () => {
-    window.location.hash = '#graduation-cakes';
-    setCurrentPage('graduation-cakes');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  const openVehiclesCakesPage = () => {
-    window.location.hash = '#cars-ships-planes-cakes';
-    setCurrentPage('cars-ships-planes-cakes');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  const openSportingCakesPage = () => {
-    window.location.hash = '#sporting-cakes';
-    setCurrentPage('sporting-cakes');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  const openCoutureCakesPage = () => {
-    window.location.hash = '#couture-cakes';
-    setCurrentPage('couture-cakes');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  const openThreeDCakesPage = () => {
-    window.location.hash = '#3d-cakes';
-    setCurrentPage('3d-cakes');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  const openIllusionCakesPage = () => {
-    window.location.hash = '#food-drink-illusion-cakes';
-    setCurrentPage('food-drink-illusion-cakes');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  const openDoughnutsCakesPage = () => {
-    window.location.hash = '#doughnuts-cakes';
-    setCurrentPage('doughnuts-cakes');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  const openPhotoOnCakePage = () => {
-    window.location.hash = '#photo-on-cake';
-    setCurrentPage('photo-on-cake');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  const openPetAnimalsCakesPage = () => {
-    window.location.hash = '#pet-animals-cakes';
-    setCurrentPage('pet-animals-cakes');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  const openSuperheroCakesPage = () => {
-    window.location.hash = '#superhero-cakes';
-    setCurrentPage('superhero-cakes');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  const openLabubuCakesPage = () => {
-    window.location.hash = '#labubu-cakes';
-    setCurrentPage('labubu-cakes');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  const openBakingDecoratingPage = () => {
-    window.location.hash = '#cake-baking-decorating';
-    setCurrentPage('cake-baking-decorating');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
+  const openCartPage = () => navigateTo('/cart');
+  const openMyOrdersPage = () => navigateTo('/my-orders');
+  const openCustomizePage = () => navigateTo('/customize');
+  const openCookiesPage = () => navigateTo('/cookies');
+  const openCupcakesPage = () => navigateTo('/cupcakes');
+  const openCakePopsPage = () => navigateTo('/cake-pops');
+  const openCakesForKidsPage = () => navigateTo('/cakes-for-kids');
+  const openCakesForGuysPage = () => navigateTo('/cakes-for-guys');
+  const openCakesForLadiesPage = () => navigateTo('/cakes-for-ladies');
+  const openClassicWeddingCakesPage = () => navigateTo('/classic-wedding-cakes');
+  const openNoveltyWeddingCakesPage = () => navigateTo('/novelty-wedding-cakes');
+  const openBrideToBeCakesPage = () => navigateTo('/bride-to-be-cakes');
+  const openEngagementCakesPage = () => navigateTo('/engagement-cakes');
+  const openGroomsCakesPage = () => navigateTo('/grooms-cakes');
+  const openCorporateCakesPage = () => navigateTo('/corporate-cakes');
+  const openCorporateCookiesPage = () => navigateTo('/corporate-cookies');
+  const openCupcakesWithLogoPage = () => navigateTo('/cupcakes-with-logo');
+  const openGraduationCakesPage = () => navigateTo('/graduation-cakes');
+  const openVehiclesCakesPage = () => navigateTo('/cars-ships-planes-cakes');
+  const openSportingCakesPage = () => navigateTo('/sporting-cakes');
+  const openCoutureCakesPage = () => navigateTo('/couture-cakes');
+  const openThreeDCakesPage = () => navigateTo('/3d-cakes');
+  const openIllusionCakesPage = () => navigateTo('/food-drink-illusion-cakes');
+  const openDoughnutsCakesPage = () => navigateTo('/doughnuts-cakes');
+  const openPhotoOnCakePage = () => navigateTo('/photo-on-cake');
+  const openPetAnimalsCakesPage = () => navigateTo('/pet-animals-cakes');
+  const openSuperheroCakesPage = () => navigateTo('/superhero-cakes');
+  const openLabubuCakesPage = () => navigateTo('/labubu-cakes');
+  const openBakingDecoratingPage = () => navigateTo('/cake-baking-decorating');
 
   const handleCategoryNavigation = (id) => {
     if (id === 'cookies' || id === 'cookies-cat') {
@@ -486,15 +272,39 @@ export default function App() {
   };
 
   const goToHome = () => {
-    window.location.hash = '';
-    setCurrentPage('home');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    navigateTo('/');
   };
 
   const handleAddToCart = (item) => {
-    setCartCount((prev) => prev + 1);
+    if (!item) return;
+    setCartItems(prev => {
+      const existingIndex = prev.findIndex(ci => ci.id === item.id && ci.flavor === item.flavor);
+      if (existingIndex > -1) {
+        const updated = [...prev];
+        updated[existingIndex] = {
+          ...updated[existingIndex],
+          quantity: (updated[existingIndex].quantity || 1) + (item.quantity || 1)
+        };
+        return updated;
+      }
+      return [
+        ...prev,
+        {
+          id: item.id || `item-${Date.now()}`,
+          title: item.title || item.occasion || 'Handcrafted Cake',
+          title_ar: item.title_ar,
+          price: Number(item.price) || 0,
+          quantity: item.quantity || 1,
+          image: item.image || item.image_url || '/Lebanese Dream Bakery Cake Display.png',
+          flavor: item.flavor || '',
+          flavor_ar: item.flavor_ar || '',
+          servings: item.servings || '',
+          servings_ar: item.servings_ar || ''
+        }
+      ];
+    });
+
     const itemName = item.title || item.occasion || 'Cake';
-    const detail = item.price ? `${item.price} AED` : item.flavor ? `(${item.flavor})` : '';
     setToastMessage(
       isAr 
         ? `تمت إضافة "${itemName}" إلى حقيبتك بنجاح!` 
@@ -512,11 +322,18 @@ export default function App() {
       
       {/* Toast Notification */}
       {toastMessage && (
-        <div className="fixed bottom-6 right-6 rtl:right-auto rtl:left-6 z-50 bg-[#4A2116] text-[#FFF9F0] px-5 py-3 rounded-xl shadow-2xl border border-[#C58A19] flex items-center gap-3 animate-fadeIn">
+        <div className="fixed bottom-6 right-6 rtl:right-auto rtl:left-6 z-50 bg-[#4A2116] text-[#FFF9F0] px-5 py-3.5 rounded-2xl shadow-2xl border border-[#C58A19] flex items-center gap-3 animate-fadeIn">
           <div className="w-6 h-6 rounded-full bg-[#C58A19] flex items-center justify-center shrink-0">
-            <Check className="w-3.5 h-3.5 text-white" />
+            <Check className="w-3.5 h-3.5 text-white stroke-[2.5]" />
           </div>
           <span className="text-xs sm:text-sm font-medium">{toastMessage}</span>
+          <button
+            type="button"
+            onClick={openCartPage}
+            className="ml-2 rtl:ml-0 rtl:mr-2 text-xs font-bold text-[#E6C783] hover:underline cursor-pointer flex items-center gap-1"
+          >
+            <span>{isAr ? 'عرض الحقيبة' : 'View Bag'}</span>
+          </button>
         </div>
       )}
 
@@ -531,8 +348,8 @@ export default function App() {
         currentLang={currentLang}
         cartCount={cartCount}
         onOpenHelp={() => setIsHelpOpen(true)}
-        onOpenAccount={() => setIsAccountOpen(true)}
-        onOpenBag={() => setIsBagOpen(true)}
+        onOpenAccount={openMyOrdersPage}
+        onOpenBag={openCartPage}
         onLogoClick={goToHome}
       />
 
@@ -563,8 +380,28 @@ export default function App() {
         onCustomizeClick={openCustomizePage}
       />
 
-      {/* Page View: Either Dedicated Multi-Step Customize Page OR Dedicated Category Pages OR Homepage */}
-      {currentPage === 'customize' ? (
+      {/* Page View: Dedicated Cart Page OR My Orders OR Dedicated Multi-Step Customize Page OR Dedicated Category Pages OR Homepage */}
+      {currentPage === 'my-orders' ? (
+        <main className="w-full flex-1">
+          <MyOrdersPage
+            currentLang={currentLang}
+            onAddToCart={handleAddToCart}
+            onContinueShopping={goToHome}
+          />
+        </main>
+      ) : currentPage === 'cart' ? (
+        <main className="w-full flex-1">
+          <CartPage
+            cartItems={cartItems}
+            currentLang={currentLang}
+            onUpdateQuantity={handleUpdateQuantity}
+            onRemoveItem={handleRemoveItem}
+            onClearCart={handleClearCart}
+            onContinueShopping={goToHome}
+            onCustomizeClick={openCustomizePage}
+          />
+        </main>
+      ) : currentPage === 'customize' ? (
         <main className="w-full flex-1">
           <CustomizePage
             currentLang={currentLang}
@@ -804,15 +641,28 @@ export default function App() {
               <p className="text-xs text-[#7D5B50] mb-5">
                 {isAr ? 'سجل دخولك لتتبع طلبات الكيك المخصصة وحفظ تصاميمك' : 'Sign in to track custom cake orders and view saved celebration designs.'}
               </p>
-              <button 
-                onClick={() => {
-                  setIsAccountOpen(false);
-                  setToastMessage(isAr ? 'أهلاً بك في حسابك' : 'Welcome back!');
-                }}
-                className="w-full bg-[#C58A19] hover:bg-[#4A2116] text-white py-2.5 rounded-[20px] text-xs font-semibold shadow transition-colors cursor-pointer"
-              >
-                {isAr ? 'تسجيل الدخول / إنشاء حساب' : 'Sign In / Register'}
-              </button>
+              <div className="space-y-2.5">
+                <button 
+                  onClick={() => {
+                    setIsAccountOpen(false);
+                    openMyOrdersPage();
+                  }}
+                  className="w-full bg-[#4A2116] hover:bg-[#C58A19] text-white py-2.5 rounded-[20px] text-xs font-semibold shadow transition-colors cursor-pointer flex items-center justify-center gap-2"
+                >
+                  <Package className="w-4 h-4 text-[#E6C783]" />
+                  <span>{isAr ? 'طلباتي ومتابعة التوصيل' : 'My Orders & Live Tracking'}</span>
+                </button>
+
+                <button 
+                  onClick={() => {
+                    setIsAccountOpen(false);
+                    setToastMessage(isAr ? 'أهلاً بك في حسابك' : 'Welcome back!');
+                  }}
+                  className="w-full bg-[#FAF5ED] hover:bg-[#F2E5D5] text-[#4A2116] border border-[#EBDCC8] py-2.5 rounded-[20px] text-xs font-semibold transition-colors cursor-pointer"
+                >
+                  {isAr ? 'تسجيل الدخول / إنشاء حساب' : 'Sign In / Register'}
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -836,21 +686,45 @@ export default function App() {
                 {isAr ? 'حقيبة المشتريات' : 'Your Shopping Bag'}
               </h3>
               <p className="text-xs text-[#7D5B50] mb-4">
-                {isAr ? `لديك ${cartCount} عناصر في حقيبتك` : `You currently have ${cartCount} handcrafted items in your bag.`}
+                {cartItems.length === 0
+                  ? (isAr ? 'حقيبة التسوق فارغة حالياً' : 'Your bag is currently empty.')
+                  : (isAr ? `لديك ${cartCount} عناصر في حقيبتك` : `You currently have ${cartCount} handcrafted items in your bag.`)}
               </p>
-              <div className="bg-white p-3 rounded-xl border border-[#F5EBDD] text-left rtl:text-right text-xs mb-5 space-y-1">
-                <div className="font-semibold text-[#4A2116] flex justify-between">
-                  <span>{isAr ? 'كيك الكراميل المقطر الفاخر' : 'Signature Caramel Drip Cake'}</span>
-                  <span className="text-[#72251F]">AED 290</span>
+              {cartItems.length > 0 && (
+                <div className="max-h-48 overflow-y-auto space-y-2 mb-4 text-left rtl:text-right">
+                  {cartItems.slice(0, 3).map((item, idx) => (
+                    <div key={item.id || idx} className="bg-white p-2.5 rounded-xl border border-[#F5EBDD] text-xs">
+                      <div className="font-semibold text-[#4A2116] flex justify-between">
+                        <span className="truncate max-w-[170px]">{isAr ? (item.title_ar || item.title) : item.title}</span>
+                        <span className="text-[#72251F] shrink-0">AED {item.price * (item.quantity || 1)}</span>
+                      </div>
+                      <div className="text-[10px] text-[#8C6D62] truncate">
+                        {[item.quantity ? `${item.quantity}x` : null, item.flavor, item.servings].filter(Boolean).join(' • ')}
+                      </div>
+                    </div>
+                  ))}
+                  {cartItems.length > 3 && (
+                    <p className="text-[11px] text-[#C58A19] text-center font-medium">
+                      +{cartItems.length - 3} {isAr ? 'أصناف أخرى' : 'more items'}
+                    </p>
+                  )}
                 </div>
-                <div className="text-[11px] text-[#8C6D62]">2kg • Vanilla Bean • 24K Gold Leaf</div>
-              </div>
+              )}
+              <button 
+                onClick={() => {
+                  setIsBagOpen(false);
+                  openCartPage();
+                }}
+                className="w-full bg-[#4A2116] hover:bg-[#C58A19] text-white py-2.5 rounded-[20px] text-xs font-semibold shadow transition-colors cursor-pointer mb-2"
+              >
+                {isAr ? 'عرض صفحة حقيبة التسوق الكاملة' : 'View Full Shopping Bag'}
+              </button>
               <button 
                 onClick={() => {
                   setIsBagOpen(false);
                   setIsCustomizeOpen(true);
                 }}
-                className="w-full bg-[#C58A19] hover:bg-[#4A2116] text-white py-2.5 rounded-[20px] text-xs font-semibold shadow transition-colors cursor-pointer"
+                className="w-full bg-[#FAF5ED] hover:bg-[#F2E5D5] text-[#7A5846] py-2 rounded-[20px] text-xs font-semibold border border-[#EBDCC8] transition-colors cursor-pointer"
               >
                 {isAr ? 'إضافة تصميم كيك آخر' : 'Customize Another Cake'}
               </button>

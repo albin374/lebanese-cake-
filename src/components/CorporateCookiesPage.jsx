@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import CategoryProductsSection from './CategoryProductsSection';
 
 export default function CorporateCookiesPage({ currentLang = 'en', onAddToCart, onCustomizeClick }) {
@@ -11,7 +11,7 @@ export default function CorporateCookiesPage({ currentLang = 'en', onAddToCart, 
   
   const description = isAr
     ? 'كوكيز فاخر ومطبوع بشعار الشركة بدقة عالية ومخبوز طازجاً بنكهات غنية لتقديم ضيافة استثنائية في اجتماعاتكم ومناسباتكم.'
-    : 'Artisanal branded cookies baked fresh to order with precision logo detailing and gourmet chocolate on elegant corporate displays.';
+    : 'Lebanese branded cookies baked fresh to order with precision logo detailing and gourmet chocolate on elegant corporate displays.';
 
   return (
     <div className={`w-full flex flex-col ${isAr ? 'font-arabic' : 'font-poppins'}`}>
@@ -20,7 +20,7 @@ export default function CorporateCookiesPage({ currentLang = 'en', onAddToCart, 
       <section className="relative w-full overflow-hidden bg-[#24130A] select-none">
         
         {/* Banner Container matching exact natural image aspect ratio (2172 x 724) */}
-        <div className="relative w-full aspect-[2172/724] min-h-[240px] sm:min-h-[280px] md:min-h-[320px] flex items-center">
+        <div className="relative w-full aspect-[2172/600] min-h-[170px] sm:min-h-[220px] md:min-h-[260px] flex items-center">
           
           {/* Banner Photography Background */}
           <div className="absolute inset-0 z-0">

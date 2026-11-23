@@ -20,7 +20,7 @@ export default function BannerSection({ currentLang = 'en' }) {
     {
       id: 2,
       image: '/Luxurious Lebanese Dessert Display.png',
-      alt: 'Authentic Lebanese Sweets & Confectionery - Lebanese Dream Bakery LLC',
+      alt: 'Authentic Lebanese Sweets and Confectionery - Lebanese Dream Bakery LLC',
       titleLine1: t.slides[1].titleLine1,
       titleLine2: t.slides[1].titleLine2,
       subtitleLine1: t.slides[1].subtitleLine1,

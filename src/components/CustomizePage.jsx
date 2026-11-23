@@ -278,7 +278,7 @@ export default function CustomizePage({
     {
       id: 'marbled-choco-chip',
       name: isAr ? 'ماربلد تشوكليت تشيب' : 'Marbled Chocolate Chip',
-      desc: isAr ? 'مزيج رخامي مميز بين الفانيليا والكاكاو مع رقائق الشوكولاتة' : 'Artisanal vanilla and dark cocoa marble swirl with melted chocolate chips',
+      desc: isAr ? 'مزيج رخامي مميز بين الفانيليا والكاكاو مع رقائق الشوكولاتة' : 'Lebanese vanilla and dark cocoa marble swirl with melted chocolate chips',
       image: '/customize/sponge/Marbled Chocolate Chip Cake Slice.png'
     },
     {
@@ -428,7 +428,7 @@ export default function CustomizePage({
   const toppingOptions = [
     { id: 'gold-leaf', name: isAr ? 'ورق الذهب عيار 24 الصالح للأكل' : '24K Edible Gold Leaf Accents', price: 50, desc: isAr ? 'لمسات ذهبية ملكية فاخرة على أطراف الكيك' : 'Hand-applied pure edible 24K gold foil for royal elegance' },
     { id: 'fresh-flowers', name: isAr ? 'ورود طبيعية منسقة يدوياً' : 'Fresh Organic Floral Cascade', price: 80, desc: isAr ? 'ورود وبراعم منتقاة بعناية للأعراس والاحتفال' : 'Handcrafted arrangement of edible organic roses and eucalyptus' },
-    { id: 'chocolate-drip', name: isAr ? 'صوص شوكولاتة أو كراميل مقطر' : 'Artisanal Caramel / Chocolate Drip', price: 30, desc: isAr ? 'تقطير احترافي ناعم على حواف الكيك' : 'Glossy, warm Belgian ganache drip cascading over the tiers' },
+    { id: 'chocolate-drip', name: isAr ? 'صوص شوكولاتة أو كراميل مقطر' : 'Lebanese Caramel / Chocolate Drip', price: 30, desc: isAr ? 'تقطير احترافي ناعم على حواف الكيك' : 'Glossy, warm Belgian ganache drip cascading over the tiers' },
     { id: 'wild-berries', name: isAr ? 'توت وتوت بري وفراولة طازجة' : 'Gourmet Wild Seasonal Berries', price: 40, desc: isAr ? 'توت أحمر وتوت أزرق طازج يومياً' : 'Sweet raspberries, blackberries, and glazed garden strawberries' },
     { id: 'macarons', name: isAr ? 'ماكرون فرنسي فاخر (6 حبات)' : 'Handcrafted French Macarons (6 pcs)', price: 45, desc: isAr ? 'حبات ماكرون مقرمشة محشوة بالغاناش' : 'Crisp Parisian almond shells filled with pistachio and chocolate' },
     { id: 'candles', name: isAr ? 'طقم شموع ذهبية فاخرة' : 'Luxury Golden Candle Set', price: 0, desc: isAr ? 'شموع راقية مجانية مع الكيك' : 'Complimentary metallic gold celebration candles' },
@@ -472,7 +472,7 @@ export default function CustomizePage({
       id: 'pink-spiral-candle',
       name: isAr ? 'شمعة حلزونية وردية مضيئة' : 'Lit Pink Spiral Birthday Candle',
       category: isAr ? 'شموع عيد الميلاد' : 'Birthday Candle',
-      desc: isAr ? 'شمعة باستيل حلزونية أنيقة بلهب دافئ ومضيء' : 'Artisanal pastel spiral candle with a warm glowing flame',
+      desc: isAr ? 'شمعة باستيل حلزونية أنيقة بلهب دافئ ومضيء' : 'Lebanese pastel spiral candle with a warm glowing flame',
       image: '/customize/birthday/Lit Pink Spiral Birthday Candle PNG.png',
       price: 10,
       type: 'candle',
@@ -511,7 +511,7 @@ export default function CustomizePage({
       id: 'chocolate-chips',
       name: isAr ? 'حبيبات شوكولاتة بلجيكية فاخرة' : 'Glossy Belgian Chocolate Chips',
       category: isAr ? 'شوكولاتة فاخرة' : 'Fine Chocolates',
-      desc: isAr ? 'حبيبات شوكولاتة داكنة منثورة بأسلوب شيف حلويات' : 'Artisanal mound of rich Belgian chocolate drops',
+      desc: isAr ? 'حبيبات شوكولاتة داكنة منثورة بأسلوب شيف حلويات' : 'Lebanese mound of rich Belgian chocolate drops',
       image: '/customize/birthday/Glossy Chocolate Chip Mound.png',
       price: 15,
       type: 'scatter',
@@ -604,7 +604,7 @@ export default function CustomizePage({
       name: isAr ? 'كيك الكريمة الثلاثي (باتمان، سوبرمان وسبايدرمان)' : 'Tri-Hero Buttercream Rosette Crest Cake',
       category: 'Tri-Hero',
       hero: isAr ? 'ثلاثي الأبطال' : 'Trinity Heroes',
-      desc: isAr ? 'تزيين كريمة الزبدة الفاخرة المقسمة بدقة لرموز باتمان، سوبرمان وسبايدرمان' : 'Artisanal piped rosettes dividing the cake into Batman, Superman, and Spider-Man crests',
+      desc: isAr ? 'تزيين كريمة الزبدة الفاخرة المقسمة بدقة لرموز باتمان، سوبرمان وسبايدرمان' : 'Lebanese piped rosettes dividing the cake into Batman, Superman, and Spider-Man crests',
       image: '/customize/superhero cakes/images (7).jpg'
     },
     {
@@ -836,62 +836,6 @@ export default function CustomizePage({
     return isAr ? 'تأكيد وإضافة للحقيبة' : 'Add to Bag and Confirm';
   };
 
-  const handleNext = () => {
-    if (!isStepCompleted(currentStep)) {
-      if (currentStep === 4 && !selectedFilling) {
-        setStepValidationError(isAr ? 'يرجى اختيار حشوة وتغليف الكيك للمتابعة' : 'Please select a gourmet filling to proceed');
-      } else {
-        setStepValidationError(isAr ? 'يرجى إكمال هذه الخطوة للمتابعة' : 'Please complete this step to proceed');
-      }
-      return;
-    }
-
-    setStepValidationError('');
-
-    if (currentStep < 8) {
-      setCurrentStep(prev => prev + 1);
-      window.scrollTo({ top: 120, behavior: 'smooth' });
-    } else {
-      // Step 8 Confirm
-      const customCakeItem = {
-        title: `${occasions.find(o => o.id === selectedOccasion)?.title || 'Custom Cake'} (${selectedSize})`,
-        price: totalPrice.toFixed(2),
-        flavor: `${spongeOptions.find(s => s.id === selectedSponge)?.name || 'Signature Vanilla'}${selectedFilling ? ` with ${fillingOptions.find(f => f.id === selectedFilling)?.name}` : ''}`,
-        sponge: spongeOptions.find(s => s.id === selectedSponge)?.name,
-        filling: fillingOptions.find(f => f.id === selectedFilling)?.name || (isAr ? 'حشوة كلاسيكية فاخرة' : 'Signature Bakery Filling'),
-        occasion: occasions.find(o => o.id === selectedOccasion)?.title,
-        superheroDesign: selectedOccasion === 'superhero' ? selectedSuperheroItem?.name : null,
-        boysDesign: selectedOccasion === 'boys' ? selectedBoysItem?.name : null,
-        girlsDesign: selectedOccasion === 'girls' ? selectedGirlsItem?.name : null,
-        message: cakeMessage,
-        layers: selectedShapeLayerItem?.title || selectedLayers,
-        shape: selectedShapeLayerItem?.shape || selectedShape,
-        toppings: [
-          ...selectedToppings.map(t => toppingOptions.find(x => x.id === t)?.name).filter(Boolean),
-          ...selectedBirthdayItems.map(t => birthdayToppingOptions.find(x => x.id === t)?.name).filter(Boolean)
-        ],
-        birthdayDecorations: selectedBirthdayItems.map(id => {
-          const item = birthdayToppingOptions.find(b => b.id === id);
-          return {
-            id,
-            name: item?.name,
-            price: item?.price
-          };
-        })
-      };
-      if (onAddToCart) onAddToCart(customCakeItem);
-      if (onBackToHome) onBackToHome();
-    }
-  };
-
-  const handlePrev = () => {
-    setStepValidationError('');
-    if (currentStep > 1) {
-      setCurrentStep(prev => prev - 1);
-      window.scrollTo({ top: 120, behavior: 'smooth' });
-    }
-  };
-
   const isChocolateSponge = selectedSponge === 'glossy-chocolate-4layer';
 
   // Frosting Layer Map for Other Sponge Bases (public/customize/froesting layer/ & /pineapply foresting layer.png)
@@ -939,6 +883,117 @@ export default function CustomizePage({
   const selectedFinalCakeImg = selectedFilling 
     ? (finalCakeMap[selectedFilling] || finalCakeMap['fresh-whipped-cream-plain']) 
     : finalCakeMap['fresh-whipped-cream-plain'];
+
+  const handleNext = () => {
+    if (!isStepCompleted(currentStep)) {
+      if (currentStep === 4 && !selectedFilling) {
+        setStepValidationError(isAr ? 'يرجى اختيار حشوة وتغليف الكيك للمتابعة' : 'Please select a gourmet filling to proceed');
+      } else {
+        setStepValidationError(isAr ? 'يرجى إكمال هذه الخطوة للمتابعة' : 'Please complete this step to proceed');
+      }
+      return;
+    }
+
+    setStepValidationError('');
+
+    if (currentStep < 8) {
+      setCurrentStep(prev => prev + 1);
+      window.scrollTo({ top: 120, behavior: 'smooth' });
+    } else {
+      // Step 8 Confirm & Persist
+      const custCode = `CUST-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
+
+      let previewImg = selectedFinalCakeImg || spongeBaseMap[selectedSponge] || '/categorycake imges/Wedding Cake.png';
+      if (selectedOccasion === 'superhero' && selectedSuperheroDesign && selectedSuperheroItem?.image) {
+        previewImg = selectedSuperheroItem.image;
+      } else if (selectedOccasion === 'boys' && selectedBoysDesign && selectedBoysItem?.image) {
+        previewImg = selectedBoysItem.image;
+      } else if (selectedOccasion === 'girls' && selectedGirlsDesign && selectedGirlsItem?.image) {
+        previewImg = selectedGirlsItem.image;
+      }
+
+      const shapeTiers = selectedShapeLayerItem?.title || selectedLayers;
+      const cakeShape = selectedShapeLayerItem?.shape || selectedShape;
+      const sizeTitle = sizeOptions.find(s => s.id === selectedSize)?.title || selectedSize;
+      const servingsText = sizeOptions.find(s => s.id === selectedSize)?.servings || '12-16 Servings';
+      const spongeName = spongeOptions.find(s => s.id === selectedSponge)?.name || 'Vanilla Bean Sponge';
+      const fillingName = fillingOptions.find(f => f.id === selectedFilling)?.name || (isAr ? 'حشوة كلاسيكية فاخرة' : 'Signature Bakery Filling');
+      const occasionTitle = occasions.find(o => o.id === selectedOccasion)?.title || 'Bespoke Celebration';
+      const themeDesign = selectedOccasion === 'superhero' ? selectedSuperheroItem?.name :
+                          selectedOccasion === 'boys' ? selectedBoysItem?.name :
+                          selectedOccasion === 'girls' ? selectedGirlsItem?.name : null;
+
+      const customCakeItem = {
+        id: custCode,
+        customization_code: custCode,
+        title: `${occasionTitle} (${sizeTitle})`,
+        price: Number(totalPrice.toFixed(2)),
+        image: previewImg,
+        flavor: `${spongeName}${selectedFilling ? ` with ${fillingName}` : ''}`,
+        sponge: spongeName,
+        filling: fillingName,
+        occasion: occasionTitle,
+        superheroDesign: selectedOccasion === 'superhero' ? selectedSuperheroItem?.name : null,
+        boysDesign: selectedOccasion === 'boys' ? selectedBoysItem?.name : null,
+        girlsDesign: selectedOccasion === 'girls' ? selectedGirlsItem?.name : null,
+        message: cakeMessage,
+        layers: shapeTiers,
+        shape: cakeShape,
+        toppings: [
+          ...selectedToppings.map(t => toppingOptions.find(x => x.id === t)?.name).filter(Boolean),
+          ...selectedBirthdayItems.map(t => birthdayToppingOptions.find(x => x.id === t)?.name).filter(Boolean)
+        ],
+        birthdayDecorations: selectedBirthdayItems.map(id => {
+          const item = birthdayToppingOptions.find(b => b.id === id);
+          return {
+            id,
+            name: item?.name,
+            price: item?.price
+          };
+        })
+      };
+
+      // Persist customization design directly to backend database
+      try {
+        fetch('http://localhost:5000/api/customizations', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            customization_code: custCode,
+            occasion: occasionTitle,
+            theme_design: themeDesign,
+            shape: cakeShape,
+            tiers: shapeTiers,
+            size: sizeTitle,
+            servings: servingsText,
+            sponge_flavor: spongeName,
+            filling_flavor: fillingName,
+            toppings: selectedToppings.map(t => toppingOptions.find(x => x.id === t)?.name).filter(Boolean),
+            birthday_toppers: selectedBirthdayItems.map(bId => {
+              const item = birthdayToppingOptions.find(b => b.id === bId);
+              return { id: bId, name: item?.name, price: item?.price };
+            }),
+            cake_message: cakeMessage,
+            preview_image: previewImg,
+            total_price: Number(totalPrice.toFixed(2)),
+            customer_name: 'Bespoke Guest',
+            status: 'new'
+          })
+        }).catch(err => console.warn('Customization persist notice:', err));
+      } catch (_) {}
+
+      if (onAddToCart) onAddToCart(customCakeItem);
+      if (onBackToHome) onBackToHome();
+    }
+  };
+
+  const handlePrev = () => {
+    setStepValidationError('');
+    if (currentStep > 1) {
+      setCurrentStep(prev => prev - 1);
+      window.scrollTo({ top: 120, behavior: 'smooth' });
+    }
+  };
 
   // Dimensions and bounds of each sponge base (in 1774 x 887 canvas)
   const spongeMeta = {
@@ -2006,7 +2061,7 @@ export default function CustomizePage({
                     <p className="font-poppins text-xs sm:text-sm text-[#8C6D62] mt-0.5">
                       {isAr 
                         ? 'محضرة طازجة يومياً من أجود أنواع الكريمة، الشوكولاتة والفاكهة الطبيعية.' 
-                        : 'Artisanal silky fillings handcrafted daily with Belgian chocolates, fresh fruits and organic creams.'}
+                        : 'Lebanese silky fillings handcrafted daily with Belgian chocolates, fresh fruits and organic creams.'}
                     </p>
                   </div>
                 </div>
@@ -2583,7 +2638,7 @@ export default function CustomizePage({
 
                     <div className="p-3 rounded-xl bg-[#FFFBF5] border border-[#F5EBDD] flex items-center justify-between">
                       <div>
-                        <span className="text-[#8C6D62] block mb-0.5 font-medium">{isAr ? 'الحجم والضيوف' : 'Size & Servings'}</span>
+                        <span className="text-[#8C6D62] block mb-0.5 font-medium">{isAr ? 'الحجم والضيوف' : 'Size and Servings'}</span>
                         <span className="font-semibold text-[#4A2116] text-sm">{sizeOptions.find(s => s.id === selectedSize)?.title}</span>
                       </div>
                       {sizeOptions.find(s => s.id === selectedSize)?.image && (
@@ -2607,7 +2662,7 @@ export default function CustomizePage({
 
                     <div className="p-3 rounded-xl bg-[#FFFBF5] border border-[#F5EBDD] flex items-center justify-between">
                       <div>
-                        <span className="text-[#8C6D62] block mb-0.5 font-medium">{isAr ? 'حشوة وتغليف الكيك' : 'Frosting & Filling'}</span>
+                        <span className="text-[#8C6D62] block mb-0.5 font-medium">{isAr ? 'حشوة وتغليف الكيك' : 'Frosting and Filling'}</span>
                         <span className="font-semibold text-[#4A2116] text-sm">
                           {fillingOptions.find(f => f.id === selectedFilling)?.name || (isAr ? 'حشوة كلاسيكية فاخرة' : 'Signature Bakery Filling')}
                         </span>
@@ -2659,7 +2714,7 @@ export default function CustomizePage({
                     )}
 
                     <div className="sm:col-span-2 p-3 rounded-xl bg-[#FFFBF5] border border-[#F5EBDD]">
-                      <span className="text-[#8C6D62] block mb-1 font-medium">{isAr ? 'الإضافات والتزيين' : 'Selected Accents & Toppings'}</span>
+                      <span className="text-[#8C6D62] block mb-1 font-medium">{isAr ? 'الإضافات والتزيين' : 'Selected Accents and Toppings'}</span>
                       <div className="flex flex-wrap gap-1.5">
                         {selectedBirthdayItems.map(bId => {
                           const item = birthdayToppingOptions.find(t => t.id === bId);
@@ -2703,7 +2758,7 @@ export default function CustomizePage({
                     )}
                     {birthdayToppingsPrice > 0 && (
                       <div className="flex justify-between">
-                        <span>{isAr ? 'زينة ومجسمات عيد الميلاد:' : 'Birthday Toppers & Decorations:'}</span>
+                        <span>{isAr ? 'زينة ومجسمات عيد الميلاد:' : 'Birthday Toppers and Decorations:'}</span>
                         <span className="font-semibold text-[#4A2116]">+AED {birthdayToppingsPrice}</span>
                       </div>
                     )}

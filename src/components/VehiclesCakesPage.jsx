@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import CategoryProductsSection from './CategoryProductsSection';
 
 export default function VehiclesCakesPage({ currentLang = 'en', onAddToCart, onCustomizeClick }) {
@@ -6,7 +6,7 @@ export default function VehiclesCakesPage({ currentLang = 'en', onAddToCart, onC
 
   const bannerImage = '/Luxury Transportation Cake Showcase.png';
 
-  const titleLine1 = isAr ? 'كيك السيارات واليخوت والطائرات' : 'Cars, Ships, Yachts & Planes Cakes';
+  const titleLine1 = isAr ? 'كيك السيارات واليخوت والطائرات' : 'Cars, Ships, Yachts and Planes Cakes';
   const titleLine2 = isAr ? 'في دبي' : 'in Dubai';
   
   const description = isAr
@@ -20,7 +20,7 @@ export default function VehiclesCakesPage({ currentLang = 'en', onAddToCart, onC
       <section className="relative w-full overflow-hidden bg-[#24130A] select-none">
         
         {/* Banner Container matching exact natural image aspect ratio (2172 x 724) */}
-        <div className="relative w-full aspect-[2172/724] min-h-[240px] sm:min-h-[280px] md:min-h-[320px] flex items-center">
+        <div className="relative w-full aspect-[2172/600] min-h-[170px] sm:min-h-[220px] md:min-h-[260px] flex items-center">
           
           {/* Banner Photography Background */}
           <div className="absolute inset-0 z-0">

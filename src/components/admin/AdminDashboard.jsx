@@ -14,16 +14,19 @@ import {
   Eye, 
   Trash2, 
   Edit3,
-  ExternalLink, 
   Menu,
   Layers,
-  ArrowUpRight,
   FolderTree,
   Package,
   FolderPlus,
   Upload,
   Image as ImageIcon,
-  Camera
+  Camera,
+  Wand2,
+  Sparkles,
+  Printer,
+  Cake,
+  Check
 } from 'lucide-react';
 
 const API_BASE = 'http://localhost:5000/api';
@@ -45,6 +48,79 @@ export const slugify = (text) => {
     .replace(/[^\w\s-]/g, '')
     .replace(/[\s_-]+/g, '-')
     .replace(/^-+|-+$/g, '');
+};
+
+export const isCustomOrder = (order) => {
+  if (!order) return false;
+  if (order.order_type === 'custom' || order.order_type === 'customization') return true;
+  if (order.is_custom) return true;
+  if (order.customization_code) return true;
+  
+  if (typeof order.cake_type === 'string') {
+    const ct = order.cake_type.toLowerCase();
+    if (ct.includes('custom') || ct.includes('bespoke') || ct.includes('cust-') || ct.includes('3d') || ct.includes('superhero') || ct.includes('boys design') || ct.includes('girls design')) {
+      return true;
+    }
+  }
+  
+  let details = order.cake_details;
+  if (typeof details === 'string') {
+    try { details = JSON.parse(details); } catch (_) {}
+  }
+  if (details && typeof details === 'object') {
+    if (details.customization_code || details.is_custom || details.layers || details.shape || details.theme || details.sponge || details.filling || details.superheroDesign || details.boysDesign || details.girlsDesign) {
+      return true;
+    }
+    if (Array.isArray(details.items)) {
+      if (details.items.some(it => 
+        it.customization_code || 
+        it.layers || 
+        it.sponge || 
+        it.superheroDesign || 
+        it.boysDesign || 
+        it.girlsDesign || 
+        (typeof it.id === 'string' && it.id.startsWith('CUST-')) ||
+        (typeof it.title === 'string' && (it.title.toLowerCase().includes('custom') || it.title.toLowerCase().includes('bespoke')))
+      )) {
+        return true;
+      }
+    }
+  }
+  return false;
+};
+
+export const formatOrderDate = (dateVal) => {
+  if (!dateVal) return 'Standard Schedule';
+  try {
+    const d = new Date(dateVal);
+    if (isNaN(d.getTime())) return String(dateVal);
+    return d.toLocaleDateString('en-AE', { day: 'numeric', month: 'short', year: 'numeric' });
+  } catch (_) {
+    return String(dateVal);
+  }
+};
+
+export const formatTimeSlot = (slot) => {
+  if (!slot) return 'Standard Delivery';
+  return slot.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+};
+
+export const formatPaymentStatus = (status, method) => {
+  if (!status) return { text: 'Pending', style: 'bg-amber-50 text-amber-700 border-amber-200' };
+  const s = String(status).toLowerCase();
+  if (s === 'paid') {
+    return { text: 'Paid', style: 'bg-emerald-50 text-emerald-700 border-emerald-200' };
+  }
+  if (s === 'failed' || s === 'cancelled') {
+    return { text: s.toUpperCase(), style: 'bg-red-50 text-red-700 border-red-200' };
+  }
+  if (s === 'cash_on_delivery' || (method && String(method).toLowerCase().includes('cash'))) {
+    return { text: 'Cash on Delivery', style: 'bg-blue-50 text-blue-700 border-blue-200' };
+  }
+  return { 
+    text: s.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()), 
+    style: 'bg-amber-50 text-amber-700 border-amber-200' 
+  };
 };
 
 export const WEDDING_SUBCATEGORIES = [
@@ -161,13 +237,36 @@ export default function AdminDashboard({ onBackToStore }) {
   const [loginError, setLoginError] = useState('');
   const [loginLoading, setLoginLoading] = useState(false);
 
-  // Dashboard navigation state
-  const [activeTab, setActiveTab] = useState('overview'); // 'overview' | 'orders' | 'categories' | 'category' | 'inquiries'
+  // Dashboard navigation state (persisted across page refreshes)
+  const [activeTab, setActiveTab] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const savedTab = localStorage.getItem('ldb_admin_active_tab');
+      if (savedTab && ['overview', 'orders', 'customizations', 'categories', 'category', 'inquiries'].includes(savedTab)) {
+        return savedTab;
+      }
+      const hash = window.location.hash.replace('#', '').trim();
+      if (['overview', 'orders', 'customizations', 'categories', 'category', 'inquiries'].includes(hash)) {
+        return hash;
+      }
+    }
+    return 'overview';
+  });
   const [categoriesList, setCategoriesList] = useState(CATEGORIES);
-  const [selectedCategory, setSelectedCategory] = useState(CATEGORIES[0]);
-  const [categoryMenuOpen, setCategoryMenuOpen] = useState(true);
-  const [weddingSubmenuOpen, setWeddingSubmenuOpen] = useState(true);
-  const [corporateSubmenuOpen, setCorporateSubmenuOpen] = useState(true);
+  const [selectedCategory, setSelectedCategory] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const savedCatId = localStorage.getItem('ldb_admin_selected_cat_id');
+      if (savedCatId) {
+        const found = CATEGORIES.find(c => c.id === savedCatId || c.slug === savedCatId);
+        if (found) return found;
+      }
+    }
+    return CATEGORIES[0];
+  });
+  // Products dropdown and its sub-dropdowns:
+  // Closed by default and ONLY open when the user explicitly clicks to open them
+  const [categoryMenuOpen, setCategoryMenuOpen] = useState(false);
+  const [weddingSubmenuOpen, setWeddingSubmenuOpen] = useState(false);
+  const [corporateSubmenuOpen, setCorporateSubmenuOpen] = useState(false);
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
 
   // Data state
@@ -180,10 +279,17 @@ export default function AdminDashboard({ onBackToStore }) {
 
   // Filter & Search state
   const [orderFilter, setOrderFilter] = useState('all');
+  const [orderTypeFilter, setOrderTypeFilter] = useState('all'); // 'all' | 'custom' | 'normal'
   const [orderSearch, setOrderSearch] = useState('');
   const [productSearch, setProductSearch] = useState('');
   const [categorySearch, setCategorySearch] = useState('');
   const [selectedOrder, setSelectedOrder] = useState(null);
+
+  // Customizations state (for interactive 3D /customize builder submissions)
+  const [customizations, setCustomizations] = useState([]);
+  const [customizationFilter, setCustomizationFilter] = useState('all');
+  const [customizationSearch, setCustomizationSearch] = useState('');
+  const [selectedCustomization, setSelectedCustomization] = useState(null);
 
   // Add / Edit Product Modal
   const [showAddProduct, setShowAddProduct] = useState(false);
@@ -346,7 +452,29 @@ export default function AdminDashboard({ onBackToStore }) {
     setToken('');
     localStorage.removeItem('ldb_admin_token');
     localStorage.removeItem('ldb_admin_user');
+    localStorage.removeItem('ldb_admin_active_tab');
+    localStorage.removeItem('ldb_admin_selected_cat_id');
   };
+
+  // Sync activeTab to localStorage and URL hash across browser refreshes
+  useEffect(() => {
+    if (activeTab) {
+      localStorage.setItem('ldb_admin_active_tab', activeTab);
+      if (typeof window !== 'undefined' && window.location.pathname.startsWith('/admin')) {
+        const currentHash = window.location.hash.replace('#', '').trim();
+        if (currentHash !== activeTab) {
+          window.history.replaceState(null, '', `/admin#${activeTab}`);
+        }
+      }
+    }
+  }, [activeTab]);
+
+  // Sync selectedCategory to localStorage across browser refreshes
+  useEffect(() => {
+    if (selectedCategory && (selectedCategory.slug || selectedCategory.id)) {
+      localStorage.setItem('ldb_admin_selected_cat_id', selectedCategory.slug || selectedCategory.id);
+    }
+  }, [selectedCategory]);
 
   // Fetch Data
   const fetchDashboardData = async () => {
@@ -356,12 +484,13 @@ export default function AdminDashboard({ onBackToStore }) {
     try {
       const headers = { 'Authorization': `Bearer ${token}` };
 
-      const [statsRes, ordersRes, productsRes, inqRes, catRes] = await Promise.all([
+      const [statsRes, ordersRes, productsRes, inqRes, catRes, custRes] = await Promise.all([
         fetch(`${API_BASE}/dashboard/stats`, { headers }),
         fetch(`${API_BASE}/orders`, { headers }),
         fetch(`${API_BASE}/products`, { headers }),
         fetch(`${API_BASE}/inquiries`, { headers }),
-        fetch(`${API_BASE}/categories`, { headers })
+        fetch(`${API_BASE}/categories`, { headers }),
+        fetch(`${API_BASE}/customizations`)
       ]);
 
       if (statsRes.ok) {
@@ -385,10 +514,14 @@ export default function AdminDashboard({ onBackToStore }) {
         const data = await inqRes.json();
         setInquiries(data.inquiries || []);
       }
+      if (custRes && custRes.ok) {
+        const custData = await custRes.json();
+        setCustomizations(custData.customizations || []);
+      }
       if (catRes && catRes.ok) {
         const catData = await catRes.json();
         if (catData.categories && catData.categories.length > 0) {
-          setCategoriesList(catData.categories.map(c => {
+          const mappedCats = catData.categories.map(c => {
             const matched = CATEGORIES.find(def => def.id === c.slug || def.slug === c.slug || def.id === c.id);
             return {
               id: c.slug || c.id,
@@ -404,7 +537,17 @@ export default function AdminDashboard({ onBackToStore }) {
                 ['corporate-cookies', 'cupcakes-with-logo'].includes(c.slug) ? 'corporate-cakes' : null
               )
             };
-          }));
+          });
+          setCategoriesList(mappedCats);
+
+          // If a category was previously active, synchronize with freshly loaded category data
+          const savedCatId = localStorage.getItem('ldb_admin_selected_cat_id');
+          if (savedCatId) {
+            const matched = mappedCats.find(c => c.id === savedCatId || c.slug === savedCatId);
+            if (matched) {
+              setSelectedCategory(matched);
+            }
+          }
         }
       }
     } catch (err) {
@@ -500,6 +643,47 @@ export default function AdminDashboard({ onBackToStore }) {
     } catch (e) {
       setOrders(prev => prev.map(o => o.id === orderId ? { ...o, status: newStatus } : o));
       notify('Order status updated');
+    }
+  };
+
+  // Update Customization Status
+  const handleUpdateCustomizationStatus = async (id, newStatus) => {
+    try {
+      await fetch(`${API_BASE}/customizations/${id}/status`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ status: newStatus })
+      });
+      setCustomizations(prev => prev.map(c => c.id === id ? { ...c, status: newStatus } : c));
+      if (selectedCustomization && selectedCustomization.id === id) {
+        setSelectedCustomization(prev => ({ ...prev, status: newStatus }));
+      }
+      notify(`Customization marked as "${newStatus.replace('_', ' ')}"`);
+    } catch (e) {
+      setCustomizations(prev => prev.map(c => c.id === id ? { ...c, status: newStatus } : c));
+      notify('Customization status updated');
+    }
+  };
+
+  // Delete Customization
+  const handleDeleteCustomization = async (id) => {
+    if (!window.confirm('Are you sure you want to delete this custom cake specification?')) return;
+    try {
+      await fetch(`${API_BASE}/customizations/${id}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      setCustomizations(prev => prev.filter(c => c.id !== id));
+      if (selectedCustomization && selectedCustomization.id === id) {
+        setSelectedCustomization(null);
+      }
+      notify('Customization record deleted');
+    } catch (e) {
+      setCustomizations(prev => prev.filter(c => c.id !== id));
+      notify('Customization record removed');
     }
   };
 
@@ -670,12 +854,32 @@ export default function AdminDashboard({ onBackToStore }) {
 
   // Filtered Orders
   const filteredOrders = orders.filter(o => {
+    const isCustom = isCustomOrder(o);
+    const matchesType = orderTypeFilter === 'all' ||
+      (orderTypeFilter === 'custom' && isCustom) ||
+      (orderTypeFilter === 'normal' && !isCustom);
     const matchesFilter = orderFilter === 'all' || o.status === orderFilter;
-    const matchesSearch = !orderSearch.trim() || 
-      (o.order_number && o.order_number.toLowerCase().includes(orderSearch.toLowerCase())) ||
-      (o.customer_name && o.customer_name.toLowerCase().includes(orderSearch.toLowerCase())) ||
-      (o.customer_phone && o.customer_phone.toLowerCase().includes(orderSearch.toLowerCase())) ||
-      (o.cake_type && o.cake_type.toLowerCase().includes(orderSearch.toLowerCase()));
+    const q = orderSearch.toLowerCase().trim();
+    const matchesSearch = !q || 
+      (o.order_number && o.order_number.toLowerCase().includes(q)) ||
+      (o.customer_name && o.customer_name.toLowerCase().includes(q)) ||
+      (o.customer_phone && o.customer_phone.toLowerCase().includes(q)) ||
+      (o.cake_type && o.cake_type.toLowerCase().includes(q)) ||
+      (isCustom ? 'customization order custom' : 'normal order standard').includes(q);
+    return matchesType && matchesFilter && matchesSearch;
+  });
+
+  // Filtered Customizations (Interactive 3D /customize builder submissions)
+  const filteredCustomizations = customizations.filter(c => {
+    const matchesFilter = customizationFilter === 'all' || c.status === customizationFilter;
+    const q = customizationSearch.toLowerCase().trim();
+    const matchesSearch = !q ||
+      (c.customization_code && c.customization_code.toLowerCase().includes(q)) ||
+      (c.customer_name && c.customer_name.toLowerCase().includes(q)) ||
+      (c.occasion && c.occasion.toLowerCase().includes(q)) ||
+      (c.theme_design && c.theme_design.toLowerCase().includes(q)) ||
+      (c.sponge_flavor && c.sponge_flavor.toLowerCase().includes(q)) ||
+      (c.cake_message && c.cake_message.toLowerCase().includes(q));
     return matchesFilter && matchesSearch;
   });
 
@@ -906,16 +1110,6 @@ export default function AdminDashboard({ onBackToStore }) {
             </button>
           </form>
 
-          <div className="mt-6 pt-5 border-t border-[#F2E6D5] text-center text-xs text-[#7A5846]">
-            <button 
-              type="button"
-              onClick={onBackToStore} 
-              className="hover:text-[#C58A19] transition-colors cursor-pointer"
-            >
-              ← Return to Website
-            </button>
-          </div>
-
         </div>
       </div>
     );
@@ -1009,6 +1203,30 @@ export default function AdminDashboard({ onBackToStore }) {
                 activeTab === 'orders' ? 'bg-white/20 text-white' : 'bg-[#F2E5D5] text-[#7A5846]'
               }`}>
                 {orders.length}
+              </span>
+            </button>
+
+            {/* 2.5 Cake Customizations (Bespoke 3D /customize builder submissions) */}
+            <button
+              type="button"
+              onClick={() => {
+                setActiveTab('customizations');
+                setMobileSidebarOpen(false);
+              }}
+              className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-medium transition-colors cursor-pointer ${
+                activeTab === 'customizations'
+                  ? 'bg-[#C58A19] text-white font-semibold shadow-xs'
+                  : 'text-[#4A2116] hover:bg-[#F5EBDD] hover:text-[#C58A19]'
+              }`}
+            >
+              <div className="flex items-center gap-3">
+                <Wand2 className="w-4 h-4 shrink-0" />
+                <span>Customizations</span>
+              </div>
+              <span className={`text-[11px] px-2 py-0.5 rounded-md font-semibold ${
+                activeTab === 'customizations' ? 'bg-white/20 text-white' : 'bg-[#F2E5D5] text-[#7A5846]'
+              }`}>
+                {customizations.length}
               </span>
             </button>
 
@@ -1263,25 +1481,15 @@ export default function AdminDashboard({ onBackToStore }) {
 
         {/* Clean Professional Sidebar Footer */}
         <div className="p-4 border-t border-[#EBDCC8] bg-[#FAF3E8]">
-          <div className="flex items-center justify-between gap-2">
-            <button
-              type="button"
-              onClick={onBackToStore}
-              className="flex-1 flex items-center justify-center gap-1.5 text-xs text-[#4A2116] hover:text-[#C58A19] bg-white hover:bg-[#FDFBF7] border border-[#EBDCC8] py-2 px-3 rounded-xl transition-colors cursor-pointer font-medium shadow-2xs"
-            >
-              <span>View Website</span>
-              <ArrowUpRight className="w-3.5 h-3.5 text-[#C58A19]" />
-            </button>
-
-            <button
-              type="button"
-              onClick={handleLogout}
-              className="p-2 text-[#7A5846] hover:text-red-600 hover:bg-red-50 bg-white border border-[#EBDCC8] rounded-xl transition-colors cursor-pointer shadow-2xs"
-              title="Sign Out"
-            >
-              <LogOut className="w-4 h-4" />
-            </button>
-          </div>
+          <button
+            type="button"
+            onClick={handleLogout}
+            className="w-full flex items-center justify-center gap-2 py-2 px-3 text-xs text-[#7A5846] hover:text-red-600 hover:bg-red-50 bg-white border border-[#EBDCC8] rounded-xl transition-colors cursor-pointer shadow-2xs font-medium"
+            title="Sign Out"
+          >
+            <LogOut className="w-4 h-4" />
+            <span>Sign Out</span>
+          </button>
         </div>
 
       </aside>
@@ -1307,6 +1515,7 @@ export default function AdminDashboard({ onBackToStore }) {
               <div className="text-xs text-[#8A6753] uppercase tracking-wider font-semibold">
                 {activeTab === 'overview' ? 'Administration' :
                  activeTab === 'orders' ? 'Orders Management' :
+                 activeTab === 'customizations' ? 'Cake Customizations' :
                  activeTab === 'categories' ? 'Category Taxonomy' :
                  activeTab === 'inquiries' ? 'Client Consultations' :
                  'Product Catalog'}
@@ -1314,8 +1523,9 @@ export default function AdminDashboard({ onBackToStore }) {
               <h2 className="text-base sm:text-lg font-bold text-[#4A2116] leading-tight font-serif">
                 {activeTab === 'overview' ? 'Dashboard Overview' :
                  activeTab === 'orders' ? 'All Customer Orders' :
+                 activeTab === 'customizations' ? 'Cake Customizations' :
                  activeTab === 'categories' ? 'Category Management' :
-                 activeTab === 'inquiries' ? 'Inquiries & Consultations' :
+                 activeTab === 'inquiries' ? 'Inquiries and Consultations' :
                  selectedCategory.name}
               </h2>
             </div>
@@ -1332,15 +1542,6 @@ export default function AdminDashboard({ onBackToStore }) {
               title="Refresh Data"
             >
               <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
-            </button>
-
-            <button
-              type="button"
-              onClick={onBackToStore}
-              className="hidden sm:flex items-center gap-1.5 text-xs font-semibold text-[#4A2116] bg-[#FAF5ED] hover:bg-[#F2E6D5] px-3.5 py-2 rounded-xl transition-colors cursor-pointer border border-[#E2D2BD]"
-            >
-              <span>View Storefront</span>
-              <ExternalLink className="w-3.5 h-3.5 text-[#C58A19]" />
             </button>
 
           </div>
@@ -1417,6 +1618,7 @@ export default function AdminDashboard({ onBackToStore }) {
                     <thead>
                       <tr className="border-b border-[#F2E6D5] text-xs text-[#8A6753] uppercase tracking-wider">
                         <th className="pb-3 font-semibold">Order ID</th>
+                        <th className="pb-3 font-semibold">Type</th>
                         <th className="pb-3 font-semibold">Customer</th>
                         <th className="pb-3 font-semibold">Item</th>
                         <th className="pb-3 font-semibold">Delivery Date</th>
@@ -1428,7 +1630,7 @@ export default function AdminDashboard({ onBackToStore }) {
                     <tbody className="divide-y divide-[#F9F3EA]">
                       {orders.length === 0 ? (
                         <tr>
-                          <td colSpan="7" className="py-8 text-center text-xs text-[#8A6753]">
+                          <td colSpan="8" className="py-8 text-center text-xs text-[#8A6753]">
                             No orders placed yet. New celebration orders will appear here automatically.
                           </td>
                         </tr>
@@ -1437,6 +1639,19 @@ export default function AdminDashboard({ onBackToStore }) {
                         <tr key={order.id} className="hover:bg-[#FFFDF8] transition-colors">
                           <td className="py-3.5 font-semibold text-[#4A2116] text-xs">
                             {order.order_number}
+                          </td>
+                          <td className="py-3.5">
+                            {isCustomOrder(order) ? (
+                              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-[#FFF4DE] text-[#C58A19] border border-[#E5C583]">
+                                <Wand2 className="w-2.5 h-2.5" />
+                                <span>Custom</span>
+                              </span>
+                            ) : (
+                              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-[#FAF5ED] text-[#7A5846] border border-[#E2D2BD]">
+                                <Package className="w-2.5 h-2.5" />
+                                <span>Normal</span>
+                              </span>
+                            )}
                           </td>
                           <td className="py-3.5">
                             <div className="font-medium text-[#33180F]">{order.customer_name}</div>
@@ -1489,34 +1704,114 @@ export default function AdminDashboard({ onBackToStore }) {
             <div className="space-y-6">
               
               {/* Filter Bar */}
-              <div className="bg-white border border-[#EBDCC8] rounded-2xl p-4 sm:p-5 shadow-xs flex flex-col md:flex-row gap-4 items-center justify-between">
+              <div className="bg-white border border-[#EBDCC8] rounded-2xl p-4 sm:p-5 shadow-xs space-y-3.5">
                 
-                <div className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto w-full md:w-auto pb-1 md:pb-0">
-                  {['all', 'pending', 'in_production', 'ready', 'delivered', 'cancelled'].map(status => (
-                    <button
-                      key={status}
-                      type="button"
-                      onClick={() => setOrderFilter(status)}
-                      className={`px-3 py-1.5 rounded-xl text-xs font-medium capitalize transition-colors cursor-pointer whitespace-nowrap ${
-                        orderFilter === status
-                          ? 'bg-[#4A2116] text-white font-semibold'
-                          : 'bg-[#FAF5ED] text-[#7A5846] hover:bg-[#F2E6D5]'
-                      }`}
-                    >
-                      {status.replace('_', ' ')}
-                    </button>
-                  ))}
+                {/* Row 1: Order Type Filter & Search Bar */}
+                <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3">
+                  
+                  {/* Order Type Filter Segment */}
+                  <div className="flex items-center gap-2">
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-[#8A6753] hidden sm:inline shrink-0">
+                      Order Type:
+                    </span>
+                    <div className="inline-flex items-center gap-1 bg-[#FAF5ED] p-1 rounded-xl border border-[#E2D2BD] w-full sm:w-auto overflow-x-auto scrollbar-none">
+                      <button
+                        type="button"
+                        onClick={() => setOrderTypeFilter('all')}
+                        className={`flex-1 sm:flex-none px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer whitespace-nowrap ${
+                          orderTypeFilter === 'all'
+                            ? 'bg-[#4A2116] text-white shadow-xs'
+                            : 'text-[#7A5846] hover:text-[#4A2116]'
+                        }`}
+                      >
+                        All Orders ({orders.length})
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setOrderTypeFilter('custom')}
+                        className={`flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer whitespace-nowrap ${
+                          orderTypeFilter === 'custom'
+                            ? 'bg-[#C58A19] text-white shadow-xs'
+                            : 'text-[#C58A19] hover:bg-white/80'
+                        }`}
+                      >
+                        <Wand2 className="w-3.5 h-3.5" />
+                        <span>Customization ({orders.filter(isCustomOrder).length})</span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setOrderTypeFilter('normal')}
+                        className={`flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer whitespace-nowrap ${
+                          orderTypeFilter === 'normal'
+                            ? 'bg-[#4A2116] text-white shadow-xs'
+                            : 'text-[#7A5846] hover:bg-white/80'
+                        }`}
+                      >
+                        <Package className="w-3.5 h-3.5" />
+                        <span>Normal ({orders.filter(o => !isCustomOrder(o)).length})</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Search Input */}
+                  <div className="relative min-w-[240px] sm:w-72">
+                    <Search className="w-4 h-4 text-[#A07A65] absolute left-3 top-1/2 -translate-y-1/2" />
+                    <input
+                      type="text"
+                      value={orderSearch}
+                      onChange={(e) => setOrderSearch(e.target.value)}
+                      placeholder="Search order ID, client, item..."
+                      className="w-full bg-[#FAF5ED] border border-[#E2D2BD] rounded-xl pl-9 pr-8 py-2 text-xs text-[#4A2116] outline-none focus:border-[#C58A19]"
+                    />
+                    {orderSearch && (
+                      <button
+                        type="button"
+                        onClick={() => setOrderSearch('')}
+                        className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#8A6753] hover:text-[#4A2116] cursor-pointer"
+                      >
+                        <X className="w-3.5 h-3.5" />
+                      </button>
+                    )}
+                  </div>
+
                 </div>
 
-                <div className="relative w-full md:w-72">
-                  <Search className="w-4 h-4 text-[#A07A65] absolute left-3 top-1/2 -translate-y-1/2" />
-                  <input
-                    type="text"
-                    value={orderSearch}
-                    onChange={(e) => setOrderSearch(e.target.value)}
-                    placeholder="Search orders..."
-                    className="w-full bg-[#FAF5ED] border border-[#E2D2BD] rounded-xl pl-9 pr-3 py-2 text-xs text-[#4A2116] outline-none focus:border-[#C58A19]"
-                  />
+                {/* Row 2: Status Lifecycle Filter Pills */}
+                <div className="pt-2.5 border-t border-[#F2E6D5] flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none">
+                  <span className="text-[11px] font-bold uppercase tracking-wider text-[#8A6753] mr-1.5 shrink-0">
+                    Status:
+                  </span>
+                  {[
+                    { id: 'all', label: 'All Statuses' },
+                    { id: 'pending', label: 'Pending' },
+                    { id: 'in_production', label: 'In Production' },
+                    { id: 'ready', label: 'Ready' },
+                    { id: 'delivered', label: 'Delivered' },
+                    { id: 'cancelled', label: 'Cancelled' }
+                  ].map(tab => {
+                    const count = tab.id === 'all' 
+                      ? orders.length 
+                      : orders.filter(o => o.status === tab.id).length;
+                    return (
+                      <button
+                        key={tab.id}
+                        type="button"
+                        onClick={() => setOrderFilter(tab.id)}
+                        className={`px-3 py-1.5 rounded-xl text-xs font-medium transition-colors cursor-pointer whitespace-nowrap flex items-center gap-1.5 ${
+                          orderFilter === tab.id
+                            ? 'bg-[#4A2116] text-white font-semibold shadow-xs'
+                            : 'bg-[#FAF5ED] text-[#7A5846] hover:bg-[#F2E6D5]'
+                        }`}
+                      >
+                        <span>{tab.label}</span>
+                        <span className={`text-[10px] px-1.5 py-0.2 rounded-md ${
+                          orderFilter === tab.id ? 'bg-white/20 text-white' : 'bg-[#EBDCC8] text-[#5C3A28]'
+                        }`}>
+                          {count}
+                        </span>
+                      </button>
+                    );
+                  })}
                 </div>
 
               </div>
@@ -1524,77 +1819,435 @@ export default function AdminDashboard({ onBackToStore }) {
               {/* Orders Table */}
               <div className="bg-white border border-[#EBDCC8] rounded-2xl shadow-xs overflow-hidden">
                 <div className="overflow-x-auto">
-                  <table className="w-full text-left text-sm">
-                    <thead className="bg-[#FAF5ED] border-b border-[#EBDCC8] text-xs text-[#7A5846] uppercase tracking-wider">
+                  <table className="w-full text-left text-xs border-collapse">
+                    <thead className="bg-[#FAF5ED] border-b border-[#EBDCC8] text-[10px] text-[#7A5846] uppercase font-bold tracking-wider">
                       <tr>
-                        <th className="py-3 px-4 font-semibold">Order ID</th>
-                        <th className="py-3 px-4 font-semibold">Customer</th>
-                        <th className="py-3 px-4 font-semibold">Item</th>
-                        <th className="py-3 px-4 font-semibold">Delivery</th>
-                        <th className="py-3 px-4 font-semibold">Total</th>
-                        <th className="py-3 px-4 font-semibold">Status Action</th>
-                        <th className="py-3 px-4 font-semibold text-right">Details</th>
+                        <th className="py-3.5 px-4 whitespace-nowrap">Order ID</th>
+                        <th className="py-3.5 px-4 whitespace-nowrap">Order Type</th>
+                        <th className="py-3.5 px-4 whitespace-nowrap">Customer</th>
+                        <th className="py-3.5 px-4 min-w-[170px]">Item & Details</th>
+                        <th className="py-3.5 px-4 min-w-[170px]">Delivery Schedule</th>
+                        <th className="py-3.5 px-4 whitespace-nowrap">Total & Payment</th>
+                        <th className="py-3.5 px-4 whitespace-nowrap">Status Action</th>
+                        <th className="py-3.5 px-4 text-right whitespace-nowrap">Details</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-[#F2E6D5]">
                       {filteredOrders.length === 0 ? (
                         <tr>
-                          <td colSpan="7" className="py-10 text-center text-sm text-[#8A6753]">
-                            No orders found.
+                          <td colSpan="8" className="py-12 text-center text-xs text-[#8A6753]">
+                            No orders found matching your filters.
                           </td>
                         </tr>
                       ) : (
-                        filteredOrders.map(order => (
-                          <tr key={order.id} className="hover:bg-[#FFFDF8] transition-colors">
-                            <td className="py-3.5 px-4 font-bold text-[#4A2116] text-xs">
-                              {order.order_number}
-                            </td>
-                            <td className="py-3.5 px-4">
-                              <div className="font-semibold text-[#33180F]">{order.customer_name}</div>
-                              <div className="text-xs text-[#8A6753]">{order.customer_phone}</div>
-                            </td>
-                            <td className="py-3.5 px-4 max-w-xs">
-                              <div className="font-medium text-[#4A2116]">{order.cake_type}</div>
-                              {order.cake_details?.theme && (
-                                <div className="text-xs text-[#C58A19]">Theme: {order.cake_details.theme}</div>
-                              )}
-                            </td>
-                            <td className="py-3.5 px-4 text-xs">
-                              <div className="font-semibold text-[#4A2116]">{order.delivery_date}</div>
-                              <div className="text-[#8A6753]">{order.delivery_time_slot || 'Standard'}</div>
-                              <div className="text-[#A07A65] truncate max-w-[160px]">{order.delivery_address}</div>
-                            </td>
-                            <td className="py-3.5 px-4">
-                              <div className="font-bold text-[#4A2116] font-poppins tabular-nums">AED {order.total_amount}</div>
-                              <span className="text-[10px] text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded font-bold uppercase">
-                                {order.payment_status}
-                              </span>
-                            </td>
-                            <td className="py-3.5 px-4">
-                              <select
-                                value={order.status}
-                                onChange={(e) => handleUpdateStatus(order.id, e.target.value)}
-                                className="bg-[#FAF5ED] border border-[#DBC9B5] text-xs font-semibold rounded-lg px-2.5 py-1.5 text-[#4A2116] outline-none focus:border-[#C58A19] cursor-pointer"
-                              >
-                                <option value="pending">Pending</option>
-                                <option value="in_production">In Production</option>
-                                <option value="ready">Ready for Dispatch</option>
-                                <option value="delivered">Delivered</option>
-                                <option value="cancelled">Cancelled</option>
-                              </select>
-                            </td>
-                            <td className="py-3.5 px-4 text-right">
-                              <button
-                                type="button"
-                                onClick={() => setSelectedOrder(order)}
-                                className="p-1.5 text-[#8A6753] hover:text-[#4A2116] hover:bg-[#FAF5ED] rounded-lg transition-colors cursor-pointer"
-                                title="View Details"
-                              >
-                                <Eye className="w-4 h-4" />
-                              </button>
-                            </td>
-                          </tr>
-                        ))
+                        filteredOrders.map(order => {
+                          const custom = isCustomOrder(order);
+                          const payBadge = formatPaymentStatus(order.payment_status, order.payment_method);
+                          return (
+                            <tr key={order.id} className="hover:bg-[#FFFDF8] transition-colors">
+                              
+                              {/* Order ID: never wraps */}
+                              <td className="py-3.5 px-4 font-mono font-bold text-[#4A2116] text-xs whitespace-nowrap">
+                                {order.order_number}
+                              </td>
+
+                              {/* Order Type Badge */}
+                              <td className="py-3.5 px-4 whitespace-nowrap">
+                                {custom ? (
+                                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-[#FFF4DE] text-[#C58A19] border border-[#E5C583]">
+                                    <Wand2 className="w-3 h-3 text-[#C58A19]" />
+                                    <span>Customization Order</span>
+                                  </span>
+                                ) : (
+                                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-[#FAF5ED] text-[#7A5846] border border-[#E2D2BD]">
+                                    <Package className="w-3 h-3 text-[#7A5846]" />
+                                    <span>Normal Order</span>
+                                  </span>
+                                )}
+                              </td>
+
+                              {/* Customer */}
+                              <td className="py-3.5 px-4 whitespace-nowrap">
+                                <div className="font-semibold text-[#33180F] text-xs">{order.customer_name}</div>
+                                <div className="text-[11px] text-[#8A6753] mt-0.5">{order.customer_phone}</div>
+                              </td>
+
+                              {/* Item & Details */}
+                              <td className="py-3.5 px-4">
+                                <div className="font-medium text-[#4A2116] text-xs">{order.cake_type}</div>
+                                {order.cake_details?.theme && (
+                                  <div className="text-[11px] text-[#C58A19] mt-0.5 font-medium">Theme: {order.cake_details.theme}</div>
+                                )}
+                              </td>
+
+                              {/* Delivery Schedule (Formatted Cleanly!) */}
+                              <td className="py-3.5 px-4">
+                                <div className="font-semibold text-[#4A2116] text-xs whitespace-nowrap">
+                                  {formatOrderDate(order.delivery_date)}
+                                </div>
+                                <div className="text-[11px] text-[#8A6753] mt-0.5">
+                                  {formatTimeSlot(order.delivery_time_slot)}
+                                </div>
+                                {order.delivery_address && (
+                                  <div className="text-[11px] text-[#A07A65] truncate max-w-[180px] mt-0.5" title={order.delivery_address}>
+                                    {order.delivery_address}
+                                  </div>
+                                )}
+                              </td>
+
+                              {/* Total & Payment */}
+                              <td className="py-3.5 px-4 whitespace-nowrap">
+                                <div className="font-bold text-[#4A2116] font-poppins text-xs tabular-nums">
+                                  AED {parseFloat(order.total_amount || 0).toFixed(2)}
+                                </div>
+                                <span className={`inline-block mt-0.5 text-[10px] px-2 py-0.5 rounded-md font-semibold border ${payBadge.style}`}>
+                                  {payBadge.text}
+                                </span>
+                              </td>
+
+                              {/* Status Action */}
+                              <td className="py-3.5 px-4 whitespace-nowrap">
+                                <select
+                                  value={order.status || 'pending'}
+                                  onChange={(e) => handleUpdateStatus(order.id, e.target.value)}
+                                  className="bg-[#FAF5ED] border border-[#DBC9B5] text-xs font-semibold rounded-lg px-2.5 py-1.5 text-[#4A2116] outline-none focus:border-[#C58A19] cursor-pointer"
+                                >
+                                  <option value="pending">Pending</option>
+                                  <option value="in_production">In Production</option>
+                                  <option value="ready">Ready for Dispatch</option>
+                                  <option value="delivered">Delivered</option>
+                                  <option value="cancelled">Cancelled</option>
+                                </select>
+                              </td>
+
+                              {/* View Details */}
+                              <td className="py-3.5 px-4 text-right whitespace-nowrap">
+                                <button
+                                  type="button"
+                                  onClick={() => setSelectedOrder(order)}
+                                  className="p-1.5 text-[#8A6753] hover:text-[#4A2116] hover:bg-[#FAF5ED] rounded-lg transition-colors cursor-pointer"
+                                  title="View Order Details"
+                                >
+                                  <Eye className="w-4 h-4" />
+                                </button>
+                              </td>
+
+                            </tr>
+                          );
+                        })
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+            </div>
+          )}
+
+          {/* ==================================================== */}
+          {/* TAB 2.2: CAKE CUSTOMIZATIONS (Interactive 3D Builder) */}
+          {/* ==================================================== */}
+          {activeTab === 'customizations' && (
+            <div className="space-y-6">
+
+              {/* Header Card & Quick Actions */}
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white border border-[#EBDCC8] rounded-2xl p-5 sm:p-6 shadow-xs">
+                <div>
+                  <h3 className="font-serif text-xl sm:text-2xl font-bold text-[#4A2116]">
+                    Bespoke Cake Customizations
+                  </h3>
+                  <p className="text-xs sm:text-sm text-[#7A5846] mt-1">
+                    Review and manage all custom cake architectures designed by clients.
+                  </p>
+                </div>
+                <div className="flex items-center gap-2 self-stretch sm:self-auto">
+                  <button
+                    type="button"
+                    onClick={fetchDashboardData}
+                    className="p-2.5 text-[#7A5846] hover:text-[#4A2116] hover:bg-[#FAF5ED] border border-[#E2D2BD] rounded-xl transition-colors cursor-pointer"
+                    title="Refresh Customizations"
+                  >
+                    <RefreshCw className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+
+              {/* KPI Metrics Row */}
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                <div className="bg-white border border-[#EBDCC8] rounded-2xl p-4 sm:p-5 shadow-xs">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-xs font-semibold text-[#8A6753] uppercase tracking-wider">Total Built</span>
+                    <div className="w-8 h-8 rounded-xl bg-[#FAF5ED] text-[#C58A19] flex items-center justify-center">
+                      <Wand2 className="w-4 h-4" />
+                    </div>
+                  </div>
+                  <div className="font-serif text-2xl sm:text-3xl font-bold text-[#4A2116]">
+                    {customizations.length}
+                  </div>
+                  <p className="text-[11px] text-[#8A6753] mt-1">Saved custom designs</p>
+                </div>
+
+                <div className="bg-white border border-[#EBDCC8] rounded-2xl p-4 sm:p-5 shadow-xs">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-xs font-semibold text-amber-700 uppercase tracking-wider">New Requests</span>
+                    <div className="w-8 h-8 rounded-xl bg-amber-50 text-amber-700 flex items-center justify-center">
+                      <Sparkles className="w-4 h-4" />
+                    </div>
+                  </div>
+                  <div className="font-serif text-2xl sm:text-3xl font-bold text-[#4A2116]">
+                    {customizations.filter(c => c.status === 'new').length}
+                  </div>
+                  <p className="text-[11px] text-[#8A6753] mt-1">Awaiting pastry review</p>
+                </div>
+
+                <div className="bg-white border border-[#EBDCC8] rounded-2xl p-4 sm:p-5 shadow-xs">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-xs font-semibold text-blue-700 uppercase tracking-wider">In Kitchen</span>
+                    <div className="w-8 h-8 rounded-xl bg-blue-50 text-blue-700 flex items-center justify-center">
+                      <Cake className="w-4 h-4" />
+                    </div>
+                  </div>
+                  <div className="font-serif text-2xl sm:text-3xl font-bold text-[#4A2116]">
+                    {customizations.filter(c => c.status === 'in_kitchen').length}
+                  </div>
+                  <p className="text-[11px] text-[#8A6753] mt-1">Active baking & sculpting</p>
+                </div>
+
+                <div className="bg-white border border-[#EBDCC8] rounded-2xl p-4 sm:p-5 shadow-xs">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-xs font-semibold text-emerald-700 uppercase tracking-wider">Pipeline Value</span>
+                    <div className="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center font-bold text-xs">
+                      AED
+                    </div>
+                  </div>
+                  <div className="font-serif text-2xl sm:text-3xl font-bold text-[#4A2116]">
+                    AED {customizations.reduce((acc, c) => acc + (parseFloat(c.total_price) || 0), 0).toLocaleString()}
+                  </div>
+                  <p className="text-[11px] text-[#8A6753] mt-1">Total estimated custom value</p>
+                </div>
+              </div>
+
+              {/* Filter Tabs & Search */}
+              <div className="bg-white border border-[#EBDCC8] rounded-2xl p-4 shadow-xs flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
+                <div className="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0 scrollbar-none">
+                  {[
+                    { id: 'all', label: 'All Builds', count: customizations.length },
+                    { id: 'new', label: 'New', count: customizations.filter(c => c.status === 'new').length },
+                    { id: 'reviewed', label: 'Reviewed', count: customizations.filter(c => c.status === 'reviewed').length },
+                    { id: 'in_kitchen', label: 'In Kitchen', count: customizations.filter(c => c.status === 'in_kitchen').length },
+                    { id: 'completed', label: 'Completed', count: customizations.filter(c => c.status === 'completed').length },
+                    { id: 'cancelled', label: 'Cancelled', count: customizations.filter(c => c.status === 'cancelled').length }
+                  ].map(tab => (
+                    <button
+                      key={tab.id}
+                      type="button"
+                      onClick={() => setCustomizationFilter(tab.id)}
+                      className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-colors flex items-center gap-1.5 whitespace-nowrap cursor-pointer ${
+                        customizationFilter === tab.id
+                          ? 'bg-[#4A2116] text-white shadow-xs'
+                          : 'bg-[#FAF5ED] text-[#7A5846] hover:bg-[#F2E5D5]'
+                      }`}
+                    >
+                      <span>{tab.label}</span>
+                      <span className={`text-[10px] px-1.5 py-0.2 rounded-md ${
+                        customizationFilter === tab.id ? 'bg-white/20 text-white' : 'bg-[#EBDCC8] text-[#5C3A28]'
+                      }`}>
+                        {tab.count}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+
+                <div className="relative min-w-[240px]">
+                  <Search className="w-4 h-4 text-[#8A6753] absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+                  <input
+                    type="text"
+                    value={customizationSearch}
+                    onChange={(e) => setCustomizationSearch(e.target.value)}
+                    placeholder="Search code, client, flavor, message..."
+                    className="w-full bg-[#FAF5ED] border border-[#E2D2BD] rounded-xl pl-9 pr-3 py-2 text-xs text-[#4A2116] placeholder:text-[#9C7A65] outline-none focus:border-[#C58A19]"
+                  />
+                  {customizationSearch && (
+                    <button
+                      type="button"
+                      onClick={() => setCustomizationSearch('')}
+                      className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#8A6753] hover:text-[#4A2116] cursor-pointer"
+                    >
+                      <X className="w-3.5 h-3.5" />
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              {/* Customizations Table */}
+              <div className="bg-white border border-[#EBDCC8] rounded-2xl shadow-xs overflow-hidden">
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left border-collapse text-xs">
+                    <thead>
+                      <tr className="bg-[#FAF5ED] border-b border-[#EBDCC8] text-[#7A5846] uppercase font-bold text-[10px] tracking-wider">
+                        <th className="py-3.5 px-4">Custom Code & Date</th>
+                        <th className="py-3.5 px-4">Design & Occasion</th>
+                        <th className="py-3.5 px-4">Architecture</th>
+                        <th className="py-3.5 px-4">Flavors (Sponge & Filling)</th>
+                        <th className="py-3.5 px-4">Plaque Message</th>
+                        <th className="py-3.5 px-4 text-right">Price</th>
+                        <th className="py-3.5 px-4 text-center">Status</th>
+                        <th className="py-3.5 px-4 text-right">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-[#F2E5D5]">
+                      {filteredCustomizations.length === 0 ? (
+                        <tr>
+                          <td colSpan="8" className="py-12 text-center text-[#8A6753]">
+                            <div className="max-w-xs mx-auto">
+                              <Wand2 className="w-8 h-8 mx-auto text-[#C58A19]/50 mb-2" />
+                              <p className="font-medium text-[#4A2116]">No custom cake designs found</p>
+                              <p className="text-[11px] text-[#8A6753] mt-1">
+                                {customizationSearch || customizationFilter !== 'all'
+                                  ? 'No matching designs found for your filters. Try clearing your search.'
+                                  : 'Customers who build custom cakes at /customize will have their full specifications appear here.'}
+                              </p>
+                            </div>
+                          </td>
+                        </tr>
+                      ) : (
+                        filteredCustomizations.map((item) => {
+                          const toppingsArray = Array.isArray(item.toppings)
+                            ? item.toppings
+                            : (typeof item.toppings === 'string' && item.toppings ? (() => { try { return JSON.parse(item.toppings); } catch(e) { return [item.toppings]; } })() : []);
+                          const toppersArray = Array.isArray(item.birthday_toppers)
+                            ? item.birthday_toppers
+                            : (typeof item.birthday_toppers === 'string' && item.birthday_toppers ? (() => { try { return JSON.parse(item.birthday_toppers); } catch(e) { return [item.birthday_toppers]; } })() : []);
+
+                          return (
+                            <tr key={item.id} className="hover:bg-[#FFFDF8] transition-colors">
+                              <td className="py-3.5 px-4 font-medium text-[#4A2116]">
+                                <div className="font-semibold text-[#4A2116] flex items-center gap-1.5">
+                                  <span className="font-mono text-[11px] text-[#C58A19] font-bold">
+                                    {item.customization_code || `CUST-#${item.id}`}
+                                  </span>
+                                </div>
+                                <div className="text-[10px] text-[#8A6753] mt-0.5">
+                                  {item.created_at ? new Date(item.created_at).toLocaleDateString('en-AE', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'Recent'}
+                                </div>
+                                {item.customer_name && (
+                                  <div className="text-[11px] text-[#33180F] font-medium mt-1">
+                                    {item.customer_name}
+                                  </div>
+                                )}
+                              </td>
+
+                              <td className="py-3.5 px-4">
+                                <div className="flex items-center gap-2.5">
+                                  <div className="w-12 h-12 rounded-xl bg-[#FAF5ED] border border-[#EBDCC8] overflow-hidden shrink-0 flex items-center justify-center">
+                                    {item.preview_image ? (
+                                      <img
+                                        src={formatImageUrl(item.preview_image)}
+                                        alt={item.theme_design || 'Custom Cake'}
+                                        className="w-full h-full object-cover"
+                                        onError={(e) => { e.target.style.display = 'none'; }}
+                                      />
+                                    ) : (
+                                      <Cake className="w-5 h-5 text-[#C58A19]" />
+                                    )}
+                                  </div>
+                                  <div>
+                                    <div className="font-serif font-bold text-[#4A2116] text-xs">
+                                      {item.occasion || 'Custom Celebration'}
+                                    </div>
+                                    <div className="text-[11px] text-[#8A6753]">
+                                      {item.theme_design || 'Signature Style'}
+                                    </div>
+                                    {(toppingsArray.length > 0 || toppersArray.length > 0) && (
+                                      <span className="inline-block text-[10px] text-[#C58A19] font-medium mt-0.5">
+                                        +{toppingsArray.length + toppersArray.length} accents and toppers
+                                      </span>
+                                    )}
+                                  </div>
+                                </div>
+                              </td>
+
+                              <td className="py-3.5 px-4">
+                                <div className="font-medium text-[#4A2116]">
+                                  {item.shape || 'Round'} &bull; {item.tiers || '1 Tier'}
+                                </div>
+                                <div className="text-[11px] text-[#8A6753]">
+                                  {item.size || 'Standard'} &bull; {item.servings || '12-16 Servings'}
+                                </div>
+                              </td>
+
+                              <td className="py-3.5 px-4 max-w-[200px]">
+                                <div className="font-medium text-[#4A2116] truncate">
+                                  <span className="text-[#8A6753]">Sponge:</span> {item.sponge_flavor || 'Vanilla'}
+                                </div>
+                                <div className="text-[11px] text-[#7A5846] truncate">
+                                  <span className="text-[#8A6753]">Filling:</span> {item.filling_flavor || 'Classic Buttercream'}
+                                </div>
+                              </td>
+
+                              <td className="py-3.5 px-4 max-w-[180px]">
+                                {item.cake_message ? (
+                                  <div className="bg-[#FFF9F0] border border-[#EBDCC8] rounded-lg px-2.5 py-1 text-[11px] font-serif italic text-[#4A2116] truncate" title={item.cake_message}>
+                                    "{item.cake_message}"
+                                  </div>
+                                ) : (
+                                  <span className="text-[11px] text-[#9C7A65] italic">No plaque message</span>
+                                )}
+                              </td>
+
+                              <td className="py-3.5 px-4 text-right">
+                                <div className="font-bold text-[#4A2116] text-xs font-poppins">
+                                  AED {parseFloat(item.total_price || 0).toLocaleString()}
+                                </div>
+                              </td>
+
+                              <td className="py-3.5 px-4 text-center">
+                                <select
+                                  value={item.status || 'new'}
+                                  onChange={(e) => handleUpdateCustomizationStatus(item.id, e.target.value)}
+                                  className={`text-[11px] font-semibold rounded-lg px-2 py-1 border outline-none cursor-pointer ${
+                                    item.status === 'completed'
+                                      ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                                      : item.status === 'in_kitchen'
+                                      ? 'bg-blue-50 text-blue-700 border-blue-200'
+                                      : item.status === 'reviewed'
+                                      ? 'bg-purple-50 text-purple-700 border-purple-200'
+                                      : item.status === 'cancelled'
+                                      ? 'bg-red-50 text-red-700 border-red-200'
+                                      : 'bg-amber-50 text-amber-700 border-amber-200'
+                                  }`}
+                                >
+                                  <option value="new">New Submission</option>
+                                  <option value="reviewed">Reviewed</option>
+                                  <option value="in_kitchen">In Kitchen</option>
+                                  <option value="completed">Completed</option>
+                                  <option value="cancelled">Cancelled</option>
+                                </select>
+                              </td>
+
+                              <td className="py-3.5 px-4 text-right">
+                                <div className="flex items-center justify-end gap-1">
+                                  <button
+                                    type="button"
+                                    onClick={() => setSelectedCustomization(item)}
+                                    className="p-1.5 text-[#8A6753] hover:text-[#4A2116] hover:bg-[#FAF5ED] rounded-lg transition-colors cursor-pointer"
+                                    title="View Full Spec Sheet"
+                                  >
+                                    <Eye className="w-4 h-4" />
+                                  </button>
+                                  <button
+                                    type="button"
+                                    onClick={() => handleDeleteCustomization(item.id)}
+                                    className="p-1.5 text-[#8A6753] hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
+                                    title="Delete Specification"
+                                  >
+                                    <Trash2 className="w-4 h-4" />
+                                  </button>
+                                </div>
+                              </td>
+                            </tr>
+                          );
+                        })
                       )}
                     </tbody>
                   </table>
@@ -1989,19 +2642,9 @@ export default function AdminDashboard({ onBackToStore }) {
                               </span>
                             </td>
 
-                            {/* Actions (View, Edit & Delete) */}
+                            {/* Actions (Edit and Delete) */}
                             <td className="py-3 px-4 text-right whitespace-nowrap">
                               <div className="inline-flex items-center gap-1.5">
-                                <a
-                                  href={`#product-${prod.slug || slugify(prod.title) || prod.id}`}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="inline-flex items-center gap-1 px-2 py-1.5 rounded-lg text-xs font-semibold text-[#4A2116] hover:text-[#C58A19] bg-[#FAF5ED] hover:bg-white border border-[#EBDCC8] transition-colors cursor-pointer shadow-2xs"
-                                  title="View on Website"
-                                >
-                                  <ExternalLink className="w-3.5 h-3.5 text-[#C58A19]" />
-                                  <span>View</span>
-                                </a>
                                 <button
                                   type="button"
                                   onClick={() => handleOpenEdit(prod)}
@@ -2101,8 +2744,23 @@ export default function AdminDashboard({ onBackToStore }) {
               <X className="w-5 h-5" />
             </button>
 
-            <div className="text-xs uppercase font-bold text-[#C58A19] tracking-wider">Order Specification</div>
-            <h3 className="font-serif font-bold text-xl text-[#4A2116] mt-1">{selectedOrder.order_number}</h3>
+            <div className="flex items-center justify-between gap-2 pr-6">
+              <div>
+                <div className="text-xs uppercase font-bold text-[#C58A19] tracking-wider">Order Specification</div>
+                <h3 className="font-serif font-bold text-xl text-[#4A2116] mt-0.5">{selectedOrder.order_number}</h3>
+              </div>
+              {isCustomOrder(selectedOrder) ? (
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#FFF4DE] text-[#C58A19] border border-[#E5C583]">
+                  <Wand2 className="w-3.5 h-3.5 text-[#C58A19]" />
+                  <span>Customization Order</span>
+                </span>
+              ) : (
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#FAF5ED] text-[#7A5846] border border-[#E2D2BD]">
+                  <Package className="w-3.5 h-3.5 text-[#7A5846]" />
+                  <span>Normal Order</span>
+                </span>
+              )}
+            </div>
 
             <div className="mt-4 space-y-3 text-xs text-[#5C3A28]">
               <div className="p-3 rounded-xl bg-[#FAF5ED] border border-[#EBDCC8]">
@@ -2606,6 +3264,284 @@ export default function AdminDashboard({ onBackToStore }) {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* ==================================================== */}
+      {/* MODAL 4: VIEW FULL BESPOKE CUSTOMIZATION SPECIFICATION */}
+      {/* ==================================================== */}
+      {selectedCustomization && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs">
+          <div className="bg-white border border-[#EBDCC8] rounded-2xl w-full max-w-3xl max-h-[90vh] overflow-y-auto shadow-2xl flex flex-col">
+            
+            {/* Modal Header */}
+            <div className="p-5 border-b border-[#EBDCC8] flex items-center justify-between sticky top-0 bg-white/95 backdrop-blur-md z-10">
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="font-mono text-xs font-bold text-[#C58A19] bg-[#FAF5ED] px-2 py-0.5 rounded-md border border-[#EBDCC8]">
+                    {selectedCustomization.customization_code || `CUST-#${selectedCustomization.id}`}
+                  </span>
+                  <span className={`text-[11px] font-semibold px-2.5 py-0.5 rounded-full capitalize ${
+                    selectedCustomization.status === 'completed'
+                      ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                      : selectedCustomization.status === 'in_kitchen'
+                      ? 'bg-blue-50 text-blue-700 border border-blue-200'
+                      : selectedCustomization.status === 'reviewed'
+                      ? 'bg-purple-50 text-purple-700 border border-purple-200'
+                      : selectedCustomization.status === 'cancelled'
+                      ? 'bg-red-50 text-red-700 border border-red-200'
+                      : 'bg-amber-50 text-amber-700 border border-amber-200'
+                  }`}>
+                    {selectedCustomization.status?.replace('_', ' ') || 'New'}
+                  </span>
+                </div>
+                <h3 className="font-serif text-lg sm:text-xl font-bold text-[#4A2116] mt-1">
+                  {selectedCustomization.occasion} Cake Specifications
+                </h3>
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => window.print()}
+                  className="p-2 text-[#7A5846] hover:text-[#4A2116] hover:bg-[#FAF5ED] rounded-xl transition-colors cursor-pointer border border-[#E2D2BD]"
+                  title="Print Kitchen Ticket"
+                >
+                  <Printer className="w-4 h-4" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setSelectedCustomization(null)}
+                  className="p-2 text-[#8A6753] hover:text-[#4A2116] hover:bg-[#FAF5ED] rounded-xl transition-colors cursor-pointer"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+            </div>
+
+            {/* Modal Body */}
+            <div className="p-5 sm:p-6 space-y-5">
+              
+              {/* Top Summary Banner: Image + Key Architecture */}
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-5 bg-[#FAF5ED] border border-[#EBDCC8] rounded-2xl p-4 sm:p-5">
+                <div className="md:col-span-4 rounded-xl overflow-hidden bg-white border border-[#EBDCC8] h-48 md:h-full min-h-[160px] flex items-center justify-center">
+                  {selectedCustomization.preview_image ? (
+                    <img
+                      src={formatImageUrl(selectedCustomization.preview_image)}
+                      alt={selectedCustomization.theme_design || 'Custom Cake Preview'}
+                      className="w-full h-full object-cover"
+                      onError={(e) => { e.target.style.display = 'none'; }}
+                    />
+                  ) : (
+                    <Cake className="w-12 h-12 text-[#C58A19]" />
+                  )}
+                </div>
+
+                <div className="md:col-span-8 flex flex-col justify-between space-y-3">
+                  <div>
+                    <div className="text-xs uppercase font-bold text-[#C58A19] tracking-wider">Design Theme</div>
+                    <div className="font-serif text-xl font-bold text-[#4A2116]">{selectedCustomization.theme_design || 'Signature Bespoke Design'}</div>
+                    <div className="text-xs text-[#7A5846] mt-0.5">Occasion: <span className="font-semibold text-[#4A2116]">{selectedCustomization.occasion}</span></div>
+                  </div>
+
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2 border-t border-[#EBDCC8]/60 text-xs">
+                    <div className="bg-white/80 p-2 rounded-lg border border-[#EBDCC8]">
+                      <div className="text-[10px] text-[#8A6753]">Shape</div>
+                      <div className="font-semibold text-[#4A2116]">{selectedCustomization.shape || 'Round'}</div>
+                    </div>
+                    <div className="bg-white/80 p-2 rounded-lg border border-[#EBDCC8]">
+                      <div className="text-[10px] text-[#8A6753]">Tiers</div>
+                      <div className="font-semibold text-[#4A2116]">{selectedCustomization.tiers || '1 Tier'}</div>
+                    </div>
+                    <div className="bg-white/80 p-2 rounded-lg border border-[#EBDCC8]">
+                      <div className="text-[10px] text-[#8A6753]">Size</div>
+                      <div className="font-semibold text-[#4A2116]">{selectedCustomization.size || 'Standard'}</div>
+                    </div>
+                    <div className="bg-white/80 p-2 rounded-lg border border-[#EBDCC8]">
+                      <div className="text-[10px] text-[#8A6753]">Servings</div>
+                      <div className="font-semibold text-[#4A2116]">{selectedCustomization.servings || '12-16'}</div>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between pt-2">
+                    <span className="text-xs text-[#8A6753]">Estimated Price:</span>
+                    <span className="font-serif text-xl font-bold text-[#4A2116] font-poppins">
+                      AED {parseFloat(selectedCustomization.total_price || 0).toLocaleString()}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Flavor Profile */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="bg-white border border-[#EBDCC8] rounded-xl p-4">
+                  <div className="text-xs uppercase font-bold text-[#8A6753] tracking-wider mb-1">Sponge Flavor</div>
+                  <div className="font-semibold text-[#4A2116] text-sm">{selectedCustomization.sponge_flavor || 'Not selected'}</div>
+                </div>
+                <div className="bg-white border border-[#EBDCC8] rounded-xl p-4">
+                  <div className="text-xs uppercase font-bold text-[#8A6753] tracking-wider mb-1">Filling and Cream</div>
+                  <div className="font-semibold text-[#4A2116] text-sm">{selectedCustomization.filling_flavor || 'Not selected'}</div>
+                </div>
+              </div>
+
+              {/* Plaque Message Inscription */}
+              <div className="bg-[#FFF9F0] border-2 border-dashed border-[#C58A19]/40 rounded-xl p-4">
+                <div className="text-xs uppercase font-bold text-[#C58A19] tracking-wider mb-1">
+                  Hand-Piped Plaque Inscription
+                </div>
+                {selectedCustomization.cake_message ? (
+                  <p className="font-serif italic text-base sm:text-lg text-[#4A2116]">
+                    "{selectedCustomization.cake_message}"
+                  </p>
+                ) : (
+                  <p className="text-xs text-[#8A6753] italic">No custom message requested on plaque.</p>
+                )}
+              </div>
+
+              {/* Toppings & Birthday Accents */}
+              <div className="space-y-3">
+                <div>
+                  <div className="text-xs uppercase font-bold text-[#8A6753] tracking-wider mb-1.5">Artisanal Toppings and Accents</div>
+                  {(() => {
+                    const toppings = Array.isArray(selectedCustomization.toppings)
+                      ? selectedCustomization.toppings
+                      : (typeof selectedCustomization.toppings === 'string' && selectedCustomization.toppings ? (() => { try { return JSON.parse(selectedCustomization.toppings); } catch(e) { return [selectedCustomization.toppings]; } })() : []);
+                    return toppings.length > 0 ? (
+                      <div className="flex flex-wrap gap-1.5">
+                        {toppings.map((t, idx) => (
+                          <span key={idx} className="inline-flex items-center gap-1 px-3 py-1 bg-[#FAF5ED] border border-[#EBDCC8] rounded-full text-xs text-[#4A2116] font-medium">
+                            <Sparkles className="w-3 h-3 text-[#C58A19]" />
+                            {typeof t === 'string' ? t : t.name || JSON.stringify(t)}
+                          </span>
+                        ))}
+                      </div>
+                    ) : (
+                      <p className="text-xs text-[#8A6753]">None selected</p>
+                    );
+                  })()}
+                </div>
+
+                <div>
+                  <div className="text-xs uppercase font-bold text-[#8A6753] tracking-wider mb-1.5">Toppers and Keepsakes</div>
+                  {(() => {
+                    const toppers = Array.isArray(selectedCustomization.birthday_toppers)
+                      ? selectedCustomization.birthday_toppers
+                      : (typeof selectedCustomization.birthday_toppers === 'string' && selectedCustomization.birthday_toppers ? (() => { try { return JSON.parse(selectedCustomization.birthday_toppers); } catch(e) { return [selectedCustomization.birthday_toppers]; } })() : []);
+                    return toppers.length > 0 ? (
+                      <div className="flex flex-wrap gap-1.5">
+                        {toppers.map((t, idx) => (
+                          <span key={idx} className="inline-flex items-center gap-1 px-3 py-1 bg-[#FAF5ED] border border-[#EBDCC8] rounded-full text-xs text-[#4A2116] font-medium">
+                            <Cake className="w-3 h-3 text-[#C58A19]" />
+                            {typeof t === 'string' ? t : t.name || JSON.stringify(t)}
+                          </span>
+                        ))}
+                      </div>
+                    ) : (
+                      <p className="text-xs text-[#8A6753]">None selected</p>
+                    );
+                  })()}
+                </div>
+              </div>
+
+              {/* Client & Delivery Info */}
+              {(selectedCustomization.customer_name || selectedCustomization.delivery_address || selectedCustomization.delivery_date) && (
+                <div className="bg-white border border-[#EBDCC8] rounded-xl p-4 space-y-2">
+                  <div className="text-xs uppercase font-bold text-[#8A6753] tracking-wider">Client and Logistics Details</div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                    <div>
+                      <div className="text-[#8A6753]">Customer:</div>
+                      <div className="font-semibold text-[#4A2116]">{selectedCustomization.customer_name || 'N/A'}</div>
+                      <div className="text-[#8A6753]">{selectedCustomization.customer_phone || ''}</div>
+                      <div className="text-[#8A6753]">{selectedCustomization.customer_email || ''}</div>
+                    </div>
+                    <div>
+                      <div className="text-[#8A6753]">Delivery Date and Slot:</div>
+                      <div className="font-semibold text-[#4A2116]">{selectedCustomization.delivery_date || 'Standard Schedule'} {selectedCustomization.delivery_time_slot ? `(${selectedCustomization.delivery_time_slot})` : ''}</div>
+                      <div className="text-[#8A6753] mt-1">Delivery Address:</div>
+                      <div className="text-[#4A2116]">{selectedCustomization.delivery_address || 'Dubai, UAE'}</div>
+                    </div>
+                  </div>
+                  {selectedCustomization.notes && (
+                    <div className="pt-2 border-t border-[#EBDCC8] text-xs">
+                      <span className="text-[#8A6753]">Notes: </span>
+                      <span className="text-[#4A2116]">{selectedCustomization.notes}</span>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Status Transition Quick Action Buttons */}
+              <div className="pt-3 border-t border-[#EBDCC8] flex flex-wrap items-center justify-between gap-3">
+                <div className="text-xs font-semibold text-[#7A5846]">Change Kitchen Status:</div>
+                <div className="flex flex-wrap items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => handleUpdateCustomizationStatus(selectedCustomization.id, 'reviewed')}
+                    className={`px-3 py-1.5 rounded-xl text-xs font-semibold cursor-pointer transition-colors ${
+                      selectedCustomization.status === 'reviewed'
+                        ? 'bg-purple-600 text-white'
+                        : 'bg-purple-50 text-purple-700 hover:bg-purple-100 border border-purple-200'
+                    }`}
+                  >
+                    Reviewed
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleUpdateCustomizationStatus(selectedCustomization.id, 'in_kitchen')}
+                    className={`px-3 py-1.5 rounded-xl text-xs font-semibold cursor-pointer transition-colors ${
+                      selectedCustomization.status === 'in_kitchen'
+                        ? 'bg-blue-600 text-white'
+                        : 'bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200'
+                    }`}
+                  >
+                    In Kitchen
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleUpdateCustomizationStatus(selectedCustomization.id, 'completed')}
+                    className={`px-3 py-1.5 rounded-xl text-xs font-semibold cursor-pointer transition-colors ${
+                      selectedCustomization.status === 'completed'
+                        ? 'bg-emerald-600 text-white'
+                        : 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-200'
+                    }`}
+                  >
+                    Completed
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleUpdateCustomizationStatus(selectedCustomization.id, 'cancelled')}
+                    className={`px-3 py-1.5 rounded-xl text-xs font-semibold cursor-pointer transition-colors ${
+                      selectedCustomization.status === 'cancelled'
+                        ? 'bg-red-600 text-white'
+                        : 'bg-red-50 text-red-700 hover:bg-red-100 border border-red-200'
+                    }`}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+
+            </div>
+
+            {/* Modal Footer */}
+            <div className="p-4 bg-[#FAF5ED] border-t border-[#EBDCC8] flex items-center justify-between">
+              <button
+                type="button"
+                onClick={() => handleDeleteCustomization(selectedCustomization.id)}
+                className="inline-flex items-center gap-1.5 text-xs text-red-600 hover:text-red-800 font-medium cursor-pointer"
+              >
+                <Trash2 className="w-3.5 h-3.5" />
+                <span>Delete Specification</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setSelectedCustomization(null)}
+                className="px-4 py-2 bg-[#4A2116] hover:bg-[#C58A19] text-white text-xs font-semibold rounded-xl transition-colors cursor-pointer"
+              >
+                Close Spec Sheet
+              </button>
+            </div>
+
           </div>
         </div>
       )}

@@ -1,5 +1,6 @@
 import React from 'react';
-import { Phone } from 'lucide-react';
+import { Phone, Package } from 'lucide-react';
+import { navigateTo } from '../utils/navigation';
 
 export default function TopHeader({ currentLang, onLanguageChange }) {
   const isAr = currentLang === 'ar';
@@ -8,16 +9,31 @@ export default function TopHeader({ currentLang, onLanguageChange }) {
     <div className="bg-[#F8F1E6] border-b border-[#F5EBDD] text-[#4A2116] h-[34px] px-3 sm:px-8 lg:px-12 text-xs flex items-center transition-colors w-full">
       <div className="max-w-7xl mx-auto w-full flex items-center justify-between min-w-0">
         
-        {/* Contact Phone (Gold phone icon #C58A19, Text #4A2116) */}
-        <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
-          <Phone className="w-3.5 h-3.5 text-[#C58A19] shrink-0" />
-          <a 
-            href="tel:+971506063631" 
-            dir="ltr"
-            className="font-medium text-[#4A2116] hover:text-[#C58A19] transition-colors tracking-wide text-[11px] sm:text-xs truncate"
+        {/* Contact Phone & My Orders */}
+        <div className="flex items-center gap-3 sm:gap-5 min-w-0">
+          <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
+            <Phone className="w-3.5 h-3.5 text-[#C58A19] shrink-0" />
+            <a 
+              href="tel:+971506063631" 
+              dir="ltr"
+              className="font-medium text-[#4A2116] hover:text-[#C58A19] transition-colors tracking-wide text-[11px] sm:text-xs truncate"
+            >
+              +971 506063631
+            </a>
+          </div>
+
+          <span className="text-[#C58A19]/40 hidden sm:inline select-none">|</span>
+
+          {/* Quick Link to My Orders */}
+          <button
+            type="button"
+            onClick={() => navigateTo('/my-orders')}
+            className="flex items-center gap-1.5 text-[#4A2116] hover:text-[#C58A19] transition-colors text-[11px] sm:text-xs font-medium cursor-pointer"
           >
-            +971 506063631
-          </a>
+            <Package className="w-3.5 h-3.5 text-[#C58A19] shrink-0" />
+            <span className="hidden xs:inline">{isAr ? 'طلباتي ومتابعة التوصيل' : 'My Orders and Tracking'}</span>
+            <span className="xs:hidden">{isAr ? 'طلباتي' : 'Orders'}</span>
+          </button>
         </div>
 
         {/* Right Section: Language Switcher */}

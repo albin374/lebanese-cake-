@@ -2,6 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Clean Ampersand definition to prevent cursive swash glyph from Playfair Display */
+@font-face {
+  font-family: 'CleanAmpersand';
+  src: local('Poppins-Regular'), local('Poppins'), local('Arial'), local('sans-serif');
+  unicode-range: U+0026; /* & character */
+}
+
 @layer base {
   html, body {
     width: 100%;

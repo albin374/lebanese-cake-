@@ -115,6 +115,7 @@ exports.createProduct = async (req, res) => {
       servings_ar,
       lead_time,
       weight,
+      tiers,
       image_url,
       secondary_image_url,
       description,
@@ -145,7 +146,8 @@ exports.createProduct = async (req, res) => {
       servings_ar: servings_ar || null,
       lead_time: lead_time || null,
       weight: weight || '',
-      image_url: image_url || '/categorycake imges/Wedding Cake.png',
+      tiers: tiers || '',
+      image_url: image_url || '',
       secondary_image_url: secondary_image_url || null,
       description: description || '',
       description_ar: description_ar || null,
@@ -161,9 +163,9 @@ exports.createProduct = async (req, res) => {
         const [result] = await pool.query(
           `INSERT INTO products (
             title, title_ar, slug, category_slug, price, original_price, currency,
-            flavor, flavor_ar, servings, servings_ar, lead_time, weight, image_url, secondary_image_url, description, description_ar,
+            flavor, flavor_ar, servings, servings_ar, lead_time, weight, tiers, image_url, secondary_image_url, description, description_ar,
             is_bestseller, is_active
-          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
           [
             newProduct.title,
             newProduct.title_ar,
@@ -178,6 +180,7 @@ exports.createProduct = async (req, res) => {
             newProduct.servings_ar,
             newProduct.lead_time,
             newProduct.weight,
+            newProduct.tiers,
             newProduct.image_url,
             newProduct.secondary_image_url,
             newProduct.description,
@@ -218,6 +221,8 @@ exports.updateProduct = async (req, res) => {
       flavor_ar,
       servings,
       servings_ar,
+      weight,
+      tiers,
       image_url,
       secondary_image_url,
       description,
@@ -242,6 +247,8 @@ exports.updateProduct = async (req, res) => {
             flavor_ar = COALESCE(?, flavor_ar),
             servings = COALESCE(?, servings),
             servings_ar = COALESCE(?, servings_ar),
+            weight = COALESCE(?, weight),
+            tiers = COALESCE(?, tiers),
             image_url = COALESCE(?, image_url),
             secondary_image_url = COALESCE(?, secondary_image_url),
             description = COALESCE(?, description),
@@ -259,6 +266,8 @@ exports.updateProduct = async (req, res) => {
             flavor_ar,
             servings,
             servings_ar,
+            weight,
+            tiers,
             image_url,
             secondary_image_url,
             description,
@@ -284,6 +293,8 @@ exports.updateProduct = async (req, res) => {
       if (flavor_ar !== undefined) memProd.flavor_ar = flavor_ar;
       if (servings !== undefined) memProd.servings = servings;
       if (servings_ar !== undefined) memProd.servings_ar = servings_ar;
+      if (weight !== undefined) memProd.weight = weight;
+      if (tiers !== undefined) memProd.tiers = tiers;
       if (image_url !== undefined) memProd.image_url = image_url;
       if (secondary_image_url !== undefined) memProd.secondary_image_url = secondary_image_url;
       if (description !== undefined) memProd.description = description;

@@ -14,6 +14,16 @@ app.use(cors({
   origin: ['http://localhost:5173', 'http://localhost:5174', 'http://127.0.0.1:5173', 'http://127.0.0.1:5174'],
   credentials: true
 }));
+
+// Stripe Webhook Endpoint: Requires raw body buffer for HMAC-SHA256 signature verification
+// Must be registered BEFORE express.json() middleware
+const ordersController = require('./controllers/orders.controller');
+app.post(
+  '/api/orders/webhook',
+  express.raw({ type: 'application/json' }),
+  ordersController.handleStripeWebhook
+);
+
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
@@ -28,6 +38,7 @@ const dashboardRoutes = require('./routes/dashboard.routes');
 const inquiriesRoutes = require('./routes/inquiries.routes');
 const categoriesRoutes = require('./routes/categories.routes');
 const uploadRoutes = require('./routes/upload.routes');
+const customizationsRoutes = require('./routes/customizations.routes');
 
 app.use('/api/auth', authRoutes);
 app.use('/api/orders', ordersRoutes);
@@ -36,6 +47,7 @@ app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/inquiries', inquiriesRoutes);
 app.use('/api/categories', categoriesRoutes);
 app.use('/api/upload', uploadRoutes);
+app.use('/api/customizations', customizationsRoutes);
 
 // Health & Database status endpoint
 app.get('/api/health', (req, res) => {

@@ -2,9 +2,11 @@ import React from 'react';
 import { 
   MapPin, 
   Mail, 
-  Phone
+  Phone,
+  Package
 } from 'lucide-react';
 import { translations } from '../translations';
+import { navigateTo } from '../utils/navigation';
 
 export default function FooterSection({ 
   currentLang = 'en', 
@@ -151,6 +153,19 @@ export default function FooterSection({
                 </div>
                 <span className="text-xs sm:text-[13px] font-medium text-[#4A2116] group-hover:text-[#C58A19] transition-colors">
                   {t.footerConsultation}
+                </span>
+              </button>
+
+              {/* Service 3: Live Order Tracking */}
+              <button
+                onClick={() => navigateTo('/my-orders')}
+                className="flex items-center gap-3.5 hover:text-[#C58A19] transition-colors group cursor-pointer text-left rtl:text-right"
+              >
+                <div className="w-10 h-10 rounded-lg bg-[#FFF9F0] border border-[#E5C583]/60 flex items-center justify-center shrink-0 text-[#C58A19] group-hover:scale-105 transition-transform">
+                  <Package className="w-5 h-5 stroke-[#C58A19]" />
+                </div>
+                <span className="text-xs sm:text-[13px] font-medium text-[#4A2116] group-hover:text-[#C58A19] transition-colors">
+                  {isAr ? 'تتبع طلباتي المباشرة' : 'Track My Orders and Delivery'}
                 </span>
               </button>
             </div>

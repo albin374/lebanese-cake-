@@ -33,7 +33,7 @@ export default {
       fontFamily: {
         sans: ['Poppins', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
         poppins: ['Poppins', 'sans-serif'],
-        serif: ['"Playfair Display"', 'Georgia', 'serif'],
+        serif: ['CleanAmpersand', '"Playfair Display"', 'Georgia', 'serif'],
         arabic: ['Cairo', 'sans-serif'],
       }
     },

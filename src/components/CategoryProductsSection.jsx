@@ -1,5 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { ShoppingBag, Sparkles, X, Clock, Users, Check, ArrowRight, Eye, Image as ImageIcon } from 'lucide-react';
+import { ShoppingBag, Sparkles, X, Clock, Users, Scale, Layers, Check, ArrowRight, Eye, Image as ImageIcon } from 'lucide-react';
+import { 
+  translateTitleToArabic, 
+  translateFlavorToArabic, 
+  translateServingsToArabic, 
+  translateDescriptionToArabic,
+  translateTiersToArabic,
+  translateWeightToArabic
+} from '../utils/arabicTranslator';
+import { navigateTo } from '../utils/navigation';
 
 const API_BASE = 'http://localhost:5000/api';
 
@@ -31,9 +40,9 @@ const WEDDING_SUB_TABS = [
 ];
 
 const CORPORATE_SUB_TABS = [
-  { id: 'corporate-cakes', nameEn: 'Corporate cakes', nameAr: 'كيك الشركات', hash: '#corporate-cakes' },
-  { id: 'corporate-cookies', nameEn: 'Corporate Cookies', nameAr: 'كوكيز الشركات', hash: '#corporate-cookies' },
-  { id: 'cupcakes-with-logo', nameEn: 'Cupcakes with logo', nameAr: 'كب كيك مع شعار الشركة', hash: '#cupcakes-with-logo' }
+  { id: 'corporate-cakes', nameEn: 'Corporate cakes', nameAr: 'كيك الشركات', path: '/corporate-cakes', hash: '/corporate-cakes' },
+  { id: 'corporate-cookies', nameEn: 'Corporate Cookies', nameAr: 'كوكيز الشركات', path: '/corporate-cookies', hash: '/corporate-cookies' },
+  { id: 'cupcakes-with-logo', nameEn: 'Cupcakes with logo', nameAr: 'كب كيك مع شعار الشركة', path: '/cupcakes-with-logo', hash: '/cupcakes-with-logo' }
 ];
 
 export default function CategoryProductsSection({
@@ -52,18 +61,13 @@ export default function CategoryProductsSection({
   const targetSlugs = (Array.isArray(categorySlug) ? categorySlug : [categorySlug]).map(s => (s || '').toLowerCase().trim());
 
   // Determine active subcategory pills list
-  const isWeddingCategory = targetSlugs.some(s => 
-    ['wedding', 'wedding-cakes', 'classic-wedding-cakes', 'novelty-wedding-cakes', 'bride-to-be-cakes', 'engagement-cakes', 'grooms-cakes'].includes(s)
-  );
   const isCorporateCategory = targetSlugs.some(s => 
     ['corporate-cakes', 'corporate', 'corporate-cookies', 'cupcakes-with-logo'].includes(s)
   );
 
-  const subcategoryPills = isWeddingCategory 
-    ? WEDDING_SUB_TABS 
-    : isCorporateCategory 
-      ? CORPORATE_SUB_TABS 
-      : [];
+  const subcategoryPills = isCorporateCategory 
+    ? CORPORATE_SUB_TABS 
+    : [];
 
   const matchesCategory = (p) => {
     if (!p || !p.category_slug) return false;
@@ -165,9 +169,9 @@ export default function CategoryProductsSection({
   const handleAddProductToCart = (prod, e) => {
     if (e) e.stopPropagation();
     if (onAddToCart) {
-      const activeTitle = isAr ? (prod.title_ar || prod.title) : prod.title;
-      const activeFlavor = isAr ? (prod.flavor_ar || prod.flavor) : prod.flavor;
-      const activeServings = isAr ? (prod.servings_ar || prod.servings) : prod.servings;
+      const activeTitle = isAr ? (prod.title_ar || translateTitleToArabic(prod.title)) : prod.title;
+      const activeFlavor = isAr ? (prod.flavor_ar || translateFlavorToArabic(prod.flavor)) : prod.flavor;
+      const activeServings = isAr ? (prod.servings_ar || translateServingsToArabic(prod.servings)) : prod.servings;
 
       onAddToCart({
         id: prod.id,
@@ -188,7 +192,7 @@ export default function CategoryProductsSection({
     if (onCustomizeClick) {
       onCustomizeClick(prod);
     } else {
-      window.location.hash = '#customize';
+      navigateTo('/customize');
     }
   };
 
@@ -207,7 +211,7 @@ export default function CategoryProductsSection({
                     key={sub.id}
                     type="button"
                     onClick={() => {
-                      window.location.hash = sub.hash;
+                      navigateTo(sub.path || `/${sub.id}`);
                     }}
                     className={`px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-medium transition-all duration-200 cursor-pointer ${
                       isActive
@@ -228,7 +232,7 @@ export default function CategoryProductsSection({
           <div className="py-20 text-center flex flex-col items-center justify-center">
             <div className="w-10 h-10 border-3 border-[#C58A19] border-t-transparent rounded-full animate-spin mb-3" />
             <p className="text-xs text-[#8C6D62] font-medium">
-              {isAr ? 'جاري تحميل التشكيلة الفاخرة...' : 'Loading artisanal creations...'}
+              {isAr ? 'جاري تحميل التشكيلة الفاخرة...' : 'Loading Lebanese creations...'}
             </p>
           </div>
         ) : categoryProducts.length === 0 ? (
@@ -251,7 +255,7 @@ export default function CategoryProductsSection({
             <div className="flex flex-wrap items-center justify-center gap-3 w-full">
               <button
                 type="button"
-                onClick={() => onCustomizeClick ? onCustomizeClick(null) : (window.location.hash = '#customize')}
+                onClick={() => onCustomizeClick ? onCustomizeClick(null) : navigateTo('/customize')}
                 className="bg-[#4A2116] hover:bg-[#C58A19] text-white font-semibold text-xs sm:text-sm px-6 py-3 rounded-full transition-colors flex items-center gap-2 shadow-sm cursor-pointer"
               >
                 <Sparkles className="w-4 h-4 text-[#E6C783]" />
@@ -266,19 +270,18 @@ export default function CategoryProductsSection({
               const priceNum = Number(cake.price) || 0;
               const hasTwoPhotos = Boolean(cake.secondary_image_url);
 
-              const activeTitle = isAr ? (cake.title_ar || cake.title) : cake.title;
-              const activeFlavor = isAr ? (cake.flavor_ar || cake.flavor) : cake.flavor;
-              const activeServings = isAr ? (cake.servings_ar || cake.servings) : cake.servings;
-              const activeDescription = isAr ? (cake.description_ar || cake.description) : cake.description;
+              const activeTitle = isAr ? (cake.title_ar || translateTitleToArabic(cake.title)) : cake.title;
+              const activeFlavor = isAr ? (cake.flavor_ar || translateFlavorToArabic(cake.flavor)) : cake.flavor;
+              const activeServings = isAr ? (cake.servings_ar || translateServingsToArabic(cake.servings)) : cake.servings;
+              const activeWeight = isAr ? (cake.weight_ar || translateWeightToArabic(cake.weight)) : cake.weight;
+              const activeTiers = isAr ? (cake.tiers_ar || translateTiersToArabic(cake.tiers)) : cake.tiers;
+              const activeDescription = isAr ? (cake.description_ar || translateDescriptionToArabic(cake.description)) : cake.description;
               const productSlug = cake.slug || slugify(cake.title) || cake.id;
 
               return (
                 <div
                   key={cake.id}
-                  onClick={() => {
-                    window.location.hash = `#product-${productSlug}`;
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                  }}
+                  onClick={() => navigateTo(`/product/${productSlug}`)}
                   className="group bg-white rounded-[26px] overflow-hidden border border-[#F5EBDD] shadow-xs hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col cursor-pointer"
                 >
                   {/* Image Presentation Container */}
@@ -312,13 +315,27 @@ export default function CategoryProductsSection({
                   {/* Card Content Details */}
                   <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between">
                     <div>
-                      {/* Servings Badge */}
-                      {activeServings && (
+                      {/* Specifications Badges: Servings, Weight & Tiers */}
+                      {(activeServings || activeWeight || activeTiers) && (
                         <div className="flex items-center gap-1.5 flex-wrap mb-2">
-                          <span className="text-[10px] font-semibold bg-[#FAF5ED] text-[#7A5846] px-2 py-0.5 rounded-md border border-[#EBDCC8] flex items-center gap-1">
-                            <Users className="w-3 h-3 text-[#C58A19]" />
-                            <span>{activeServings}</span>
-                          </span>
+                          {activeServings && (
+                            <span className="text-[10px] font-semibold bg-[#FAF5ED] text-[#7A5846] px-2 py-0.5 rounded-md border border-[#EBDCC8] flex items-center gap-1">
+                              <Users className="w-3 h-3 text-[#C58A19]" />
+                              <span>{activeServings}</span>
+                            </span>
+                          )}
+                          {activeWeight && (
+                            <span className="text-[10px] font-semibold bg-[#FAF3E8] text-[#C58A19] px-2 py-0.5 rounded-md border border-[#E5C583]/60 flex items-center gap-1" title="Weight">
+                              <Scale className="w-3 h-3 text-[#C58A19]" />
+                              <span>{activeWeight}</span>
+                            </span>
+                          )}
+                          {activeTiers && (
+                            <span className="text-[10px] font-semibold bg-[#FAF5ED] text-[#7A5846] px-2 py-0.5 rounded-md border border-[#EBDCC8] flex items-center gap-1" title="Tiers">
+                              <Layers className="w-3 h-3 text-[#C58A19]" />
+                              <span>{activeTiers}</span>
+                            </span>
+                          )}
                         </div>
                       )}
 

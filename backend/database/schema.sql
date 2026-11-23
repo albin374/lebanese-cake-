@@ -52,6 +52,7 @@ CREATE TABLE IF NOT EXISTS `products` (
   `servings_ar` VARCHAR(100) DEFAULT NULL,
   `lead_time` VARCHAR(80) DEFAULT '24 hours notice',
   `weight` VARCHAR(50),
+  `tiers` VARCHAR(50) DEFAULT NULL,
   `image_url` TEXT NOT NULL,
   `secondary_image_url` TEXT DEFAULT NULL,
   `description` TEXT,
@@ -84,6 +85,8 @@ CREATE TABLE IF NOT EXISTS `orders` (
   `status` ENUM('pending', 'in_production', 'ready', 'delivered', 'cancelled') DEFAULT 'pending',
   `payment_status` ENUM('pending', 'paid', 'cash_on_delivery') DEFAULT 'cash_on_delivery',
   `payment_method` VARCHAR(50) DEFAULT 'Cash On Delivery',
+  `stripe_session_id` VARCHAR(255) DEFAULT NULL,
+  `stripe_payment_intent_id` VARCHAR(255) DEFAULT NULL,
   `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -122,6 +125,37 @@ CREATE TABLE IF NOT EXISTS `inquiries` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- -------------------------------------------------------
+-- 7. Table: customizations (Bespoke 3D Customizer Submissions)
+-- -------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `customizations` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `customization_code` VARCHAR(50) NOT NULL UNIQUE,
+  `occasion` VARCHAR(100) NOT NULL,
+  `theme_design` VARCHAR(150) DEFAULT NULL,
+  `shape` VARCHAR(50) DEFAULT 'Round',
+  `tiers` VARCHAR(50) DEFAULT '1 Layer',
+  `size` VARCHAR(100) DEFAULT 'Medium - 2kg',
+  `servings` VARCHAR(80) DEFAULT '12-16 Servings',
+  `sponge_flavor` VARCHAR(150) NOT NULL,
+  `filling_flavor` VARCHAR(150) NOT NULL,
+  `toppings` JSON DEFAULT NULL,
+  `birthday_toppers` JSON DEFAULT NULL,
+  `cake_message` TEXT DEFAULT NULL,
+  `preview_image` TEXT DEFAULT NULL,
+  `total_price` DECIMAL(10, 2) NOT NULL,
+  `customer_name` VARCHAR(150) DEFAULT NULL,
+  `customer_phone` VARCHAR(50) DEFAULT NULL,
+  `customer_email` VARCHAR(150) DEFAULT NULL,
+  `delivery_date` DATE DEFAULT NULL,
+  `delivery_time_slot` VARCHAR(50) DEFAULT NULL,
+  `delivery_address` TEXT DEFAULT NULL,
+  `status` ENUM('new', 'reviewed', 'in_kitchen', 'completed', 'cancelled') DEFAULT 'new',
+  `notes` TEXT DEFAULT NULL,
+  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- -------------------------------------------------------
 -- INITIAL BASE DATA (ADMIN & CATEGORIES ONLY)
 -- (No demo products, demo orders, or demo inquiries)
 -- -------------------------------------------------------
@@ -146,24 +180,24 @@ INSERT INTO `categories` (`id`, `name`, `slug`, `description`, `image_url`, `sor
 (5, 'Engagement Celebration Cakes', 'engagement-cakes', 'Romantic engagement cakes adorned with edible gold rings and floral wreaths.', '/Elegant Gold Ring Engagement Cake.png', 1),
 (6, 'Grooms Cakes', 'grooms-cakes', 'Tailored tuxedo, hobby, and masculine celebration cakes for the groom.', '/Tuxedo Groom Cake with Top Hat.png', 1),
 (7, 'Corporate Cakes', 'corporate-cakes', 'Executive event cakes & branded desserts', '/Corporate Skyline Cake with Laptop topper.png', 2),
-(8, 'Corporate Cookies', 'corporate-cookies', 'Artisanal cookies with precision edible logo prints for PR and brand activations.', '/Corporate Cookie Collection on Gold-Rimmed Plate.png', 2),
+(8, 'Corporate Cookies', 'corporate-cookies', 'Lebanese cookies with precision edible logo prints for PR and brand activations.', '/Corporate Cookie Collection on Gold-Rimmed Plate.png', 2),
 (9, 'Cupcakes with logo', 'cupcakes-with-logo', 'Gourmet French buttercream cupcakes crowned with customized corporate logos.', '/Business Cupcake Icon Plate.png', 2),
-(10, 'Cookies', 'cookies', 'Freshly baked artisanal cookies & macarons', '/Golden Chocolate Chip Cookie Stack.png', 3),
+(10, 'Cookies', 'cookies', 'Freshly baked Lebanese cookies & macarons', '/Golden Chocolate Chip Cookie Stack.png', 3),
 (11, 'Cake Pops', 'cake-pops', 'Delightful handheld dessert bites for parties', '/Colorful Cake Pops in a Ribbon Jar.png', 4),
-(12, 'Cupcakes', 'cupcakes', 'Gourmet artisanal cupcakes with French buttercream', '/Colorful Cupcakes on a Wooden Table.png', 5),
+(12, 'Cupcakes', 'cupcakes', 'Gourmet Lebanese cupcakes with French buttercream', '/Colorful Cupcakes on a Wooden Table.png', 5),
 (13, 'Cakes for Kids', 'cakes-for-kids', 'Rainbow, fantasy and storybook cakes', '/Rainbow Bear Birthday Cake.png', 6),
 (14, 'Cakes for Ladies', 'cakes-for-ladies', 'Pink floral, pearls & haute couture cakes', '/Elegant Pink Floral Pearl Cake.png', 7),
 (15, 'Cakes for Guys', 'cakes-for-guys', 'Luxury cars, chronographs & bold themes', '/Black SUV Cake on a Wooden Tabletop.png', 8),
 (16, 'Graduation Cakes', 'graduation-cakes', 'Celebrate academic milestones and commencement ceremonies', '/Elegant Graduation Cake with Diploma and Books.png', 9),
-(17, 'Cars, Ships, Yachts & Planes Cakes', 'cars-ships-planes-cakes', 'Custom 3D sculpted luxury vehicles, ships, yachts & aviation cakes', '/Luxury Transportation Cake Showcase.png', 10),
+(17, 'Cars, Ships, Yachts and Planes Cakes', 'cars-ships-planes-cakes', 'Custom 3D sculpted luxury vehicles, ships, yachts & aviation cakes', '/Luxury Transportation Cake Showcase.png', 10),
 (18, 'Sporting Cakes', 'sporting-cakes', 'Football, basketball, golf, tennis & championship celebration cakes', '/Sports Cake Trio Banner.png', 11),
 (19, 'Couture Cakes', 'couture-cakes', 'Haute couture, fashion-forward & luxury designer cakes', '/Couture Cakes in Gold and Pink.png', 12),
 (20, '3D Cakes', '3d-cakes', 'Spectacular sculpted 3-dimensional cake centerpieces', '/Spiderman, Unicorn and Race Car Cakes.png', 13),
-(21, 'Food & Drink Illusion Cakes', 'food-drink-illusion-cakes', 'Hyper-realistic trompe-l\'œil culinary and beverage illusion cakes', '/Realistic Fast-Food Illusion Cakes.png', 14),
-(22, 'Doughnuts Cakes', 'doughnuts-cakes', 'Custom artisanal stacked doughnut cakes and dessert towers', '/Glossy Donut Cake Trio.png', 15),
+(21, 'Food and Drink Illusion Cakes', 'food-drink-illusion-cakes', 'Hyper-realistic trompe-l\'œil culinary and beverage illusion cakes', '/Realistic Fast-Food Illusion Cakes.png', 14),
+(22, 'Doughnuts Cakes', 'doughnuts-cakes', 'Custom Lebanese stacked doughnut cakes and dessert towers', '/Glossy Donut Cake Trio.png', 15),
 (23, 'Photo on Cake', 'photo-on-cake', 'High-definition edible printed memories and personalized photo cakes', '/Celebration Cakes with Edible Photos.png', 16),
-(24, 'Pet & Animals Cakes', 'pet-animals-cakes', 'Cute puppies, kittens, safari & wildlife celebration cakes', '/Adorable Animal-Themed Fondant Cake Collection.png', 17),
+(24, 'Pet and Animals Cakes', 'pet-animals-cakes', 'Cute puppies, kittens, safari & wildlife celebration cakes', '/Adorable Animal-Themed Fondant Cake Collection.png', 17),
 (25, 'Superhero Cakes', 'superhero-cakes', 'Action-packed Marvel, DC & comic book hero sculpted cakes', '/Superhero Fondant Cake Trio.png', 18),
 (26, 'Labubu Cakes', 'labubu-cakes', 'Trendy Labubu monster & whimsical vinyl toy designer cakes', '/Whimsical Labubu Cake Collection.png', 19),
-(27, 'Cake Baking & Decorating Cakes', 'cake-baking-decorating', 'Baking enthusiast, confectionery master & sugarcraft themed cakes', '/Pink Rosette Berry Cake Workshop.png', 20)
+(27, 'Cake Baking and Decorating Cakes', 'cake-baking-decorating', 'Baking enthusiast, confectionery master & sugarcraft themed cakes', '/Pink Rosette Berry Cake Workshop.png', 20)
 ON DUPLICATE KEY UPDATE `name` = VALUES(`name`), `slug` = VALUES(`slug`), `description` = VALUES(`description`), `image_url` = VALUES(`image_url`);

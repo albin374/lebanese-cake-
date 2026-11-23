@@ -41,30 +41,31 @@ const inMemoryStore = {
     { id: 5, name: 'Engagement Celebration Cakes', slug: 'engagement-cakes', description: 'Romantic engagement cakes adorned with edible gold rings and floral wreaths.', image_url: '/Elegant Gold Ring Engagement Cake.png' },
     { id: 6, name: 'Grooms Cakes', slug: 'grooms-cakes', description: 'Tailored tuxedo, hobby, and masculine celebration cakes for the groom.', image_url: '/Tuxedo Groom Cake with Top Hat.png' },
     { id: 7, name: 'Corporate Cakes', slug: 'corporate-cakes', description: 'Executive event cakes & branded desserts', image_url: '/Corporate Skyline Cake with Laptop topper.png' },
-    { id: 8, name: 'Corporate Cookies', slug: 'corporate-cookies', description: 'Artisanal cookies with precision edible logo prints for PR and brand activations.', image_url: '/Corporate Cookie Collection on Gold-Rimmed Plate.png' },
+    { id: 8, name: 'Corporate Cookies', slug: 'corporate-cookies', description: 'Lebanese cookies with precision edible logo prints for PR and brand activations.', image_url: '/Corporate Cookie Collection on Gold-Rimmed Plate.png' },
     { id: 9, name: 'Cupcakes with logo', slug: 'cupcakes-with-logo', description: 'Gourmet French buttercream cupcakes crowned with customized corporate logos.', image_url: '/Business Cupcake Icon Plate.png' },
-    { id: 10, name: 'Cookies', slug: 'cookies', description: 'Freshly baked artisanal cookies & macarons', image_url: '/Golden Chocolate Chip Cookie Stack.png' },
+    { id: 10, name: 'Cookies', slug: 'cookies', description: 'Freshly baked Lebanese cookies & macarons', image_url: '/Golden Chocolate Chip Cookie Stack.png' },
     { id: 11, name: 'Cake Pops', slug: 'cake-pops', description: 'Delightful handheld dessert bites for parties', image_url: '/Colorful Cake Pops in a Ribbon Jar.png' },
-    { id: 12, name: 'Cupcakes', slug: 'cupcakes', description: 'Gourmet artisanal cupcakes with French buttercream', image_url: '/Colorful Cupcakes on a Wooden Table.png' },
+    { id: 12, name: 'Cupcakes', slug: 'cupcakes', description: 'Gourmet Lebanese cupcakes with French buttercream', image_url: '/Colorful Cupcakes on a Wooden Table.png' },
     { id: 13, name: 'Cakes for Kids', slug: 'cakes-for-kids', description: 'Rainbow, fantasy and storybook cakes', image_url: '/Rainbow Bear Birthday Cake.png' },
     { id: 14, name: 'Cakes for Ladies', slug: 'cakes-for-ladies', description: 'Pink floral, pearls & haute couture cakes', image_url: '/Elegant Pink Floral Pearl Cake.png' },
     { id: 15, name: 'Cakes for Guys', slug: 'cakes-for-guys', description: 'Luxury cars, chronographs & bold themes', image_url: '/Black SUV Cake on a Wooden Tabletop.png' },
     { id: 16, name: 'Graduation Cakes', slug: 'graduation-cakes', description: 'Celebrate academic milestones and commencement ceremonies', image_url: '/Elegant Graduation Cake with Diploma and Books.png' },
-    { id: 17, name: 'Cars, Ships, Yachts & Planes Cakes', slug: 'cars-ships-planes-cakes', description: 'Custom 3D sculpted luxury vehicles, ships, yachts & aviation cakes', image_url: '/Luxury Transportation Cake Showcase.png' },
+    { id: 17, name: 'Cars, Ships, Yachts and Planes Cakes', slug: 'cars-ships-planes-cakes', description: 'Custom 3D sculpted luxury vehicles, ships, yachts & aviation cakes', image_url: '/Luxury Transportation Cake Showcase.png' },
     { id: 18, name: 'Sporting Cakes', slug: 'sporting-cakes', description: 'Football, basketball, golf, tennis & championship celebration cakes', image_url: '/Sports Cake Trio Banner.png' },
     { id: 19, name: 'Couture Cakes', slug: 'couture-cakes', description: 'Haute couture, fashion-forward & luxury designer cakes', image_url: '/Couture Cakes in Gold and Pink.png' },
     { id: 20, name: '3D Cakes', slug: '3d-cakes', description: 'Spectacular sculpted 3-dimensional cake centerpieces', image_url: '/Spiderman, Unicorn and Race Car Cakes.png' },
-    { id: 21, name: 'Food & Drink Illusion Cakes', slug: 'food-drink-illusion-cakes', description: 'Hyper-realistic trompe-l\'œil culinary and beverage illusion cakes', image_url: '/Realistic Fast-Food Illusion Cakes.png' },
-    { id: 22, name: 'Doughnuts Cakes', slug: 'doughnuts-cakes', description: 'Custom artisanal stacked doughnut cakes and dessert towers', image_url: '/Glossy Donut Cake Trio.png' },
+    { id: 21, name: 'Food and Drink Illusion Cakes', slug: 'food-drink-illusion-cakes', description: 'Hyper-realistic trompe-l\'œil culinary and beverage illusion cakes', image_url: '/Realistic Fast-Food Illusion Cakes.png' },
+    { id: 22, name: 'Doughnuts Cakes', slug: 'doughnuts-cakes', description: 'Custom Lebanese stacked doughnut cakes and dessert towers', image_url: '/Glossy Donut Cake Trio.png' },
     { id: 23, name: 'Photo on Cake', slug: 'photo-on-cake', description: 'High-definition edible printed memories and personalized photo cakes', image_url: '/Celebration Cakes with Edible Photos.png' },
-    { id: 24, name: 'Pet & Animals Cakes', slug: 'pet-animals-cakes', description: 'Cute puppies, kittens, safari & wildlife celebration cakes', image_url: '/Adorable Animal-Themed Fondant Cake Collection.png' },
+    { id: 24, name: 'Pet and Animals Cakes', slug: 'pet-animals-cakes', description: 'Cute puppies, kittens, safari & wildlife celebration cakes', image_url: '/Adorable Animal-Themed Fondant Cake Collection.png' },
     { id: 25, name: 'Superhero Cakes', slug: 'superhero-cakes', description: 'Action-packed Marvel, DC & comic book hero sculpted cakes', image_url: '/Superhero Fondant Cake Trio.png' },
     { id: 26, name: 'Labubu Cakes', slug: 'labubu-cakes', description: 'Trendy Labubu monster & whimsical vinyl toy designer cakes', image_url: '/Whimsical Labubu Cake Collection.png' },
-    { id: 27, name: 'Cake Baking & Decorating Cakes', slug: 'cake-baking-decorating', description: 'Baking enthusiast, confectionery master & sugarcraft themed cakes', image_url: '/Pink Rosette Berry Cake Workshop.png' }
+    { id: 27, name: 'Cake Baking and Decorating Cakes', slug: 'cake-baking-decorating', description: 'Baking enthusiast, confectionery master & sugarcraft themed cakes', image_url: '/Pink Rosette Berry Cake Workshop.png' }
   ],
   products: [],
   orders: [],
-  inquiries: []
+  inquiries: [],
+  customizations: []
 };
 
 function parseSqlStatements(sqlContent) {
@@ -126,12 +127,16 @@ async function initDatabase() {
           }
         }
 
-        // Automatic column migrations for products Arabic translation fields
+        // Automatic column migrations for products Arabic translation fields and cake specifications
         const columnMigrations = [
           { col: 'title_ar', sql: 'ALTER TABLE `products` ADD COLUMN `title_ar` VARCHAR(255) NULL AFTER `title`' },
           { col: 'flavor_ar', sql: 'ALTER TABLE `products` ADD COLUMN `flavor_ar` VARCHAR(255) NULL AFTER `flavor`' },
           { col: 'servings_ar', sql: 'ALTER TABLE `products` ADD COLUMN `servings_ar` VARCHAR(100) NULL AFTER `servings`' },
-          { col: 'description_ar', sql: 'ALTER TABLE `products` ADD COLUMN `description_ar` TEXT NULL AFTER `description`' }
+          { col: 'description_ar', sql: 'ALTER TABLE `products` ADD COLUMN `description_ar` TEXT NULL AFTER `description`' },
+          { col: 'weight', sql: 'ALTER TABLE `products` ADD COLUMN `weight` VARCHAR(50) NULL AFTER `servings_ar`' },
+          { col: 'tiers', sql: 'ALTER TABLE `products` ADD COLUMN `tiers` VARCHAR(50) NULL AFTER `weight`' },
+          { col: 'stripe_session_id', sql: 'ALTER TABLE `orders` ADD COLUMN `stripe_session_id` VARCHAR(255) NULL AFTER `payment_method`' },
+          { col: 'stripe_payment_intent_id', sql: 'ALTER TABLE `orders` ADD COLUMN `stripe_payment_intent_id` VARCHAR(255) NULL AFTER `stripe_session_id`' }
         ];
 
         for (const mig of columnMigrations) {
