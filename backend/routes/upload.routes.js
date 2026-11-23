@@ -2,7 +2,23 @@ const express = require('express');
 const router = express.Router();
 const fs = require('fs');
 const path = require('path');
+const cloudinary = require('cloudinary').v2;
 const { requireAdmin } = require('../middleware/auth.middleware');
+
+// Optional Cloudinary Configuration (Permanent CDN storage for production e.g. on Render)
+const isCloudinaryConfigured = Boolean(
+  process.env.CLOUDINARY_CLOUD_NAME &&
+  process.env.CLOUDINARY_API_KEY &&
+  process.env.CLOUDINARY_API_SECRET
+);
+
+if (isCloudinaryConfigured) {
+  cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET
+  });
+}
 
 router.post('/', requireAdmin, async (req, res) => {
   try {
@@ -11,7 +27,26 @@ router.post('/', requireAdmin, async (req, res) => {
       return res.status(400).json({ success: false, message: 'No image data provided' });
     }
 
-    // Match data:image/png;base64,...
+    // 1. If Cloudinary credentials are provided, store permanently in Cloudinary CDN
+    if (isCloudinaryConfigured) {
+      try {
+        const uploadResult = await cloudinary.uploader.upload(image, {
+          folder: 'lebanese_bakery/products',
+          resource_type: 'image'
+        });
+
+        return res.json({
+          success: true,
+          url: uploadResult.secure_url,
+          filename: uploadResult.public_id,
+          storage: 'cloudinary'
+        });
+      } catch (cloudErr) {
+        console.warn('Cloudinary upload warning, falling back to local disk:', cloudErr.message);
+      }
+    }
+
+    // 2. Fallback to local server disk storage (e.g. for offline local development)
     const matches = image.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
     let buffer;
     let ext = '.png';
@@ -44,7 +79,8 @@ router.post('/', requireAdmin, async (req, res) => {
     return res.json({
       success: true,
       url: publicUrl,
-      filename: uniqueFilename
+      filename: uniqueFilename,
+      storage: 'local'
     });
   } catch (err) {
     console.error('Upload error:', err);
