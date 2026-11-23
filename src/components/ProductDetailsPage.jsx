@@ -24,7 +24,7 @@ import {
 } from '../utils/arabicTranslator';
 import { navigateTo } from '../utils/navigation';
 
-const API_BASE = 'http://localhost:5000/api';
+import { API_BASE, API_SERVER_URL } from '../config/api';
 
 const CATEGORY_NAMES = {
   'classic-wedding-cakes': { en: 'Classic Wedding Cakes', ar: 'كيك الأعراس الكلاسيكي', path: '/classic-wedding-cakes', hash: '/classic-wedding-cakes' },

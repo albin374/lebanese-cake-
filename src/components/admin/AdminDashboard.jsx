@@ -29,12 +29,12 @@ import {
   Check
 } from 'lucide-react';
 
-const API_BASE = 'http://localhost:5000/api';
+import { API_BASE, API_SERVER_URL } from '../../config/api';
 
 export const formatImageUrl = (url) => {
   if (!url) return '';
   if (url.startsWith('/uploads/')) {
-    return `${API_BASE.replace('/api', '')}${url}`;
+    return `${API_SERVER_URL}${url}`;
   }
   return url;
 };

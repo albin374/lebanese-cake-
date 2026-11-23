@@ -16,6 +16,7 @@ import {
   AlertCircle
 } from 'lucide-react';
 import { translations } from '../translations';
+import { API_BASE } from '../config/api';
 
 export default function CustomizePage({ 
   currentLang = 'en', 
@@ -955,7 +956,7 @@ export default function CustomizePage({
 
       // Persist customization design directly to backend database
       try {
-        fetch('http://localhost:5000/api/customizations', {
+        fetch(`${API_BASE}/customizations`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({

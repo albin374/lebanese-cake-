@@ -24,7 +24,7 @@ import {
 import { formatImageUrl } from './CategoryProductsSection';
 import { navigateTo } from '../utils/navigation';
 
-const API_BASE = 'http://localhost:5000/api';
+import { API_BASE } from '../config/api';
 
 export default function CartPage({
   cartItems = [],
@@ -231,7 +231,7 @@ export default function CartPage({
         const contentType = res.headers.get('content-type') || '';
         if (!contentType.includes('application/json')) {
           const text = await res.text();
-          throw new Error(`Backend server error (${res.status}). Please make sure the backend server on port 5000 is running.`);
+          throw new Error(`Backend server error (${res.status}). Please check backend server connection.`);
         }
 
         const data = await res.json();

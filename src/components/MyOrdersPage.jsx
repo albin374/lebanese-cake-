@@ -24,7 +24,7 @@ import {
 } from 'lucide-react';
 import { navigateTo } from '../utils/navigation';
 
-const API_BASE = 'http://localhost:5000/api';
+import { API_BASE } from '../config/api';
 
 export default function MyOrdersPage({ currentLang = 'en', onAddToCart, onContinueShopping }) {
   const isAr = currentLang === 'ar';

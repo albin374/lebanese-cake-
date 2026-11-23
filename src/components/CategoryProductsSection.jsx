@@ -10,7 +10,7 @@ import {
 } from '../utils/arabicTranslator';
 import { navigateTo } from '../utils/navigation';
 
-const API_BASE = 'http://localhost:5000/api';
+import { API_BASE, API_SERVER_URL } from '../config/api';
 
 export const slugify = (text) => {
   if (!text) return '';
@@ -26,7 +26,7 @@ export const slugify = (text) => {
 export const formatImageUrl = (url) => {
   if (!url) return '';
   if (url.startsWith('/uploads/')) {
-    return `http://localhost:5000${url}`;
+    return `${API_SERVER_URL}${url}`;
   }
   return url;
 };
