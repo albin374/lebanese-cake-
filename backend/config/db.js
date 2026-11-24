@@ -6,6 +6,12 @@ const bcrypt = require('bcryptjs');
 
 dotenv.config();
 
+const useSsl = process.env.DB_SSL === 'true' || (
+  process.env.DB_HOST &&
+  process.env.DB_HOST !== 'localhost' &&
+  process.env.DB_HOST !== '127.0.0.1'
+);
+
 const dbConfig = {
   host: process.env.DB_HOST || 'localhost',
   port: parseInt(process.env.DB_PORT || '3306', 10),
@@ -14,7 +20,8 @@ const dbConfig = {
   multipleStatements: true,
   waitForConnections: true,
   connectionLimit: 10,
-  queueLimit: 0
+  queueLimit: 0,
+  ...(useSsl ? { ssl: { minVersion: 'TLSv1.2', rejectUnauthorized: false } } : {})
 };
 
 let pool = null;
@@ -88,14 +95,20 @@ async function initDatabase() {
       port: dbConfig.port,
       user: dbConfig.user,
       password: dbConfig.password,
-      multipleStatements: true
+      multipleStatements: true,
+      ...(dbConfig.ssl ? { ssl: dbConfig.ssl } : {})
     });
 
     console.log(`🔌 [Database] Successfully connected to MySQL at ${dbConfig.host}:${dbConfig.port}`);
     
     // Ensure database exists
     const dbName = process.env.DB_NAME || 'lebanese_bakery';
-    await rawConnection.query(`CREATE DATABASE IF NOT EXISTS \`${dbName}\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;`);
+    try {
+      await rawConnection.query(`CREATE DATABASE IF NOT EXISTS \`${dbName}\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;`);
+    } catch (createDbErr) {
+      // Benign if on a managed cloud database where database is pre-created and user has restricted DDL rights
+      console.log(`[Database Notice] Database check: ${createDbErr.message}`);
+    }
     await rawConnection.end();
 
     // Create pool with specific database
