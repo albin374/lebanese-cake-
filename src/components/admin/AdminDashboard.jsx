@@ -294,20 +294,15 @@ export default function AdminDashboard({ onBackToStore }) {
   // Add / Edit Product Modal
   const [showAddProduct, setShowAddProduct] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
-  const [modalLangTab, setModalLangTab] = useState('en');
   const [newProduct, setNewProduct] = useState({
     title: '',
-    title_ar: '',
     category_slug: 'wedding',
     price: '',
     flavor: 'Belgian Chocolate & French Vanilla',
-    flavor_ar: '',
     servings: '15-20 servings',
-    servings_ar: '',
-    image_url: '/categorycake imges/Wedding Cake.png',
+    image_url: '',
     secondary_image_url: '',
-    description: '',
-    description_ar: ''
+    description: ''
   });
 
   const [uploadingSlot1, setUploadingSlot1] = useState(false);
@@ -690,20 +685,15 @@ export default function AdminDashboard({ onBackToStore }) {
   // Open Add Product Modal
   const handleOpenAdd = () => {
     setEditingProduct(null);
-    setModalLangTab('en');
     setNewProduct({
       title: '',
-      title_ar: '',
       category_slug: selectedCategory.slug || selectedCategory.id,
       price: '',
       flavor: 'Belgian Chocolate & French Vanilla',
-      flavor_ar: '',
       servings: '15-20 servings',
-      servings_ar: '',
-      image_url: selectedCategory.banner || selectedCategory.image_url || '/Elegant Ivory Wedding Cake Banner.png',
+      image_url: '',
       secondary_image_url: '',
-      description: '',
-      description_ar: ''
+      description: ''
     });
     setShowAddProduct(true);
   };
@@ -711,20 +701,15 @@ export default function AdminDashboard({ onBackToStore }) {
   // Open Edit Product Modal
   const handleOpenEdit = (prod) => {
     setEditingProduct(prod);
-    setModalLangTab('en');
     setNewProduct({
       title: prod.title || '',
-      title_ar: prod.title_ar || '',
       category_slug: prod.category_slug || selectedCategory.slug || selectedCategory.id,
       price: prod.price || '',
-      flavor: prod.flavor || '',
-      flavor_ar: prod.flavor_ar || '',
-      servings: prod.servings || '',
-      servings_ar: prod.servings_ar || '',
+      flavor: prod.flavor || 'Belgian Chocolate & French Vanilla',
+      servings: prod.servings || '15-20 servings',
       image_url: prod.image_url || '',
       secondary_image_url: prod.secondary_image_url || '',
-      description: prod.description || '',
-      description_ar: prod.description_ar || ''
+      description: prod.description || ''
     });
     setShowAddProduct(true);
   };
@@ -805,7 +790,7 @@ export default function AdminDashboard({ onBackToStore }) {
           price: '',
           flavor: 'Belgian Chocolate & French Vanilla',
           servings: '15-20 servings',
-          image_url: selectedCategory.banner || selectedCategory.image_url || '/Elegant Ivory Wedding Cake Banner.png',
+          image_url: '',
           secondary_image_url: '',
           description: ''
         });
@@ -2585,18 +2570,13 @@ export default function AdminDashboard({ onBackToStore }) {
                               </div>
                             </td>
 
-                            {/* Title, Arabic Title, Slug & Description */}
+                            {/* Title, Slug & Description */}
                             <td className="py-3 px-4 max-w-xs">
-                              <div className="font-serif font-bold text-sm text-[#4A2116] line-clamp-1 flex items-center gap-2">
+                              <div className="font-serif font-bold text-sm text-[#4A2116] line-clamp-1">
                                 <span>{prod.title}</span>
-                                {prod.title_ar && (
-                                  <span className="text-[10px] bg-emerald-50 text-emerald-800 border border-emerald-200 px-1.5 py-0.5 rounded font-medium truncate max-w-[120px]" title={prod.title_ar}>
-                                    {prod.title_ar}
-                                  </span>
-                                )}
                               </div>
                               <div className="text-[10.5px] text-[#A07A65] font-mono mt-0.5 flex items-center gap-1">
-                                <span>#product-{prod.slug || slugify(prod.title) || prod.id}</span>
+                                <span>/product/{prod.slug || slugify(prod.title) || prod.id}</span>
                               </div>
                               {prod.description ? (
                                 <div className="text-[11px] text-[#8A6753] line-clamp-2 mt-0.5 leading-relaxed">
@@ -2628,11 +2608,6 @@ export default function AdminDashboard({ onBackToStore }) {
                               <div className="text-[11.5px] text-[#4A2116] font-medium line-clamp-1">
                                 {prod.flavor || '—'}
                               </div>
-                              {prod.flavor_ar && (
-                                <div className="text-[10.5px] text-[#8A6753] line-clamp-1 mt-0.5">
-                                  {prod.flavor_ar}
-                                </div>
-                              )}
                             </td>
 
                             {/* Servings */}
@@ -2851,39 +2826,23 @@ export default function AdminDashboard({ onBackToStore }) {
 
             <form onSubmit={handleSaveProduct} className="space-y-3.5 text-xs">
               
-              {/* Language Switcher Tabs: English & Arabic */}
-              <div className="flex items-center gap-2 border-b border-[#EBDCC8] pb-2.5">
-                <button
-                  type="button"
-                  onClick={() => setModalLangTab('en')}
-                  className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer ${
-                    modalLangTab === 'en'
-                      ? 'bg-[#4A2116] text-white shadow-xs'
-                      : 'bg-[#FAF5ED] text-[#7A5846] hover:bg-[#F2E5D5]'
-                  }`}
-                >
-                  <span>🇬🇧 English Details</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setModalLangTab('ar')}
-                  className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer ${
-                    modalLangTab === 'ar'
-                      ? 'bg-[#C58A19] text-white shadow-xs'
-                      : 'bg-[#FAF5ED] text-[#7A5846] hover:bg-[#F2E5D5]'
-                  }`}
-                >
-                  <span>🇦🇪 Arabic (الترجمة العربية)</span>
-                  {newProduct.title_ar ? (
-                    <span className="w-2 h-2 rounded-full bg-emerald-400 inline-block" title="Arabic added" />
-                  ) : (
-                    <span className="text-[10px] text-[#A08070] italic">(Optional)</span>
-                  )}
-                </button>
+              {/* 1. Item Title (Shown First) */}
+              <div>
+                <label className="block font-semibold text-[#4A2116] mb-1">
+                  Item Title *
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={newProduct.title}
+                  onChange={(e) => setNewProduct({ ...newProduct, title: e.target.value })}
+                  placeholder="e.g. Royal Golden Pistachio Cake"
+                  className="w-full bg-[#FAF5ED] border border-[#E2D2BD] rounded-xl px-3 py-2 text-sm text-[#4A2116] outline-none focus:border-[#C58A19]"
+                />
               </div>
 
-              {/* Shared Price Field */}
-              <div className="bg-[#FAF5ED] p-2.5 rounded-xl border border-[#EBDCC8] flex items-center justify-between gap-3">
+              {/* 2. Price & Clean URL Preview (Shown After Title) */}
+              <div className="bg-[#FAF5ED] p-2.5 rounded-xl border border-[#EBDCC8] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div className="flex-1">
                   <label className="block font-semibold text-[#4A2116] mb-1">Price (AED) *</label>
                   <input
@@ -2895,111 +2854,46 @@ export default function AdminDashboard({ onBackToStore }) {
                     className="w-full bg-white border border-[#E2D2BD] rounded-lg px-3 py-1.5 text-sm font-bold text-[#4A2116] outline-none focus:border-[#C58A19]"
                   />
                 </div>
-                <div className="text-[11px] text-[#8A6753] pt-4">
-                  Canonical URL: <span className="font-mono text-[#C58A19]">#product-{slugify(newProduct.title) || '...'}</span>
+                <div className="text-[11px] text-[#8A6753] sm:pt-4">
+                  Product URL: <span className="font-mono text-[#C58A19]">/product/{slugify(newProduct.title) || '...'}</span>
                 </div>
               </div>
 
-              {/* ENGLISH TAB CONTENT */}
-              {modalLangTab === 'en' && (
-                <div className="space-y-3 animate-fadeIn">
-                  <div>
-                    <label className="block font-semibold text-[#4A2116] mb-1">Item Title (English) *</label>
-                    <input
-                      type="text"
-                      required
-                      value={newProduct.title}
-                      onChange={(e) => setNewProduct({ ...newProduct, title: e.target.value })}
-                      placeholder="e.g. Royal Golden Pistachio Cake"
-                      className="w-full bg-[#FAF5ED] border border-[#E2D2BD] rounded-xl px-3 py-2 text-sm text-[#4A2116] outline-none focus:border-[#C58A19]"
-                    />
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-3">
-                    <div>
-                      <label className="block font-semibold text-[#4A2116] mb-1">Servings (English)</label>
-                      <input
-                        type="text"
-                        value={newProduct.servings}
-                        onChange={(e) => setNewProduct({ ...newProduct, servings: e.target.value })}
-                        placeholder="e.g. 15-20 servings"
-                        className="w-full bg-[#FAF5ED] border border-[#E2D2BD] rounded-xl px-3 py-2 text-sm text-[#4A2116] outline-none focus:border-[#C58A19]"
-                      />
-                    </div>
-                    <div>
-                      <label className="block font-semibold text-[#4A2116] mb-1">Flavor (English)</label>
-                      <input
-                        type="text"
-                        value={newProduct.flavor}
-                        onChange={(e) => setNewProduct({ ...newProduct, flavor: e.target.value })}
-                        placeholder="e.g. Belgian Chocolate Ganache"
-                        className="w-full bg-[#FAF5ED] border border-[#E2D2BD] rounded-xl px-3 py-2 text-sm text-[#4A2116] outline-none focus:border-[#C58A19]"
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="block font-semibold text-[#4A2116] mb-1">Description (English)</label>
-                    <textarea
-                      rows="3"
-                      value={newProduct.description}
-                      onChange={(e) => setNewProduct({ ...newProduct, description: e.target.value })}
-                      placeholder="Detailed description of cake design, sponge layers, fillings, and custom handcrafted toppings..."
-                      className="w-full bg-[#FAF5ED] border border-[#E2D2BD] rounded-xl px-3 py-2 text-xs text-[#4A2116] outline-none focus:border-[#C58A19] resize-none"
-                    />
-                  </div>
+              {/* 3. Servings & Flavor */}
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block font-semibold text-[#4A2116] mb-1">Servings</label>
+                  <input
+                    type="text"
+                    value={newProduct.servings}
+                    onChange={(e) => setNewProduct({ ...newProduct, servings: e.target.value })}
+                    placeholder="e.g. 15-20 servings"
+                    className="w-full bg-[#FAF5ED] border border-[#E2D2BD] rounded-xl px-3 py-2 text-sm text-[#4A2116] outline-none focus:border-[#C58A19]"
+                  />
                 </div>
-              )}
-
-              {/* ARABIC TAB CONTENT */}
-              {modalLangTab === 'ar' && (
-                <div className="space-y-3 animate-fadeIn text-right" dir="rtl">
-                  <div>
-                    <label className="block font-semibold text-[#4A2116] mb-1 font-arabic">اسم الكيك بالعربية (Arabic Title)</label>
-                    <input
-                      type="text"
-                      value={newProduct.title_ar}
-                      onChange={(e) => setNewProduct({ ...newProduct, title_ar: e.target.value })}
-                      placeholder="مثال: كيك الفستق الذهبي الملكي"
-                      className="w-full bg-[#FAF5ED] border border-[#E2D2BD] rounded-xl px-3 py-2 text-sm text-[#4A2116] outline-none focus:border-[#C58A19] font-arabic"
-                    />
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-3">
-                    <div>
-                      <label className="block font-semibold text-[#4A2116] mb-1 font-arabic">عدد الحصص والضيوف (Arabic Servings)</label>
-                      <input
-                        type="text"
-                        value={newProduct.servings_ar}
-                        onChange={(e) => setNewProduct({ ...newProduct, servings_ar: e.target.value })}
-                        placeholder="مثال: 15 إلى 20 شخص"
-                        className="w-full bg-[#FAF5ED] border border-[#E2D2BD] rounded-xl px-3 py-2 text-sm text-[#4A2116] outline-none focus:border-[#C58A19] font-arabic"
-                      />
-                    </div>
-                    <div>
-                      <label className="block font-semibold text-[#4A2116] mb-1 font-arabic">النكهة والحشوة (Arabic Flavor)</label>
-                      <input
-                        type="text"
-                        value={newProduct.flavor_ar}
-                        onChange={(e) => setNewProduct({ ...newProduct, flavor_ar: e.target.value })}
-                        placeholder="مثال: شوكولاتة بلجيكية، كراميل مملح"
-                        className="w-full bg-[#FAF5ED] border border-[#E2D2BD] rounded-xl px-3 py-2 text-sm text-[#4A2116] outline-none focus:border-[#C58A19] font-arabic"
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="block font-semibold text-[#4A2116] mb-1 font-arabic">وصف الكيك وتفاصيل الصنع (Arabic Description)</label>
-                    <textarea
-                      rows="3"
-                      value={newProduct.description_ar}
-                      onChange={(e) => setNewProduct({ ...newProduct, description_ar: e.target.value })}
-                      placeholder="اكتب وصفاً مفصلاً لطبقات الكيك، نوع الإسفنج، الكريمة والحشوات، واللمسات التزيينية اليدوية..."
-                      className="w-full bg-[#FAF5ED] border border-[#E2D2BD] rounded-xl px-3 py-2 text-xs text-[#4A2116] outline-none focus:border-[#C58A19] resize-none font-arabic"
-                    />
-                  </div>
+                <div>
+                  <label className="block font-semibold text-[#4A2116] mb-1">Flavor</label>
+                  <input
+                    type="text"
+                    value={newProduct.flavor}
+                    onChange={(e) => setNewProduct({ ...newProduct, flavor: e.target.value })}
+                    placeholder="e.g. Belgian Chocolate Ganache"
+                    className="w-full bg-[#FAF5ED] border border-[#E2D2BD] rounded-xl px-3 py-2 text-sm text-[#4A2116] outline-none focus:border-[#C58A19]"
+                  />
                 </div>
-              )}
+              </div>
+
+              {/* 4. Description */}
+              <div>
+                <label className="block font-semibold text-[#4A2116] mb-1">Description</label>
+                <textarea
+                  rows="3"
+                  value={newProduct.description}
+                  onChange={(e) => setNewProduct({ ...newProduct, description: e.target.value })}
+                  placeholder="Detailed description of cake design, sponge layers, fillings, and custom handcrafted toppings..."
+                  className="w-full bg-[#FAF5ED] border border-[#E2D2BD] rounded-xl px-3 py-2 text-xs text-[#4A2116] outline-none focus:border-[#C58A19] resize-none"
+                />
+              </div>
 
               {/* 2 Cake Images Upload Section */}
               <div>
