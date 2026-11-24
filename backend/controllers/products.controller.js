@@ -147,7 +147,7 @@ exports.createProduct = async (req, res) => {
       lead_time: lead_time || null,
       weight: weight || '',
       tiers: tiers || '',
-      image_url: image_url || '',
+      image_url: image_url || '/Lebanese Dream Bakery Cake Display.png',
       secondary_image_url: secondary_image_url || null,
       description: description || '',
       description_ar: description_ar || null,

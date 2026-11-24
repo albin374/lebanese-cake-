@@ -1,11 +1,7 @@
 -- =======================================================
--- Lebanese Dream Bakery - Database Schema for MySQL / XAMPP
--- Database Name: lebanese_bakery
--- Host: localhost | Port: 3306 | User: root | Password: (empty by default)
+-- Lebanese Dream Bakery - Database Schema for MySQL / Cloud DB
+-- Host: localhost | Cloud TiDB | MySQL
 -- =======================================================
-
-CREATE DATABASE IF NOT EXISTS `lebanese_bakery` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE `lebanese_bakery`;
 
 -- -------------------------------------------------------
 -- 1. Table: admins

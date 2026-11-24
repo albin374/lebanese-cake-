@@ -27,6 +27,7 @@ const dbConfig = {
 let pool = null;
 let isConnected = false;
 let connectionError = null;
+let activeDbName = process.env.DB_NAME || 'lebanese_bakery';
 
 // In-Memory Fallback Store (Used if XAMPP MySQL is temporarily offline)
 const inMemoryStore = {
@@ -102,12 +103,19 @@ async function initDatabase() {
     console.log(`🔌 [Database] Successfully connected to MySQL at ${dbConfig.host}:${dbConfig.port}`);
     
     // Ensure database exists
-    const dbName = process.env.DB_NAME || 'lebanese_bakery';
+    const rawDbName = (process.env.DB_NAME || '').trim();
+    const isCloudHost = dbConfig.host && dbConfig.host !== 'localhost' && dbConfig.host !== '127.0.0.1';
+    // If on TiDB/cloud and DB_NAME is missing or set to the restricted MySQL 'sys' schema, automatically use 'test'
+    const dbName = (isCloudHost && (!rawDbName || rawDbName.toLowerCase() === 'sys'))
+      ? 'test'
+      : (rawDbName || 'lebanese_bakery');
+    activeDbName = dbName;
+
     try {
       await rawConnection.query(`CREATE DATABASE IF NOT EXISTS \`${dbName}\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;`);
     } catch (createDbErr) {
       // Benign if on a managed cloud database where database is pre-created and user has restricted DDL rights
-      console.log(`[Database Notice] Database check: ${createDbErr.message}`);
+      console.log(`[Database Notice] Database check (${dbName}): ${createDbErr.message}`);
     }
     await rawConnection.end();
 
@@ -123,7 +131,10 @@ async function initDatabase() {
     const schemaPath = path.join(__dirname, '..', 'database', 'schema.sql');
     if (fs.existsSync(schemaPath)) {
       const sqlContent = fs.readFileSync(schemaPath, 'utf8');
-      const queries = parseSqlStatements(sqlContent);
+      const queries = parseSqlStatements(sqlContent).filter(stmt => {
+        const upper = stmt.toUpperCase().trim();
+        return !upper.startsWith('CREATE DATABASE') && !upper.startsWith('USE ');
+      });
 
       const conn = await pool.getConnection();
       try {
@@ -223,7 +234,7 @@ function getDatabaseStatus() {
     type: isConnected ? 'mysql' : 'in_memory_fallback',
     host: dbConfig.host,
     port: dbConfig.port,
-    database: process.env.DB_NAME || 'lebanese_bakery',
+    database: activeDbName,
     user: dbConfig.user,
     error: connectionError
   };

@@ -12,7 +12,7 @@ export const API_BASE = (
 export const API_SERVER_URL = API_BASE.replace(/\/api\/?$/, '');
 
 export function getFullImageUrl(url) {
-  if (!url) return '';
+  if (!url) return '/Lebanese Dream Bakery Cake Display.png';
   if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:')) {
     return url;
   }

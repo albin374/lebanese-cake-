@@ -32,7 +32,10 @@ import {
 import { API_BASE, API_SERVER_URL } from '../../config/api';
 
 export const formatImageUrl = (url) => {
-  if (!url) return '';
+  if (!url) return '/Lebanese Dream Bakery Cake Display.png';
+  if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:')) {
+    return url;
+  }
   if (url.startsWith('/uploads/')) {
     return `${API_SERVER_URL}${url}`;
   }
@@ -719,6 +722,11 @@ export default function AdminDashboard({ onBackToStore }) {
     e.preventDefault();
     if (!newProduct.title || !newProduct.price) return;
 
+    const payload = {
+      ...newProduct,
+      image_url: newProduct.image_url || '/Lebanese Dream Bakery Cake Display.png'
+    };
+
     if (editingProduct) {
       // Edit existing product
       try {
@@ -728,12 +736,12 @@ export default function AdminDashboard({ onBackToStore }) {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
           },
-          body: JSON.stringify(newProduct)
+          body: JSON.stringify(payload)
         });
         const data = await res.json();
         const updatedItem = data.product 
-          ? { ...editingProduct, ...newProduct, ...data.product } 
-          : { ...editingProduct, ...newProduct };
+          ? { ...editingProduct, ...payload, ...data.product } 
+          : { ...editingProduct, ...payload };
 
         setProducts(prev => {
           const updated = prev.map(p => p.id === editingProduct.id ? updatedItem : p);
@@ -749,7 +757,7 @@ export default function AdminDashboard({ onBackToStore }) {
         notify('Product updated successfully');
       } catch (err) {
         setProducts(prev => {
-          const updated = prev.map(p => p.id === editingProduct.id ? { ...editingProduct, ...newProduct } : p);
+          const updated = prev.map(p => p.id === editingProduct.id ? { ...editingProduct, ...payload } : p);
           try {
             localStorage.setItem('ldb_cached_products', JSON.stringify(updated));
             window.dispatchEvent(new CustomEvent('ldb_products_updated'));
@@ -769,10 +777,10 @@ export default function AdminDashboard({ onBackToStore }) {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
           },
-          body: JSON.stringify(newProduct)
+          body: JSON.stringify(payload)
         });
         const data = await res.json();
-        const createdProduct = data.product || { ...newProduct, id: Date.now() };
+        const createdProduct = data.product || { ...payload, id: Date.now() };
 
         setProducts(prev => {
           const updated = [createdProduct, ...prev];
@@ -2557,6 +2565,10 @@ export default function AdminDashboard({ onBackToStore }) {
                                 <img
                                   src={formatImageUrl(prod.image_url)}
                                   alt={prod.title}
+                                  onError={(e) => {
+                                    e.currentTarget.onerror = null;
+                                    e.currentTarget.src = '/Lebanese Dream Bakery Cake Display.png';
+                                  }}
                                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                                 />
                                 {prod.secondary_image_url && (

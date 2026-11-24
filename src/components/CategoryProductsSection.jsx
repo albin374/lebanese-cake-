@@ -24,7 +24,10 @@ export const slugify = (text) => {
 };
 
 export const formatImageUrl = (url) => {
-  if (!url) return '';
+  if (!url) return '/Lebanese Dream Bakery Cake Display.png';
+  if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:')) {
+    return url;
+  }
   if (url.startsWith('/uploads/')) {
     return `${API_SERVER_URL}${url}`;
   }
@@ -289,6 +292,10 @@ export default function CategoryProductsSection({
                     <img
                       src={formatImageUrl(cake.image_url)}
                       alt={activeTitle}
+                      onError={(e) => {
+                        e.currentTarget.onerror = null;
+                        e.currentTarget.src = '/Lebanese Dream Bakery Cake Display.png';
+                      }}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out select-none"
                       loading="lazy"
                     />

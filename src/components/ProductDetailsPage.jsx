@@ -366,6 +366,10 @@ export default function ProductDetailsPage({
               <img
                 src={formatImageUrl(currentPhotoUrl)}
                 alt={product.title}
+                onError={(e) => {
+                  e.currentTarget.onerror = null;
+                  e.currentTarget.src = '/Lebanese Dream Bakery Cake Display.png';
+                }}
                 className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
               />
 
@@ -401,6 +405,10 @@ export default function ProductDetailsPage({
                   <img
                     src={formatImageUrl(product.image_url)}
                     alt="View 1"
+                    onError={(e) => {
+                      e.currentTarget.onerror = null;
+                      e.currentTarget.src = '/Lebanese Dream Bakery Cake Display.png';
+                    }}
                     className="w-full h-full object-cover"
                   />
                   <span className="absolute bottom-1 left-1/2 -translate-x-1/2 bg-black/70 text-white text-[9px] font-bold px-1.5 py-0.2 rounded">
@@ -421,6 +429,10 @@ export default function ProductDetailsPage({
                   <img
                     src={formatImageUrl(product.secondary_image_url)}
                     alt="View 2"
+                    onError={(e) => {
+                      e.currentTarget.onerror = null;
+                      e.currentTarget.src = '/Lebanese Dream Bakery Cake Display.png';
+                    }}
                     className="w-full h-full object-cover"
                   />
                   <span className="absolute bottom-1 left-1/2 -translate-x-1/2 bg-black/70 text-white text-[9px] font-bold px-1.5 py-0.2 rounded">
@@ -663,6 +675,10 @@ export default function ProductDetailsPage({
                       <img
                         src={formatImageUrl(rel.image_url)}
                         alt={relTitle}
+                        onError={(e) => {
+                          e.currentTarget.onerror = null;
+                          e.currentTarget.src = '/Lebanese Dream Bakery Cake Display.png';
+                        }}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                       />
                       <div className="absolute top-2.5 right-2.5 bg-[#4A2116]/90 text-[#E6C783] text-[11px] font-bold px-2.5 py-0.5 rounded-full">
