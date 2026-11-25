@@ -7,17 +7,23 @@ const { requireAdmin } = require('../middleware/auth.middleware');
 
 // Optional Cloudinary Configuration (Permanent CDN storage for production e.g. on Render)
 const isCloudinaryConfigured = Boolean(
-  process.env.CLOUDINARY_CLOUD_NAME &&
-  process.env.CLOUDINARY_API_KEY &&
-  process.env.CLOUDINARY_API_SECRET
+  process.env.CLOUDINARY_URL || (
+    process.env.CLOUDINARY_CLOUD_NAME &&
+    process.env.CLOUDINARY_API_KEY &&
+    process.env.CLOUDINARY_API_SECRET
+  )
 );
 
 if (isCloudinaryConfigured) {
-  cloudinary.config({
-    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-    api_key: process.env.CLOUDINARY_API_KEY,
-    api_secret: process.env.CLOUDINARY_API_SECRET
-  });
+  if (process.env.CLOUDINARY_URL) {
+    cloudinary.config();
+  } else {
+    cloudinary.config({
+      cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+      api_key: process.env.CLOUDINARY_API_KEY,
+      api_secret: process.env.CLOUDINARY_API_SECRET
+    });
+  }
 }
 
 router.post('/', requireAdmin, async (req, res) => {
@@ -35,6 +41,8 @@ router.post('/', requireAdmin, async (req, res) => {
           resource_type: 'image'
         });
 
+        console.log('✅ Image successfully uploaded to Cloudinary:', uploadResult.secure_url);
+
         return res.json({
           success: true,
           url: uploadResult.secure_url,
@@ -42,7 +50,8 @@ router.post('/', requireAdmin, async (req, res) => {
           storage: 'cloudinary'
         });
       } catch (cloudErr) {
-        console.warn('Cloudinary upload warning, falling back to local disk:', cloudErr.message);
+        console.error('❌ Cloudinary upload error:', cloudErr.message, '(HTTP ' + (cloudErr.http_code || 500) + ')');
+        console.warn('⚠️ Falling back to local disk storage on Render...');
       }
     }
 
