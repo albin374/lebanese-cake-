@@ -160,7 +160,9 @@ async function initDatabase() {
           { col: 'weight', sql: 'ALTER TABLE `products` ADD COLUMN `weight` VARCHAR(50) NULL AFTER `servings_ar`' },
           { col: 'tiers', sql: 'ALTER TABLE `products` ADD COLUMN `tiers` VARCHAR(50) NULL AFTER `weight`' },
           { col: 'stripe_session_id', sql: 'ALTER TABLE `orders` ADD COLUMN `stripe_session_id` VARCHAR(255) NULL AFTER `payment_method`' },
-          { col: 'stripe_payment_intent_id', sql: 'ALTER TABLE `orders` ADD COLUMN `stripe_payment_intent_id` VARCHAR(255) NULL AFTER `stripe_session_id`' }
+          { col: 'stripe_payment_intent_id', sql: 'ALTER TABLE `orders` ADD COLUMN `stripe_payment_intent_id` VARCHAR(255) NULL AFTER `stripe_session_id`' },
+          { col: 'image_url_mediumtext', sql: 'ALTER TABLE `products` MODIFY COLUMN `image_url` MEDIUMTEXT NOT NULL' },
+          { col: 'secondary_image_url_mediumtext', sql: 'ALTER TABLE `products` MODIFY COLUMN `secondary_image_url` MEDIUMTEXT NULL' }
         ];
 
         for (const mig of columnMigrations) {

@@ -1,7 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const fs = require('fs');
-const path = require('path');
 const cloudinary = require('cloudinary').v2;
 const { requireAdmin } = require('../middleware/auth.middleware');
 
@@ -51,45 +49,17 @@ router.post('/', requireAdmin, async (req, res) => {
         });
       } catch (cloudErr) {
         console.error('❌ Cloudinary upload error:', cloudErr.message, '(HTTP ' + (cloudErr.http_code || 500) + ')');
-        console.warn('⚠️ Falling back to local disk storage on Render...');
+        console.warn('⚠️ Falling back to database-stored data URI...');
       }
     }
 
-    // 2. Fallback to local server disk storage (e.g. for offline local development)
-    const matches = image.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
-    let buffer;
-    let ext = '.png';
-
-    if (matches && matches.length === 3) {
-      const mime = matches[1];
-      if (mime.includes('jpeg') || mime.includes('jpg')) ext = '.jpg';
-      else if (mime.includes('webp')) ext = '.webp';
-      else if (mime.includes('gif')) ext = '.gif';
-      buffer = Buffer.from(matches[2], 'base64');
-    } else {
-      buffer = Buffer.from(image, 'base64');
-    }
-
-    const safeBaseName = (filename ? path.parse(filename).name : 'cake')
-      .toLowerCase()
-      .replace(/[^a-z0-9_-]/g, '_')
-      .slice(0, 30);
-    const uniqueFilename = `${safeBaseName}-${Date.now()}-${Math.floor(Math.random() * 1000)}${ext}`;
-    const uploadDir = path.join(__dirname, '..', 'uploads');
-
-    if (!fs.existsSync(uploadDir)) {
-      fs.mkdirSync(uploadDir, { recursive: true });
-    }
-
-    const targetPath = path.join(uploadDir, uniqueFilename);
-    fs.writeFileSync(targetPath, buffer);
-
-    const publicUrl = `/uploads/${uniqueFilename}`;
+    // 2. Fallback to base64 data URI stored directly in the database (persists across ephemeral deploys)
+    const dataUri = image.startsWith('data:') ? image : `data:image/jpeg;base64,${image}`;
     return res.json({
       success: true,
-      url: publicUrl,
-      filename: uniqueFilename,
-      storage: 'local'
+      url: dataUri,
+      filename: filename || 'cake-image',
+      storage: 'database'
     });
   } catch (err) {
     console.error('Upload error:', err);
